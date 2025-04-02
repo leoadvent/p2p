@@ -1,0 +1,54 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres
+    container_name: POSTGRES_EXPO_MONEY_API
+    environment:
+      POSTGRES_DB: apiexpomoney
+      POSTGRES_USER: userexpormoney
+      POSTGRES_PASSWORD: userexpormoney
+    ports:
+      - "3333:5432"
+    volumes:
+      - postgres_data_expo:/var/lib/postgresql/data
+      - ./init-schema.sql:/docker-entrypoint-initdb.d/init-schema.sql
+    networks:
+      - api_expo_network
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:latest
+    container_name: KEYCLOAK_EXPO_MONEY_API
+    environment:
+      KC_DB: postgres
+      KC_DB_URL_HOST: postgres
+      KC_DB_URL_PORT: 5432
+      KC_DB_URL_DATABASE: apiexpomoney
+      KC_DB_USERNAME: userexpormoney
+      KC_DB_PASSWORD: userexpormoney
+      KC_DB_DATABASE: apiexpomoney  # 🔥 GARANTIR QUE USA O BANCO CORRETO
+      KC_DB_SCHEMA: KEYCLOAK  # 🔥 GARANTIR QUE USA O SCHEMA CORRETO
+      KEYCLOAK_ADMIN: adminkeycloak
+      KEYCLOAK_ADMIN_PASSWORD: adminkeycloak
+    ports:
+      - "8090:8080"
+    depends_on:
+      - postgres
+    networks:
+      - api_expo_network
+    volumes:
+      - keycloak_data_expo:/opt/keycloak/data
+      - ./realm-money-api-export.json:/opt/keycloak/data/import/realm-money-api-export.json
+    command:
+      - "start-dev"
+      - "--import-realm"
+
+
+
+volumes:
+  postgres_data_expo:
+  keycloak_data_expo:
+
+networks:
+  api_expo_network:
+    driver: bridge

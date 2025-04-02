@@ -1,0 +1,77 @@
+{
+  "id": "REALM_EXPO_MONEY",
+  "realm": "REALM_EXPO_MONEY",
+  "enabled": true,
+  "clients": [
+    {
+      "clientId": "client_expo_money",
+      "rootUrl": "${authBaseUrl}",
+      "adminUrl": "${authBaseUrl}",
+      "baseUrl": "/realms/REALM_EXPO_MONEY/account/",
+      "redirectUris": ["/realms/REALM_EXPO_MONEY/account/*"],
+      "webOrigins": ["+"],
+      "clientAuthenticatorType": "client-secret",
+      "secret": "OQEpQkjXwO547qSZQ0Xk7DOV9qgVC64Q",
+      "enabled": true,
+      "publicClient": false,
+      "directAccessGrantsEnabled": true,
+      "frontchannelLogout": true,
+      "attributes": {
+        "backchannel.logout.session.required": "true",
+        "backchannel.logout.revoke.offline.tokens": "true"
+      }
+    }
+  ],
+  "roles": {
+    "realm": [
+      {
+        "name": "ADMINISTRADORES",
+        "description": "Role for administrators"
+      },
+      {
+        "name": "USUARIO",
+        "description": "Role for standard users"
+      }
+    ]
+  },
+  "users": [
+    {
+      "username": "adminspringexpomoney",
+      "email": "adminspringexpomoney@expomoney.com",
+      "emailVerified": true,
+      "firstName": "Administrador",
+      "lastName": "Sistema",
+      "enabled": true,
+      "credentials": [
+        {
+          "type": "password",
+          "value": "adminspringexpomoney",
+          "temporary": false
+        }
+      ],
+      "realmRoles": [
+        "ADMINISTRADORES",
+        "USUARIO",
+        "offline_access",
+        "uma_authorization",
+        "default-roles-REALM_EXPO_MONEY"
+      ],
+      "clientRoles": {
+        "realm-management": [
+          "view-authorization",
+          "view-clients",
+          "query-groups"
+        ],
+        "broker": [
+          "read-token"
+        ],
+        "account": [
+          "delete-account",
+          "manage-account",
+          "view-applications",
+          "manage-consent"
+        ]
+      }
+    }
+  ]
+}

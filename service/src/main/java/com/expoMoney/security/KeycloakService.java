@@ -66,7 +66,7 @@ public class KeycloakService {
 
     private Keycloak keycloakClientBuilder(String realm, String clientId, String username, String password, String clientSecret){
         return KeycloakBuilder.builder()
-                .serverUrl(keycloakSereverUrl + "/auth")
+                .serverUrl(keycloakSereverUrl)
                 .realm(realm)
                 .clientId(clientId)
                 .clientSecret(clientSecret)

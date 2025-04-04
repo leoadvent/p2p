@@ -3,6 +3,7 @@ package com.expoMoney.security;
 import com.expoMoney.security.dto.*;
 import com.expoMoney.security.utils.StringUtils;
 import com.expoMoney.security.utils.TokenUtils;
+import com.expoMoney.tenancy.multitenancy.SchemaCreator;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.ws.rs.client.Client;
@@ -50,6 +51,7 @@ public class KeycloakService {
 
 
     private final ClientRealmDTORepository repository;
+    private final SchemaCreator schemaCreator;
 
     @Bean
     private Keycloak keycloakBuilder() {
@@ -105,6 +107,8 @@ public class KeycloakService {
             }
 
             createClient(dto.getClientId(),dto.getRealmName());
+
+            schemaCreator.createSchema(dto.getRealmName());
 
             return findRealmByName(dto.getRealmName());
 

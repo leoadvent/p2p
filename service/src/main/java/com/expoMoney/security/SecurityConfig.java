@@ -77,7 +77,7 @@ public class SecurityConfig {
     public JwtDecoder jwtDecoderForMultiTenant() {
         return token -> {
             String tenant = extractTenantFromRequest(); // Extrai o tenant
-            String jwkSetUri = keycloakServerUrl + "/auth/realms/" + tenant + "/protocol/openid-connect/certs";
+            String jwkSetUri = keycloakServerUrl + "/realms/" + tenant + "/protocol/openid-connect/certs";
             log.debug("Using JWK URI: {}", jwkSetUri);
             try {
                 return NimbusJwtDecoder.withJwkSetUri(jwkSetUri).build().decode(token);

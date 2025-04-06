@@ -57,7 +57,7 @@ public class LiquibaseDynamicSchemas {
                  ResultSet rs = stmt.executeQuery(
                          "SELECT schema_name " +
                                  "FROM information_schema.schemata " +
-                                 "WHERE schema_name NOT IN ('service', 'keycloak', 'information_schema', 'pg_catalog', 'pg_toast') ")) {
+                                 "WHERE schema_name NOT IN ('service', 'keycloak', 'information_schema', 'pg_catalog', 'pg_toast', 'public') ")) {
                 while (rs.next()) {
                     schemas.add(rs.getString("schema_name"));
                 }

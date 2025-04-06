@@ -50,7 +50,8 @@ public class SecurityConfig {
             "/swagger-ui.html",
             "/swagger-ui/**",
             "/keycloak/identityProviderLoginLinks/*",
-            "/keycloak/code/sso**"
+            "/keycloak/code/sso**",
+            "/endereco/viacep/*"
     };
 
     public static final String [] PUBLIC_MATCHERS_PUT = {};

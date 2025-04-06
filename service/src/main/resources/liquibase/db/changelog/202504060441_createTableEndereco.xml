@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <changeSet id="202504060441_1" author="Desenvolvedor Do Sistema">
+
+        <createTable tableName="tb_endereco">
+            <column name="id" type="UUID">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="cep" type="VARCHAR(20)"/>
+            <column name="logradouro" type="VARCHAR(255)"/>
+            <column name="numero" type="VARCHAR(20)"/>
+            <column name="complemento" type="VARCHAR(255)"/>
+            <column name="unidade" type="VARCHAR(50)"/>
+            <column name="bairro" type="VARCHAR(100)"/>
+            <column name="localidade" type="VARCHAR(100)"/>
+            <column name="uf" type="VARCHAR(2)"/>
+            <column name="regiao" type="VARCHAR(50)"/>
+            <column name="ibge" type="VARCHAR(20)"/>
+            <column name="ddd" type="VARCHAR(10)"/>
+            <column name="gia" type="VARCHAR(20)"/>
+            <column name="siaf" type="VARCHAR(20)"/>
+        </createTable>
+    </changeSet>
+
+</databaseChangeLog>

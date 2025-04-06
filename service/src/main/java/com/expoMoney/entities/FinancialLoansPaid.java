@@ -1,5 +1,6 @@
 package com.expoMoney.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.EqualsAndHashCode;
@@ -30,14 +31,21 @@ public class FinancialLoansPaid {
     @Column(name = "amount_paid")
     private Double amountPaid;
     @NotNull(message = "Campo Obrigatório")
+    @Column(name = "add_for_day_delay")
+    private Double additionForDaysOfDelay;
+    @NotNull(message = "Campo Obrigatório")
     private Float rate;
     @NotNull(message = "Campo Obrigatório")
     @Column(name = "interest_delay")
     private Float interestDelay;
 
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "financial_loans_id")
     private FinancialLoans financialLoans;
 
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "customer_id")
     private Customer customer;
 }

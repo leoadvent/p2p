@@ -32,4 +32,21 @@
         </createTable>
 
     </changeSet>
+
+    <changeSet id="202504061421_2" author="Desenvolvedor Do Sistema">
+        <addColumn tableName="TB_FINANCIAL_LOANS">
+            <column name="start_year" type="INT">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="202504061421_3" author="Desenvolvedor Do Sistema">
+        <addColumn tableName="TB_FINANCIAL_LOANS">
+            <column name="add_for_day_delay" type="DOUBLE PRECISION">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
+
 </databaseChangeLog>

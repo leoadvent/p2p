@@ -30,4 +30,13 @@
         </createTable>
 
     </changeSet>
+
+    <changeSet id="202504061420_2" author="Desenvolvedor Do Sistema">
+        <addColumn tableName="TB_FINANCIAL_LOANS_PAID">
+            <column name="add_for_day_delay" type="DOUBLE PRECISION">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
+
 </databaseChangeLog>

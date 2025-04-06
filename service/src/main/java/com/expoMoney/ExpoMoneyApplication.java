@@ -1,6 +1,6 @@
 package com.expoMoney;
 
-import com.expoMoney.tenancy.multitenancy.SchemaCreator;
+import com.expoMoney.tenancy.SchemaCreator;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

@@ -19,7 +19,7 @@ public interface ClientRealmDTORepository extends JpaRepository<ClientRealmDTO, 
                     "c.base_url, " +
                     "c.realm_id " +
             " FROM " +
-                    " client c " +
+                    " keycloak.client c " +
             " WHERE " +
                     " c.client_id = :clientId", nativeQuery = true)
     Optional<Object> findByClientName(String clientId);
@@ -28,8 +28,8 @@ public interface ClientRealmDTORepository extends JpaRepository<ClientRealmDTO, 
                 SELECT
                     c.client_id , c.secret
                 FROM
-                    realm r
-                    inner join client c on c.realm_id = r.id and r.enabled = true and c.secret is not null
+                    keycloak.realm r
+                    inner join keycloak.client c on c.realm_id = r.id and r.enabled = true and c.secret is not null
                     where
                 r.name = :nameRealm
             """, nativeQuery = true)

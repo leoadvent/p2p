@@ -1,4 +1,4 @@
-package com.expoMoney.tenancy.multitenancy;
+package com.expoMoney.tenancy;
 
 import com.expoMoney.tenancy.liquibase.LiquibaseDynamicSchemas;
 import lombok.RequiredArgsConstructor;

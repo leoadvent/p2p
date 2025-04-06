@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="
+      http://www.liquibase.org/xml/ns/dbchangelog
+      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.23.xsd">
+
+    <changeSet id="202504061420_1" author="Desenvolvedor Do Sistema">
+        <createTable tableName="TB_FINANCIAL_LOANS_PAID">
+            <column name="id" type="UUID">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="due_date" type="DATE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="due_payment" type="DATE"/>
+            <column name="install_meant_value" type="DOUBLE PRECISION">
+                <constraints nullable="false"/>
+            </column>
+            <column name="amount_paid" type="DOUBLE PRECISION"/>
+            <column name="rate" type="FLOAT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="interest_delay" type="FLOAT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="financial_loans_id" type="UUID"/>
+            <column name="customer_id" type="UUID"/>
+        </createTable>
+
+    </changeSet>
+</databaseChangeLog>

@@ -6,6 +6,8 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -29,4 +31,7 @@ public class Customer {
 
     @OneToOne(cascade = CascadeType.ALL)
     private Endereco endereco;
+
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "customer")
+    private List<FinancialLoans> financialLoans = new ArrayList<>();
 }

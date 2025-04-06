@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="
+      http://www.liquibase.org/xml/ns/dbchangelog
+      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.23.xsd">
+
+    <changeSet id="202504061425_1" author="Desenvolvedor Do Sistema">
+
+        <addForeignKeyConstraint
+                baseTableName="TB_FINANCIAL_LOANS_PAID"
+                baseColumnNames="financial_loans_id"
+                constraintName="fk_loans_paid_financial_loans"
+                referencedTableName="TB_FINANCIAL_LOANS"
+                referencedColumnNames="id"
+                onDelete="CASCADE"/>
+
+        <addForeignKeyConstraint
+                baseTableName="TB_FINANCIAL_LOANS_PAID"
+                baseColumnNames="customer_id"
+                constraintName="fk_loans_paid_customer"
+                referencedTableName="TB_CUSTOMER"
+                referencedColumnNames="id"
+                onDelete="CASCADE"/>
+
+        <addForeignKeyConstraint
+                baseTableName="TB_FINANCIAL_LOANS"
+                baseColumnNames="customer_id"
+                constraintName="fk_financial_loans_customer"
+                referencedTableName="TB_CUSTOMER"
+                referencedColumnNames="id"
+                onDelete="CASCADE"/>
+    </changeSet>
+
+</databaseChangeLog>

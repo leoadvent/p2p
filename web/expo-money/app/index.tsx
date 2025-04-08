@@ -1,6 +1,6 @@
 import { Text, View } from "react-native";
 
-export default function App() {
+export default function Index() {
   return (
     <View
       style={{
@@ -9,7 +9,7 @@ export default function App() {
         alignItems: "center",
       }}
     >
-      <Text>Start Project Mobile Expo Money APP</Text>
+      <Text>Edit app/index.tsx to edit this screen.</Text>
     </View>
   );
 }

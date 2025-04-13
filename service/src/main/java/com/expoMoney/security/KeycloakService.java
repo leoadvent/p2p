@@ -288,7 +288,7 @@ public class KeycloakService {
 
             String realm = request.getHeader("X-Tenant-ID");
 
-            String url = keycloakSereverUrl + "/auth/realms/" + realm + "/protocol/openid-connect/token/introspect";
+            String url = keycloakSereverUrl + "/realms/" + realm + "/protocol/openid-connect/token/introspect";
 
             String token = TokenUtils.RetrieveToken(request).substring(7);
 

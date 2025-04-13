@@ -5,15 +5,17 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { useNavigation } from "@react-navigation/native";
 import React from "react";
 import { Ionicons } from "@expo/vector-icons";
+import UserIntrospect from "../components/userintrospect/index";
 
 type Props = {
     children: React.ReactNode;
     title: string;
     backgroundColor?: typeof backgroundPrimary | typeof backgroundSecondary
     rolbackStack?: boolean
+    showUserIntrospect?: boolean
   }
 
-const BaseScreens = ( { children, title, backgroundColor, rolbackStack} : Props) => {
+const BaseScreens = ( { children, title, backgroundColor, rolbackStack, showUserIntrospect} : Props) => {
 
   const navigation = useNavigation();
   
@@ -32,23 +34,29 @@ const BaseScreens = ( { children, title, backgroundColor, rolbackStack} : Props)
         }}  
     >
         <StatusBar barStyle="light-content" backgroundColor={statusBarColorPrimary} />
+        
         <View style={
-            [ styles(title.length === 0 && !rolbackStack ? false : true).title,
+            [ styles(title.length === 0 && !rolbackStack ? false : true, showUserIntrospect ? true : false).title,
               {
-                display:"flex", backgroundColor: statusBarColorPrimary, flexDirection:"row", paddingLeft:15
+                backgroundColor: statusBarColorPrimary, paddingLeft:15
               }
             ]}>
-   
-          <TextComponent textAlign="center" color={textColorStatusBar} fontSize={14} text={title ? title : ""}/>
-
-          {rolbackStack && 
-            <View style={{ flex: 1, alignItems:"flex-end", paddingRight: 10}}>
-              <TouchableOpacity onPress={rolbackStack ? goBack : () => {}}>
-                <Ionicons name="arrow-back" size={26} color={textColorStatusBar} />
-              </TouchableOpacity> 
-            </View>
-          }
           
+          <View style={{ display:"flex", flex: 1, width:"100%", justifyContent:"center", alignItems:"center", flexDirection:"row", paddingLeft: 10}}>
+            
+            <TextComponent textAlign="center" color={textColorStatusBar} fontSize={14} text={title ? title : ""}/>
+
+            {rolbackStack && 
+              <View style={{ flex: 1, alignItems:"flex-end", paddingRight: 10}}>
+                <TouchableOpacity onPress={rolbackStack ? goBack : () => {}}>
+                  <Ionicons name="arrow-back" size={26} color={textColorStatusBar} />
+                </TouchableOpacity> 
+              </View>
+            }
+          </View>
+          
+          {showUserIntrospect && <UserIntrospect />}
+
         </View>
         <KeyboardAvoidingView
           behavior={Platform.OS === "ios" ? "padding" : "height"}
@@ -63,11 +71,12 @@ const BaseScreens = ( { children, title, backgroundColor, rolbackStack} : Props)
 }
 export default BaseScreens;
 
-const styles = (isTile: boolean ) => StyleSheet.create({
+const styles = (isTitle: boolean, showUserIntrospect: boolean ) => StyleSheet.create({
   title:{
     display: "flex",
+    flexDirection: "column",
     width: "100%",
-    height: isTile ? 50 : 1,
+    minHeight: isTitle ? showUserIntrospect ? 180 : 50 :  1,
     marginTop: 0,
     textAlign: "center",
     alignContent: "center",

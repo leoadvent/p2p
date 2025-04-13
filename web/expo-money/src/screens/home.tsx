@@ -4,7 +4,7 @@ import { backgroundPrimary } from "../constants/colorsPalette ";
 
 const HomeScreen = () => {
   return (
-    <BaseScreens backgroundColor={backgroundPrimary} title="Home">
+    <BaseScreens backgroundColor={backgroundPrimary} title="Home" showUserIntrospect={true}>
       <View
           style={{
               flex: 1,

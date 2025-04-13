@@ -26,7 +26,6 @@ const Login = ({ navigation }:any) => {
         loginRealm(data)
         setIsSpinner(false)
 
-        console.log("Logado: ", logado)
         if(logado) {
             navigation.navigate("MyTabs")
         } else {

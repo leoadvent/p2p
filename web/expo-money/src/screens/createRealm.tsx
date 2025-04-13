@@ -59,7 +59,7 @@ const CreateRealm = () => {
 
     return(
         <BaseScreens backgroundColor={backgroundPrimary} title="Novo Usuário" rolbackStack={true}>
-            <View style={{ gap: 20}}>
+            <View style={{ display: "flex", gap: 20, alignItems: "center", flex: 1, padding: 10}}>
                 <TextComponent textAlign="auto" color={textColorPrimary} fontSize={18} text={"Novo Usuário"}/> 
 
                 <InputText 
@@ -96,7 +96,7 @@ const CreateRealm = () => {
                     isPassword={true}
                 />
 
-                <View style={{ display: "flex", flexDirection: "row", gap: 10, width: "80%", justifyContent: "center", alignItems: "center"}}>
+                <View style={{ display: "flex", flexDirection: "row", gap: 10, width: "85%", justifyContent: "center", alignItems: "center"}}>
                     <ButtonComponent nameButton="LIMPAR" typeButton="warning" width="50%" onPress={() => handlerCleanForm() } isSpinner={false} isDisabled={false}/>  
                     <ButtonComponent nameButton="CRIAR" typeButton="primary" width="50%" onPress={() => handleCreateRealm() } isSpinner={isSpinner} isDisabled={false}/>
                 </View>

@@ -1,8 +1,11 @@
 package com.expoMoney.security;
 
+import com.expoMoney.entities.UserRealm;
+import com.expoMoney.repository.UserRealmRepository;
 import com.expoMoney.security.dto.*;
 import com.expoMoney.security.utils.StringUtils;
 import com.expoMoney.security.utils.TokenUtils;
+import com.expoMoney.service.UserRealmService;
 import com.expoMoney.tenancy.SchemaCreator;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
@@ -51,6 +54,7 @@ public class KeycloakService {
 
     private final ClientRealmDTORepository repository;
     private final SchemaCreator schemaCreator;
+    private final UserRealmService userRealmService;
 
     @Bean
     private Keycloak keycloakBuilder() {
@@ -96,8 +100,7 @@ public class KeycloakService {
             UserRepresentation user = createUser(dto.getRealmName(), dto.getUser());
             changePassword(false, dto.getPassword(), dto.getRealmName(), user.getId());
 
-            List<String> nameRolesDefault = Arrays.asList("ADMINISTRATOR", "USER", "LAYOUT", "DEFAULT", "PRODUCT",
-                    "STOCK", "REPLENISHES", "CASHIER", "SUPERVISOR", "MANAGER", "MANAGER_BANKING_AS_A_SERVICE");
+            List<String> nameRolesDefault = Arrays.asList("ADMINISTRATOR", "USER");
 
             for(String x : nameRolesDefault){
                 createRole(x, "Role for " + x.toLowerCase().replaceAll("_", " "), dto.getRealmName());
@@ -107,9 +110,20 @@ public class KeycloakService {
 
             createClient(dto.getClientId(),dto.getRealmName());
 
+            RealmRepresentation realmRepresentation = findRealmByName(dto.getRealmName());
+
             schemaCreator.createSchema(dto.getRealmName());
 
-            return findRealmByName(dto.getRealmName());
+            UserRealm userRealm = new UserRealm();
+            userRealm.setUsername(dto.getUser().getEmail());
+            userRealm.setIdRealm(realmRepresentation.getId());
+            userRealm.setNameRealm(dto.getRealmName());
+            userRealm.setFirstname(dto.getUser().getFirstName());
+            userRealm.setLastname(dto.getUser().getLastName());
+
+            userRealmService.save(userRealm);
+
+            return realmRepresentation;
 
         } catch (Exception e) {
             log.error("Error creating realm: {}", e.getMessage(), e);

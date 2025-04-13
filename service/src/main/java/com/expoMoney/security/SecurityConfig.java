@@ -128,7 +128,7 @@ public class SecurityConfig {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration config = new CorsConfiguration();
         //String tenant = extractTenantFromRequest();
-        List<String> allowedOrigins = Arrays.asList("http://localhost:3001", "http://localhost:5173"); // Busca do DB ou Keycloak
+        List<String> allowedOrigins = Arrays.asList("http://localhost:3001", "http://localhost:5173", "*"); // Busca do DB ou Keycloak
         config.setAllowedOrigins(allowedOrigins);
         config.setAllowedMethods(Arrays.asList("HEAD", "GET", "POST", "PUT", "DELETE", "OPTIONS","PATCH"));
         config.setAllowedHeaders(Arrays.asList("authorization", "content-type", "X-Auth-Token","x-auth-token", "x-requested-with","X-XSRF-TOKEN"));

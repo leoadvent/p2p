@@ -1,0 +1,26 @@
+import { Text } from "react-native";
+import { textColorError, textColorPrimary, textColorSecondary } from "../../constants/colorsPalette ";
+
+interface Props {
+    text: string
+    color: typeof textColorPrimary | typeof textColorSecondary | typeof textColorError
+    fontSize: 10 | 12 | 14 | 16 | 18 | 20 | 22 | 24 | 26 | 28 | 30
+    fontWeight?: "100" | "200" | "300" | "400" | "500" | "600" | "700" | "800" | "900"
+    textAlign: "left" | "right" | "center" | "justify" | "auto"
+}
+const TextComponent = ( { text, color, fontSize, textAlign, fontWeight} : Props) => {
+  return (
+    <Text
+        style={{ 
+          color: color, 
+          fontSize: fontSize, 
+          textAlign: textAlign,
+          fontWeight: fontWeight ? fontWeight : "400",
+          lineHeight: fontSize * 1.5,
+        } }
+    >
+        {text}
+    </Text>
+  );
+}
+export default TextComponent;

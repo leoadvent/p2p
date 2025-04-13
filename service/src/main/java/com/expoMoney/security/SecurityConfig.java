@@ -41,7 +41,8 @@ public class SecurityConfig {
     private static final String[] PUBLIC_MATCHERS_POST = {
             "/keycloak",
             "/keycloak/login",
-            "/keycloak/refreshToken"
+            "/keycloak/refreshToken",
+            "/userRealm/recoveryRealm"
     };
 
     private static final String[] PUBLIC_MATCHERS_GET = {

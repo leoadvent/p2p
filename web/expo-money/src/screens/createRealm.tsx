@@ -44,6 +44,9 @@ const CreateRealm = () => {
         setCreateRealm((prev) => ({...prev, 
             realmName: `REALM_${nameClientId}`, 
             clientId: `CLIENT_${nameClientId}`,
+            enableUser: true,
+            enabled: true,
+            emailVerified: true,
             description: `Realm criado para o usuário ${prev.user.firstName} ${prev.user.lastName}`,
             user: {
                 ...prev.user, emailVerified: true,

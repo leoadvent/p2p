@@ -14,4 +14,8 @@ public class UserRealmService {
     public UserRealm save(UserRealm userRealm){
         return repository.save(userRealm);
     }
+
+    public String findRealmByUsername(String username){
+        return repository.findByNameRealmByUsername(username);
+    }
 }

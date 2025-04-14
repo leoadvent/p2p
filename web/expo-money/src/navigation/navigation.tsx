@@ -8,6 +8,7 @@ import PageTest from '../screens/pageTest';
 import Login from '../screens/login';
 import CreateRealm from '../screens/createRealm';
 import { tabNavigatorColor } from '../constants/colorsPalette ';
+import { Ionicons } from '@expo/vector-icons';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator()
@@ -21,13 +22,43 @@ type RootStackParamList = {
 export type NavigationProp = NativeStackNavigationProp<RootStackParamList>;
 
 function MyTabs() {
-    return (
-        <Tab.Navigator screenOptions={{ headerShown: false , tabBarStyle: { display: "flex", backgroundColor: tabNavigatorColor, height: 60, paddingBottom: 10, paddingTop: 10, borderTopWidth: 0, position: "absolute", bottom: 0, left: 0, right: 0}}}>
-            <Tab.Screen name="Home" component={Home} options={{ title:"PG HOME" }} />
-            <Tab.Screen name="PageTest" component={PageTest} options={{ title: "PAGE TESTE" }} />
-        </Tab.Navigator>
-    )
+  return (
+      <Tab.Navigator
+          screenOptions={({ route }) => ({
+              headerShown: false,
+              tabBarStyle: {
+                  display: "flex",
+                  backgroundColor: tabNavigatorColor,
+                  height: 60,
+                  paddingBottom: 10,
+                  paddingTop: 5,
+                  borderTopWidth: 0,
+                  position: "absolute",
+                  bottom: 5,
+                  left: 0,
+                  right: 0
+              },
+              tabBarIcon: ({ focused, color, size }) => {
+                  let iconName: keyof typeof Ionicons.glyphMap = 'home-outline';
+
+                  if (route.name === 'Home') {
+                      iconName = focused ? 'home' : 'home-outline';
+                  } else if (route.name === 'PageTest') {
+                      iconName = focused ? 'document-text' : 'document-text-outline';
+                  }
+                  
+                  return <Ionicons name={iconName} size={size} color={color} />;
+              },
+              tabBarActiveTintColor: 'tomato',
+              tabBarInactiveTintColor: 'gray',
+          })}
+      >
+          <Tab.Screen name="Home" component={Home} options={{ title: "PG HOME" }} />
+          <Tab.Screen name="PageTest" component={PageTest} options={{ title: "PAGE TESTE" }} />
+      </Tab.Navigator>
+  );
 }
+
 
 
 export default function NavigationStack() {

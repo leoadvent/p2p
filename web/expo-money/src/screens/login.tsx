@@ -6,6 +6,7 @@ import ButtonComponent from "../components/button"
 import InputText from "../components/inputText"
 import { useContext, useState } from "react"
 import { AuthContext } from "../context/AuthContext"
+import AsyncStorage from "@react-native-async-storage/async-storage"
 
 const Login = ({ navigation }:any) => {
 
@@ -26,7 +27,7 @@ const Login = ({ navigation }:any) => {
         loginRealm(data)
         setIsSpinner(false)
 
-        if(logado) {
+        if(logado || AsyncStorage.getItem("token_api") !== null) {
             navigation.navigate("MyTabs")
         } else {
             alert("Erro ao realizar o login.")

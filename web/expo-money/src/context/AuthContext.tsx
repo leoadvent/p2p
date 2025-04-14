@@ -19,7 +19,7 @@ export const AuthContext = createContext({} as AuthContextData)
 
 export function AuthProvider({ children }: any) {
 
-    const [realmName, setRealmName] = useState<string>("")
+    let realmName = ""
     const [accessTokenResponse, setAccessTokenResponse] = useState<AccessTokenResponse>({} as AccessTokenResponse)
     const [logado, setLogado] = useState<boolean>(false)
     const [userintrospect, setUserIntrospect] = useState<Userintrospect>({} as Userintrospect)
@@ -27,8 +27,8 @@ export function AuthProvider({ children }: any) {
     function recoveryRealm(login: string){
         const data: UserRealmFindNameDTO = { username: login}
         api.post<string>(`/userRealm/recoveryRealm`, data).then((response) => {
-            setRealmName(response.data)
-            localStorage.setItem("realmName", response.data)
+            realmName = response.data
+            AsyncStorage.setItem("realmName", response.data)
         }).catch((error) => {
             alert("Erro ao recuperar o Realm. Verifique os dados e tente novamente.")
         })
@@ -41,11 +41,16 @@ export function AuthProvider({ children }: any) {
         setLogado(false)
     }
     
-    function loginRealm(loginRealmClient: LoginRealmClient) {
-        const data: LoginRealmClient = { realm: realmName, username: loginRealmClient.username, password: loginRealmClient.password}
+    async function loginRealm(loginRealmClient: LoginRealmClient) {
+        
+        const realmName = await AsyncStorage.getItem("realmName");
+        const data: LoginRealmClient = { 
+            realm: realmName, 
+            username: loginRealmClient.username, 
+            password: loginRealmClient.password
+        }
         api.post<AccessTokenResponse>(`/keycloak/login`, data).then((response) => {
             setAccessTokenResponse(response.data)
-            AsyncStorage.setItem("realmName", data.realm)
             AsyncStorage.setItem("token_api", response.data.access_token)
             AsyncStorage.setItem("refresh_token_api", response.data.refresh_token)
             setLogado(true)

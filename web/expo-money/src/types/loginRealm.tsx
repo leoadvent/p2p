@@ -1,5 +1,5 @@
 interface LoginRealmClient {
-    realm: string
+    realm: string | null
     username: string
     password: string
 }

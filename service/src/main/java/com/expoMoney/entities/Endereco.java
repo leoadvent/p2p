@@ -24,6 +24,7 @@ public class Endereco {
     private String unidade;
     private String bairro;
     private String localidade;
+    private String estado;
     private String uf;
     private String regiao;
     private String ibge;

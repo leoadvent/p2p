@@ -10,7 +10,7 @@ import Login from '../screens/login';
 import CreateRealm from '../screens/createRealm';
 import { statusBarColorPrimary, tabNavigatorColor, textColorPrimary } from '../constants/colorsPalette ';
 import { Ionicons } from '@expo/vector-icons';
-import NovoCliente from '../screens/novoCliente';
+import NewClient from '../screens/newClient';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator()
@@ -20,6 +20,7 @@ type RootStackParamList = {
   Login: undefined;
   MyTabs: undefined;
   newRealm: undefined;
+  Clients: undefined;
 };
 
 export type NavigationProp = NativeStackNavigationProp<RootStackParamList>;
@@ -47,7 +48,7 @@ function MyDrawerCient() {
       >
       <DrawerClient.Screen 
         name="Home" 
-        component={NovoCliente} 
+        component={NewClient} 
         options={{ 
             title: "NOVO CLIENTE" , 
             drawerIcon: () => <Ionicons name='people' size={25} color="rgb(255, 72, 0)" />}} />
@@ -74,11 +75,11 @@ function MyTabs() {
                   display: "flex",
                   backgroundColor: tabNavigatorColor,
                   height: 60,
-                  paddingBottom: 10,
+                  paddingBottom: 0,
                   paddingTop: 5,
                   borderTopWidth: 0,
-                  position: "absolute",
-                  bottom: 5,
+                  position: "relative",
+                  bottom: 0,
                   left: 0,
                   right: 0
               },

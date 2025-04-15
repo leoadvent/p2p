@@ -15,19 +15,18 @@ const Login = ({ navigation }:any) => {
 
     const { recoveryRealm, realmName, loginRealm, accessTokenResponse, logado } = useContext(AuthContext)
 
-    const handleLogin = () => {
+    const handleLogin = async () => {
         setIsSpinner(true)
         if(realmName === "") {
             recoveryRealm(loginRealmClient.username)
         }
-        alert("Realm encontrado: " + realmName)
 
         const data: LoginRealmClient = { realm: realmName, username: loginRealmClient.username, password: loginRealmClient.password}
         
         loginRealm(data)
         setIsSpinner(false)
 
-        if(logado || AsyncStorage.getItem("token_api") !== null) {
+        if(await AsyncStorage.getItem("token_api") !== null) {
             navigation.navigate("MyTabs")
         } else {
             alert("Erro ao realizar o login.")

@@ -51,19 +51,20 @@ const ButtonComponent = ({ nameButton, onPress, typeButton, isDisabled, isSpinne
     })
 
     return(
-        <View style={{ width: width, alignItems: "center", justifyContent: "center" }}>
+        <View style={{ display:"flex", width: width, alignItems: "center", justifyContent: "center" }}>
             <TouchableOpacity
                 onPress={isDisabled ? ()=>{} : onPress}
                 style={{
                     flexDirection: "row",
                     justifyContent: "center",
+                    alignItems: "center",
                     width: "100%",
                     gap: 10,
                     backgroundColor: isDisabled ? buttonBackgroundColorDisabled : backgroundButton,
                     opacity: isDisabled ? 0.5 : 1,
                     padding: 10,
                     borderRadius: 5,
-                    alignItems: "center",
+                    
                 }}    
             >
                 <ActivityIndicator style={{ display: isSpinner ? "flex": "none" }}/>

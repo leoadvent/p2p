@@ -85,5 +85,7 @@ const styles = (isTitle: boolean, showUserIntrospect: boolean ) => StyleSheet.cr
     borderStartEndRadius: 15,
     borderEndEndRadius: 15,
     boxShadow: "0px 4px 10px  rgba(255, 255, 255, 0.2)",
+    zIndex: 10,
+    elevation: 10,
   }
 })

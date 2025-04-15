@@ -27,4 +27,10 @@
         </createTable>
     </changeSet>
 
+    <changeSet id="202504060441_2" author="Desenvolvedor Do Sistema">
+        <addColumn tableName="tb_endereco">
+            <column name="estado" type="VARCHAR(255)"/>
+        </addColumn>
+    </changeSet>
+
 </databaseChangeLog>

@@ -16,7 +16,7 @@ const TextComponent = ( { text, color, fontSize, textAlign, fontWeight} : Props)
           fontSize: fontSize, 
           textAlign: textAlign,
           fontWeight: fontWeight ? fontWeight : "400",
-          lineHeight: fontSize * 1.5,
+          lineHeight: fontSize * 1.5
         } }
     >
         {text}

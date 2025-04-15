@@ -61,7 +61,7 @@ export function AuthProvider({ children }: any) {
             setAccessTokenResponse({} as AccessTokenResponse)
             AsyncStorage.removeItem("token_api")
             AsyncStorage.removeItem("refresh_token_api")
-            alert("Erro ao realizar o login.")
+            alert("Usuário ou senha estão incorretos.")
         })
 
         

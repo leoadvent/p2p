@@ -7,17 +7,23 @@ import ButtonComponent from "../components/button";
 import api from "../integration/axiosconfig";
 import TextComponent from "../components/text/text";
 import { textColorError, textColorPrimary } from "../constants/colorsPalette ";
+import { useRoute } from "@react-navigation/native";
 
-const NewClient = () => {
+const NewClient = ({ navigation } : any) => {
 
-    const [customerDTO, setCustomerDTO] = useState<CustomerDTO>({Endereco: {cep: ""}} as CustomerDTO)
+    const [customerDTO, setCustomerDTO] = useState<CustomerDTO>({endereco: {cep: ""}} as CustomerDTO)
     const [isSpinner, setIsSpinner] = useState<boolean>(false)
     const [isDisabled, setIsDisabled] = useState<boolean>(false)
     const [isSuccess, setIsSuccess] = useState<boolean>(false)
     const [message, setMessage] = useState<string>("")
 
+    const route = useRoute();
+    const { clientEdit } : any = route.params;
+    const clientCopyEdit = clientEdit
+
     function handleSaveCustomer() {
         setIsSpinner(true)
+        console.log("customerDTO CRIANDO: ", customerDTO)
         api.post("/customer", customerDTO).then((response) => {
             setMessage("Cliente cadastrado com sucesso!")
             setIsSuccess(true)
@@ -35,16 +41,15 @@ const NewClient = () => {
     }
 
     function handleClearCustomer() {
-        setCustomerDTO({Endereco: {cep: ""}} as CustomerDTO)
+        setCustomerDTO({endereco: {cep: ""}} as CustomerDTO)
     }
 
     function handleFindAdrresByCEP() {
-        if(customerDTO.Endereco.cep.length === 8) {
-            fetch(`https://viacep.com.br/ws/${customerDTO.Endereco.cep}/json/`)
+        if(customerDTO.endereco.cep.length === 8) {
+            fetch(`https://viacep.com.br/ws/${customerDTO.endereco.cep}/json/`)
                 .then((response) => response.json())
                 .then((data) => {
-                    setCustomerDTO({...customerDTO, Endereco: {...customerDTO.Endereco, ...data}})
-                    console.log("VIA CEP: ", data)
+                    setCustomerDTO({...customerDTO, endereco: {...customerDTO.endereco, ...data}})
                 })
                 .catch((error) => {
                     console.error("Erro ao buscar endereço: ", error)
@@ -55,7 +60,7 @@ const NewClient = () => {
     }
 
     useEffect(() => {
-        if(customerDTO.Endereco.cep.length === 8) {
+        if(customerDTO.endereco.cep.length === 8) {
             handleFindAdrresByCEP()
         }
 
@@ -65,7 +70,23 @@ const NewClient = () => {
             setIsDisabled(true)
         }
 
-    }, [customerDTO.Endereco.cep, customerDTO.firsName, customerDTO.lastName, customerDTO.contact])
+    }, [customerDTO.endereco.cep, customerDTO.firsName, customerDTO.lastName, customerDTO.contact])
+
+    alert("clientEdit: " + JSON.stringify(clientEdit))
+
+    useEffect(() => {
+        if(Object.entries(clientEdit).length > 0) {
+            alert("EDITANDO CLIENTE " + clientEdit.firsName)
+            if(!clientEdit.endereco) {
+                setCustomerDTO({...clientEdit, endereco: {cep: ""}} as CustomerDTO) 
+            }
+            setCustomerDTO(clientCopyEdit)
+            navigation.setParams({ clientEdit: {} })
+        }else {
+            alert("CRIANDO NOVO CLIENTE")
+            setCustomerDTO({endereco: {cep: ""}} as CustomerDTO)
+        }
+    }, [])
 
     return (
         <BaseScreens title="" >
@@ -94,56 +115,56 @@ const NewClient = () => {
                             label="CEP"
                             placeholder="CEP"
                             keyboardType="numeric"
-                            value={customerDTO.Endereco.cep}
-                            onChangeText={(text) => setCustomerDTO({...customerDTO, Endereco: {...customerDTO.Endereco, cep: text}})} width={300}/>
+                            value={customerDTO.endereco.cep}
+                            onChangeText={(text) => setCustomerDTO({...customerDTO, endereco: {...customerDTO.endereco, cep: text}})} width={300}/>
                         
                         <InputText
                             label="Rua"
                             placeholder="Rua"
-                            value={customerDTO.Endereco.logradouro}
-                            onChangeText={(text) => setCustomerDTO({...customerDTO, Endereco: {...customerDTO.Endereco, logradouro: text}})} width={300}/>
+                            value={customerDTO.endereco.logradouro}
+                            onChangeText={(text) => setCustomerDTO({...customerDTO, endereco: {...customerDTO.endereco, logradouro: text}})} width={300}/>
 
                         <InputText
                             label="Número"
                             placeholder="Número"
-                            value={customerDTO.Endereco.numero}
-                            onChangeText={(text) => setCustomerDTO({...customerDTO, Endereco: {...customerDTO.Endereco, numero: text}})} width={300}/>
+                            value={customerDTO.endereco.numero}
+                            onChangeText={(text) => setCustomerDTO({...customerDTO, endereco: {...customerDTO.endereco, numero: text}})} width={300}/>
 
                         <InputText
                             label="Complemento"
                             placeholder="Complemento"
-                            value={customerDTO.Endereco.complemento}
-                            onChangeText={(text) => setCustomerDTO({...customerDTO, Endereco: {...customerDTO.Endereco, complemento: text}})} width={300}/>
+                            value={customerDTO.endereco.complemento}
+                            onChangeText={(text) => setCustomerDTO({...customerDTO, endereco: {...customerDTO.endereco, complemento: text}})} width={300}/>
 
                         <InputText
                             label="Bairro"
                             placeholder="Bairro"
-                            value={customerDTO.Endereco.bairro}
-                            onChangeText={(text) => setCustomerDTO({...customerDTO, Endereco: {...customerDTO.Endereco, bairro: text}})} width={300}/>
+                            value={customerDTO.endereco.bairro}
+                            onChangeText={(text) => setCustomerDTO({...customerDTO, endereco: {...customerDTO.endereco, bairro: text}})} width={300}/>
 
                         <InputText
                             label="Cidade"
                             placeholder="Cidade"
-                            value={customerDTO.Endereco.localidade}
-                            onChangeText={(text) => setCustomerDTO({...customerDTO, Endereco: {...customerDTO.Endereco, localidade: text}})} width={300}/>
+                            value={customerDTO.endereco.localidade}
+                            onChangeText={(text) => setCustomerDTO({...customerDTO, endereco: {...customerDTO.endereco, localidade: text}})} width={300}/>
                         
                         <InputText
                             label="Municipio"
                             placeholder="Municipio"
-                            value={customerDTO.Endereco.localidade}
-                            onChangeText={(text) => setCustomerDTO({...customerDTO, Endereco: {...customerDTO.Endereco, localidade: text}})} width={300}/>
+                            value={customerDTO.endereco.localidade}
+                            onChangeText={(text) => setCustomerDTO({...customerDTO, endereco: {...customerDTO.endereco, localidade: text}})} width={300}/>
 
                         <InputText
                             label="Estado"
                             placeholder="Estado"
-                            value={customerDTO.Endereco.estado}
-                            onChangeText={(text) => setCustomerDTO({...customerDTO, Endereco: {...customerDTO.Endereco, estado: text}})} width={300}/>
+                            value={customerDTO.endereco.estado}
+                            onChangeText={(text) => setCustomerDTO({...customerDTO, endereco: {...customerDTO.endereco, estado: text}})} width={300}/>
 
                         <InputText
                             label="UF"
                             placeholder="UF"
-                            value={customerDTO.Endereco.uf}
-                            onChangeText={(text) => setCustomerDTO({...customerDTO, Endereco: {...customerDTO.Endereco, uf: text}})} width={300}/>
+                            value={customerDTO.endereco.uf}
+                            onChangeText={(text) => setCustomerDTO({...customerDTO, endereco: {...customerDTO.endereco, uf: text}})} width={300}/>
                         
                     </ScrollView>
 

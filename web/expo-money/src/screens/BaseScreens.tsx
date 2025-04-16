@@ -62,7 +62,7 @@ const BaseScreens = ( { children, title, backgroundColor, rolbackStack, showUser
           behavior={Platform.OS === "ios" ? "padding" : "height"}
           style={{ flex: 1 }}
         >
-          <View style={{ display:"flex", alignItems:"center", flex: 1, padding: 10}}>
+          <View style={{ display:"flex", width:"100%", alignItems:"center", flex: 1, padding: 10}}>
             { children}
           </View>
         </KeyboardAvoidingView>

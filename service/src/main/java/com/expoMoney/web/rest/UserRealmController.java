@@ -26,7 +26,7 @@ public class UserRealmController {
     @Operation(tags = {"USER REALM"}, summary = "Buscar realm por login do usuário",
             description = "Requisicao POST para Buscar realm por login do usuário"
     )
-    public ResponseEntity<String> createOrUpdate(@RequestBody @Valid UserRealmFindNameDTO dto){
+    public ResponseEntity<String> recoverRealm(@RequestBody @Valid UserRealmFindNameDTO dto){
         log.info("REQUISICAO POST PARA RECUPERAR REALM DO USUÁRIO");
         String realmName = service.findRealmByUsername(dto.getUsername());
 

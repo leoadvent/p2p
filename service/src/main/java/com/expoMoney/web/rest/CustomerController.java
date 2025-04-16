@@ -7,6 +7,8 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -33,5 +35,14 @@ public class CustomerController {
         dto = service.createOrUpdate(dto);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(dto.getId()).toUri();
         return ResponseEntity.created(uri).body(dto);
+    }
+
+    @PostMapping("/filter")
+    @Operation(tags = {"CUSTOMER"}, summary = "Recuperar lista de clientes por Filtro",
+            description = "Requisicao POST para Recuperar lista de clientes por Filtro", security = {@SecurityRequirement(name = "BearerJWT")}
+    )
+    public ResponseEntity<Page<CustomerDTO>> findByFilter(@RequestBody CustomerDTO dto, Pageable pageable){
+        log.info("REQUISICAO POST PARA RECUPERAR LISTA DE CLIENTES");
+        return ResponseEntity.ok(service.fildByFilter(dto, pageable));
     }
 }

@@ -5,5 +5,5 @@ export interface CustomerDTO {
     firsName: string
     lastName: string
     contact: string
-    Endereco: Endereco
+    endereco: Endereco
 }

@@ -1,6 +1,6 @@
 // NavigationStack.tsx
 import React from 'react';
-import { NavigationContainer } from '@react-navigation/native';
+import { NavigationContainer, useRoute } from '@react-navigation/native';
 import { createNativeStackNavigator, NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createDrawerNavigator } from '@react-navigation/drawer';
@@ -11,6 +11,8 @@ import CreateRealm from '../screens/createRealm';
 import { statusBarColorPrimary, tabNavigatorColor, textColorPrimary } from '../constants/colorsPalette ';
 import { Ionicons } from '@expo/vector-icons';
 import NewClient from '../screens/newClient';
+import MyClient from '../screens/myClient';
+import { CustomerDTO } from '../types/customerDTO';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator()
@@ -21,14 +23,18 @@ type RootStackParamList = {
   MyTabs: undefined;
   newRealm: undefined;
   Clients: undefined;
+  NewClient: { clientEdit?: {}  | undefined;};
 };
 
 export type NavigationProp = NativeStackNavigationProp<RootStackParamList>;
 
 function MyDrawerCient() {
+
+  const route = useRoute();
+
   return (
     <DrawerClient.Navigator
-        initialRouteName='Home'
+        initialRouteName='MeusClientes'
         screenOptions={{
             drawerPosition:"left",
             headerShown: true,
@@ -47,18 +53,20 @@ function MyDrawerCient() {
         }}
       >
       <DrawerClient.Screen 
-        name="Home" 
+        name="NewClient" 
         component={NewClient} 
         options={{ 
             title: "NOVO CLIENTE" , 
-            drawerIcon: () => <Ionicons name='people' size={25} color="rgb(255, 72, 0)" />}} />
+            drawerIcon: () => <Ionicons name='people' size={25} color="rgb(255, 72, 0)" />}} 
+        initialParams={{ clientEdit: {} as CustomerDTO }}
+      />
       <DrawerClient.Screen 
-            name="PageTest" 
-            component={PageTest} 
+            name="MeusClientes" 
+            component={MyClient} 
             options={{ 
               headerTransparent: true,
-              title: "PAGE TESTE" ,
-              drawerIcon: () => <Ionicons name='clipboard' size={20} color="red" />
+              title: "MEUS CLIENTES" ,
+              drawerIcon: () => <Ionicons name='people-circle' size={20} color="red" />
             }} 
         />
     </DrawerClient.Navigator>

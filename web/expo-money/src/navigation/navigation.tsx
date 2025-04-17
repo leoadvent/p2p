@@ -13,6 +13,7 @@ import { Ionicons } from '@expo/vector-icons';
 import NewClient from '../screens/newClient';
 import MyClient from '../screens/myClient';
 import { CustomerDTO } from '../types/customerDTO';
+import FinancialLoansCreate from '../screens/financialLoansCreate';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator()
@@ -69,6 +70,15 @@ function MyDrawerCient() {
               drawerIcon: () => <Ionicons name='people-circle' size={20} color="red" />
             }} 
         />
+      <DrawerClient.Screen 
+        name='CreateFinancial'
+        component={FinancialLoansCreate}
+        options={{ 
+          headerTransparent: true,
+          title: "MEUS FINANCIAMENTOS" ,
+          drawerIcon: () => <Ionicons name='cash-outline' size={20} color="red" />
+        }} 
+      />
     </DrawerClient.Navigator>
   );
 

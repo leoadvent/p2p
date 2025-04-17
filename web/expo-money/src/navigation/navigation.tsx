@@ -33,6 +33,9 @@ function MyDrawerCient() {
 
   const route = useRoute();
 
+  const colorIcon = "rgb(255, 72, 0)"
+  const sizeIcon = 25
+
   return (
     <DrawerClient.Navigator
         initialRouteName='MeusClientes'
@@ -58,7 +61,7 @@ function MyDrawerCient() {
         component={NewClient} 
         options={{ 
             title: "NOVO CLIENTE" , 
-            drawerIcon: () => <Ionicons name='people' size={25} color="rgb(255, 72, 0)" />}} 
+            drawerIcon: () => <Ionicons name='people' size={sizeIcon} color={colorIcon} />}} 
         initialParams={{ clientEdit: {} as CustomerDTO }}
       />
       <DrawerClient.Screen 
@@ -67,7 +70,7 @@ function MyDrawerCient() {
             options={{ 
               headerTransparent: true,
               title: "MEUS CLIENTES" ,
-              drawerIcon: () => <Ionicons name='people-circle' size={20} color="red" />
+              drawerIcon: () => <Ionicons name='people-circle' size={sizeIcon} color={colorIcon} />
             }} 
         />
       <DrawerClient.Screen 
@@ -76,7 +79,7 @@ function MyDrawerCient() {
         options={{ 
           headerTransparent: true,
           title: "MEUS FINANCIAMENTOS" ,
-          drawerIcon: () => <Ionicons name='cash-outline' size={20} color="red" />
+          drawerIcon: () => <Ionicons name='cash-sharp' size={sizeIcon} color={colorIcon} />
         }} 
       />
     </DrawerClient.Navigator>

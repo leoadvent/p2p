@@ -9,7 +9,7 @@ interface Props {
     isSpinner?: boolean
     isDisabled?: boolean
     typeButton: "primary" | "secondary" | "warning" | "success" | "error"
-    width: "100%" | "50%" | "25%"
+    width: "100%" | "50%" | "25%" | "30%" | "40%"
 }
 
 const ButtonComponent = ({ nameButton, onPress, typeButton, isDisabled, isSpinner, width } : Props ) => {

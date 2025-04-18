@@ -63,6 +63,7 @@ const CreateRealm = () => {
                 <TextComponent textAlign="auto" color={textColorPrimary} fontSize={18} text={"Novo Usuário"}/> 
 
                 <InputText 
+                    editable
                     label="Nome" 
                     onChangeText={ (text) => setCreateRealm((prev) => ({...createRealm, user: {...prev.user, firstName: text}}))} 
                     value={createRealm.user.firstName} 
@@ -71,6 +72,7 @@ const CreateRealm = () => {
                 />
 
                 <InputText 
+                    editable
                     label="Sobrenome" 
                     onChangeText={ (text) => setCreateRealm((prev) => ({...createRealm, user: {...prev.user, lastName: text}}))} 
                     value={createRealm.user.lastName} 
@@ -79,6 +81,7 @@ const CreateRealm = () => {
                 />
 
                 <InputText 
+                    editable
                     label="Email" 
                     onChangeText={ (text) => setCreateRealm((prev) => ({...createRealm, user: {...prev.user, email: text}}))} 
                     value={createRealm.user.email} 
@@ -88,6 +91,7 @@ const CreateRealm = () => {
                 />
 
                 <InputText 
+                    editable
                     label="Senha" 
                     onChangeText={ (text) => setCreateRealm((prev) => ({...createRealm, password: text}))} 
                     value={createRealm.password} 

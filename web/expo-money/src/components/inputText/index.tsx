@@ -18,10 +18,11 @@ interface Props {
     isInteger?: boolean;
     keyboardType?: KeyboardType,
     width?: number,
-    money?: boolean
+    money?: boolean,
+    editable: boolean
   }
 
-const InputText = ({ value, placeholder, width, label, money, onChangeText, keyboardType, isPassword, inputError } : Props) => {
+const InputText = ({ value, placeholder, width, label, money, onChangeText, keyboardType, isPassword, inputError, editable } : Props) => {
 
     const formatMoney = (value: string): string => {
         // Remove caracteres que não são dígitos
@@ -50,11 +51,17 @@ const InputText = ({ value, placeholder, width, label, money, onChangeText, keyb
         <View style={{ width: width}}>
             <TextComponent color={inputError ? textColorError : textColorPrimary} fontSize={12} text={label} textAlign="left" />
             <TextInput 
+                editable={editable}
                 value={value} 
                 placeholder={placeholder}
                 placeholderTextColor="#000000"
                 onChangeText={handleChangeText}
-                style={[stylesGlobal.inputText, {borderColor: inputError ? textColorError : "#000000", borderWidth: 2, width: width}]}
+                style={
+                  [stylesGlobal.inputText, 
+                    {
+                      borderColor: inputError ? textColorError : "#000000", 
+                      borderWidth: 2, width: width, 
+                      backgroundColor: editable ? "rgb(255, 255, 255)" : "rgb(182, 180, 180)"}]}
                 keyboardType={keyboardType}
                 secureTextEntry={isPassword}
             />

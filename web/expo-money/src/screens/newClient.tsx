@@ -90,24 +90,28 @@ const NewClient = ({ navigation } : any) => {
                 <KeyboardAvoidingView>
                     <ScrollView style={{ padding: 20, gap: 20 }} showsVerticalScrollIndicator={false} showsHorizontalScrollIndicator={false} contentContainerStyle={{ alignItems: "center", padding: 20 }}>
                         <InputText 
+                            editable
                             label="Nome *" 
                             placeholder="Nome" 
                             value={customerDTO.firsName}
                             onChangeText={(text) => setCustomerDTO({...customerDTO, firsName: text})} width={300}/> 
 
                         <InputText
+                            editable
                             label="Sobrenome *"
                             placeholder="Sobrenome"
                             value={customerDTO.lastName}
                             onChangeText={(text) => setCustomerDTO({...customerDTO, lastName: text})} width={300}/>
 
                         <InputText
+                            editable
                             label="Contato *" 
                             placeholder="Contato"
                             value={customerDTO.contact}
                             onChangeText={(text) => setCustomerDTO({...customerDTO, contact: text})} width={300}/> 
                         
                         <InputText
+                            editable
                             label="CEP"
                             placeholder="CEP"
                             keyboardType="numeric"
@@ -115,48 +119,56 @@ const NewClient = ({ navigation } : any) => {
                             onChangeText={(text) => setCustomerDTO({...customerDTO, endereco: {...customerDTO.endereco, cep: text}})} width={300}/>
                         
                         <InputText
+                            editable
                             label="Rua"
                             placeholder="Rua"
                             value={customerDTO.endereco.logradouro}
                             onChangeText={(text) => setCustomerDTO({...customerDTO, endereco: {...customerDTO.endereco, logradouro: text}})} width={300}/>
 
                         <InputText
+                            editable
                             label="Número"
                             placeholder="Número"
                             value={customerDTO.endereco.numero}
                             onChangeText={(text) => setCustomerDTO({...customerDTO, endereco: {...customerDTO.endereco, numero: text}})} width={300}/>
 
                         <InputText
+                            editable
                             label="Complemento"
                             placeholder="Complemento"
                             value={customerDTO.endereco.complemento}
                             onChangeText={(text) => setCustomerDTO({...customerDTO, endereco: {...customerDTO.endereco, complemento: text}})} width={300}/>
 
                         <InputText
+                            editable
                             label="Bairro"
                             placeholder="Bairro"
                             value={customerDTO.endereco.bairro}
                             onChangeText={(text) => setCustomerDTO({...customerDTO, endereco: {...customerDTO.endereco, bairro: text}})} width={300}/>
 
                         <InputText
+                            editable
                             label="Cidade"
                             placeholder="Cidade"
                             value={customerDTO.endereco.localidade}
                             onChangeText={(text) => setCustomerDTO({...customerDTO, endereco: {...customerDTO.endereco, localidade: text}})} width={300}/>
                         
                         <InputText
+                            editable
                             label="Municipio"
                             placeholder="Municipio"
                             value={customerDTO.endereco.localidade}
                             onChangeText={(text) => setCustomerDTO({...customerDTO, endereco: {...customerDTO.endereco, localidade: text}})} width={300}/>
 
                         <InputText
+                            editable
                             label="Estado"
                             placeholder="Estado"
                             value={customerDTO.endereco.estado}
                             onChangeText={(text) => setCustomerDTO({...customerDTO, endereco: {...customerDTO.endereco, estado: text}})} width={300}/>
 
                         <InputText
+                            editable
                             label="UF"
                             placeholder="UF"
                             value={customerDTO.endereco.uf}

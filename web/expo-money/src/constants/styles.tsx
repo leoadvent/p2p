@@ -7,7 +7,6 @@ export const stylesGlobal = StyleSheet.create({
         padding: 10,
         fontSize: 16,
         borderRadius: 10,
-        backgroundColor: inputBackgroundColor,
         color: inputTextColor,
         borderWidth: 1,
         borderColor: inputBorderColor,

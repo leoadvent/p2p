@@ -8,6 +8,8 @@ import ButtonComponent from "../components/button"
 import DropDow from "../components/dropdow"
 import { CustomerDTO } from "../types/customerDTO"
 import api from "../integration/axiosconfig"
+import DateTimePicker from '@react-native-community/datetimepicker'
+import { Platform } from 'react-native'
 
 const FinancialLoansCreate = () => {
 
@@ -16,6 +18,9 @@ const FinancialLoansCreate = () => {
     const [filter, setFilter] = useState<string>("")
     const [showDropdow, setShowDropDow] = useState<boolean>(false)
     const [customerId, setCustomerId] = useState<string>("")
+
+    const [showPicker, setShowPicker] = useState(false)
+    const [date, setDate] = useState(new Date())
 
     const width = Dimensions.get("window").width
 
@@ -41,6 +46,7 @@ const FinancialLoansCreate = () => {
                     label="Cliente *" 
                     value={filter}
                     width={330}
+                    editable
                     onChangeText={(text) => setFilter(text) }
                 />
                 <DropDow display={showDropdow ? "flex" : "none"} width={330} top={139}> 
@@ -58,6 +64,7 @@ const FinancialLoansCreate = () => {
                 <View style={{ width: width, display:"flex", flexDirection:"row", gap: 20, justifyContent: "center", alignItems: "center"}}>
 
                     <InputText 
+                        editable
                         label="Valor *" 
                         money={true}
                         keyboardType="numeric"
@@ -67,6 +74,7 @@ const FinancialLoansCreate = () => {
                     />
 
                     <InputText 
+                        editable
                         label="Juros Empréstimo *" 
                         keyboardType="numeric"
                         value={""}
@@ -78,6 +86,7 @@ const FinancialLoansCreate = () => {
 
                 <View style={{ width: width, display:"flex", flexDirection:"row", gap: 20, justifyContent: "center", alignItems: "center"}}>
                     <InputText 
+                        editable
                         label="Juros Atraso *" 
                         keyboardType="numeric"
                         value={""}
@@ -86,6 +95,7 @@ const FinancialLoansCreate = () => {
                     />
 
                     <InputText 
+                        editable
                         label="Adcional Dia Atraso *" 
                         keyboardType="numeric"
                         value={""}
@@ -97,6 +107,7 @@ const FinancialLoansCreate = () => {
                 <View style={{ width: width, display:"flex", flexDirection:"row", gap: 20, justifyContent: "center", alignItems: "flex-end"}}>
                     
                     <InputText 
+                        editable
                         label="Quantidade Parcelas *" 
                         keyboardType="numeric"
                         value={""}
@@ -104,12 +115,42 @@ const FinancialLoansCreate = () => {
                         onChangeText={() => {}}
                     />
 
+                    <TouchableOpacity
+                        onPress={() => setShowPicker(true)}
+                    >
+                        <InputText 
+                            label="Data Início"
+                            editable={false}
+                            width={150}
+                            value={date.toLocaleDateString('pt-BR')}
+                        />
+                    </TouchableOpacity>
+
+                    {showPicker && (
+                        <DateTimePicker
+                            value={date}
+                            mode="date"
+                            display={Platform.OS === 'ios' ? 'inline' : 'default'}
+                            onChange={(event, selectedDate) => {
+                            setShowPicker(false)
+                            if (selectedDate) setDate(selectedDate)
+                            }}
+                        />
+                    )}
+
+                   
+                </View>
+
+                <View  style={{ width: width, display:"flex", flexDirection:"row", gap: 20, justifyContent: "center", alignItems: "flex-end"}}>
+                   
                     <ButtonComponent 
                         nameButton={simulator ? "SIMULANDO" : "EMPRESTIMO"} 
                         onPress={()=> {setSimulator(!simulator)} } 
                         typeButton={ simulator ? "primary" : "success"} 
                         width={"40%"} 
                     />
+                    
+                    
                 </View>
             </View>
         </BaseScreens>

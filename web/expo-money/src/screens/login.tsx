@@ -56,8 +56,8 @@ const Login = ({ navigation }:any) => {
 
                 <TextComponent textAlign="auto" color={textColorPrimary} fontSize={18} text={"Login"} />
 
-                <InputText label="Username" placeholder="usuario@email.com" onChangeText={(text) =>setLoginRealmClient({...loginRealmClient, username: text})} width={300}/>
-                <InputText label="Password" placeholder="senha" onChangeText={(text) => setLoginRealmClient({...loginRealmClient, password: text})} isPassword width={300}/>
+                <InputText editable label="Username" placeholder="usuario@email.com" onChangeText={(text) =>setLoginRealmClient({...loginRealmClient, username: text})} width={300}/>
+                <InputText editable label="Password" placeholder="senha" onChangeText={(text) => setLoginRealmClient({...loginRealmClient, password: text})} isPassword width={300}/>
 
                 <View style={{ display: "flex", marginTop: 50, flexDirection: "row", gap: 10, width: "80%", justifyContent: "center", alignItems: "center"}}>
                

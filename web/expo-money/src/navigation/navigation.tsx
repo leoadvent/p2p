@@ -25,6 +25,7 @@ type RootStackParamList = {
   newRealm: undefined;
   Clients: undefined;
   NewClient: { clientEdit?: {}  | undefined;};
+  CreateFinancial: {customer?: {} | undefined}
 };
 
 export type NavigationProp = NativeStackNavigationProp<RootStackParamList>;
@@ -76,9 +77,10 @@ function MyDrawerCient() {
       <DrawerClient.Screen 
         name='CreateFinancial'
         component={FinancialLoansCreate}
+        initialParams={{ customer: {} as CustomerDTO }}
         options={{ 
           headerTransparent: true,
-          title: "MEUS FINANCIAMENTOS" ,
+          title: "FINANCIAR" ,
           drawerIcon: () => <Ionicons name='cash-sharp' size={sizeIcon} color={colorIcon} />
         }} 
       />
@@ -138,6 +140,7 @@ export default function NavigationStack() {
         <Stack.Screen name="Clients" component={MyDrawerCient} />
         <Stack.Screen name="MyTabs"  component={MyTabs} />
         <Stack.Screen name="newRealm" component={CreateRealm} />
+        <Stack.Screen name="CreateFinancial" component={FinancialLoansCreate} />
       </Stack.Navigator>
     </NavigationContainer>
   );

@@ -1,5 +1,6 @@
 package com.expoMoney.entities;
 
+import com.expoMoney.security.utils.StringUtils;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -48,4 +49,12 @@ public class FinancialLoansPaid {
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "customer_id")
     private Customer customer;
+
+    public String getInstallmentValueFormat(){
+        return StringUtils.formatCurrency(this.installmentValue == null ? 0 : this.installmentValue);
+    }
+
+    public String getAmountPaidFormat(){
+        return StringUtils.formatCurrency(this.amountPaid == null ? 0 : this.amountPaid);
+    }
 }

@@ -10,19 +10,78 @@ import { CustomerDTO } from "../types/customerDTO"
 import api from "../integration/axiosconfig"
 import DateTimePicker from '@react-native-community/datetimepicker'
 import { Platform } from 'react-native'
+import { useRoute } from "@react-navigation/native"
+import { FinancialLoans } from "../types/financialLoans"
+import { FinancialLoansCreateDTO } from "../types/financialLoansCreateDTO"
+
 
 const FinancialLoansCreate = () => {
 
+    const route = useRoute();
+    const { customer } : any = route.params;
+
+    const param : boolean = Object.entries(customer).length > 0 ? true : false;  
+
     const [simulator, setSimulator] = useState<boolean>(true)
     const [customerDTO, setCustomerDTO] = useState<CustomerDTO[]>([])
-    const [filter, setFilter] = useState<string>("")
+    const [filter, setFilter] = useState<string>(param ? `${customer.firsName} ${customer.lastName}` : "")
     const [showDropdow, setShowDropDow] = useState<boolean>(false)
-    const [customerId, setCustomerId] = useState<string>("")
+    const [customerId, setCustomerId] = useState<string>(param ? customer.id : "")
+    const [financialLoans, setFinancialLoans] = useState<FinancialLoans>({} as FinancialLoans)
+
+    const [value, setValue] = useState<string>("")
+    const [rate, setRate] = useState<string>("")
+    const [lateInterest, setLateInterest] = useState<string>("")
+    const [additionForDaysOfDelay, setAdditionForDaysOfDelay] = useState<string>("")
+    const [cashInstallment, setCashInstallment] = useState<string>("")
 
     const [showPicker, setShowPicker] = useState(false)
-    const [date, setDate] = useState(new Date())
+    const [startDateDue, setStartDateDue] = useState(new Date())
+    
 
     const width = Dimensions.get("window").width
+
+    function handlerCleanFinancial(){
+        setValue("")
+        setRate("")
+        setLateInterest("")
+        setAdditionForDaysOfDelay("")
+        setCashInstallment("")
+        setShowPicker(false)
+        setStartDateDue(new Date())
+        setSimulator(false)
+        setCustomerDTO([])
+        setFilter("")
+        setShowDropDow(false)
+        setCustomerId("")
+        setFinancialLoans({} as FinancialLoans)
+    }
+
+    function handlerFinancialLoasnCreate() {
+        const createDTO : FinancialLoansCreateDTO = {
+            value: Number.parseFloat(value.replace(".","").replace(",",".")),
+            rate: Number.parseFloat(rate.replace(".","").replace(",",".")),
+            lateInterest: Number.parseFloat(lateInterest.replace(".","").replace(",",".")),
+            startDateDue: startDateDue,
+            cashInstallment: Number.parseFloat(cashInstallment),
+            customerId: customerId,
+            simulator: simulator,
+            additionForDaysOfDelay: Number.parseFloat(additionForDaysOfDelay.replace(".","").replace(",","."))
+        }
+
+        api.post('/financial', createDTO).then((response) => {
+            setFinancialLoans(response.data)
+            alert(JSON.stringify(response.data))
+        }).catch((error) => {
+            alert(JSON.stringify(error))
+        })
+  
+    }
+
+    useEffect(() => {
+        setFilter(customer === undefined ? "" : `${customer.firsName} ${customer.lastName}`)
+        setCustomerId(customer === undefined ? "" : customer.id)
+    },[customer])
 
     useEffect(() => {
         if(filter.length === 0) {
@@ -68,18 +127,18 @@ const FinancialLoansCreate = () => {
                         label="Valor *" 
                         money={true}
                         keyboardType="numeric"
-                        value={""}
+                        value={value}
                         width={150}
-                        onChangeText={() => {}}
+                        onChangeText={(text) => {setValue(text)}}
                     />
 
                     <InputText 
                         editable
                         label="Juros Empréstimo *" 
                         keyboardType="numeric"
-                        value={""}
+                        value={rate}
                         width={150}
-                        onChangeText={() => {}}
+                        onChangeText={(text) => { setRate(text)}}
                     />
 
                 </View>
@@ -89,18 +148,19 @@ const FinancialLoansCreate = () => {
                         editable
                         label="Juros Atraso *" 
                         keyboardType="numeric"
-                        value={""}
+                        value={lateInterest}
                         width={150}
-                        onChangeText={() => {}}
+                        onChangeText={(text) => {setLateInterest(text)}}
                     />
 
                     <InputText 
                         editable
-                        label="Adcional Dia Atraso *" 
+                        label="Adcional Por Dia Atraso *" 
+                        money
                         keyboardType="numeric"
-                        value={""}
+                        value={additionForDaysOfDelay}
                         width={150}
-                        onChangeText={() => {}}
+                        onChangeText={(text) => { setAdditionForDaysOfDelay(text)}}
                     />
                 </View>
 
@@ -110,9 +170,9 @@ const FinancialLoansCreate = () => {
                         editable
                         label="Quantidade Parcelas *" 
                         keyboardType="numeric"
-                        value={""}
+                        value={cashInstallment}
                         width={150}
-                        onChangeText={() => {}}
+                        onChangeText={(text) => { setCashInstallment(text)}}
                     />
 
                     <TouchableOpacity
@@ -122,18 +182,18 @@ const FinancialLoansCreate = () => {
                             label="Data Início"
                             editable={false}
                             width={150}
-                            value={date.toLocaleDateString('pt-BR')}
+                            value={startDateDue.toLocaleDateString('pt-BR')}
                         />
                     </TouchableOpacity>
 
                     {showPicker && (
                         <DateTimePicker
-                            value={date}
+                            value={startDateDue}
                             mode="date"
                             display={Platform.OS === 'ios' ? 'inline' : 'default'}
                             onChange={(event, selectedDate) => {
                             setShowPicker(false)
-                            if (selectedDate) setDate(selectedDate)
+                            if (selectedDate) setStartDateDue(selectedDate)
                             }}
                         />
                     )}
@@ -149,9 +209,27 @@ const FinancialLoansCreate = () => {
                         typeButton={ simulator ? "primary" : "success"} 
                         width={"40%"} 
                     />
+
+                    <ButtonComponent 
+                        nameButton={"CRIAR"} 
+                        onPress={()=> {handlerFinancialLoasnCreate()} } 
+                        typeButton={"primary"} 
+                        width={"40%"} 
+                        isDisabled={
+                            (customerId              === "" || customerId                === null) &&
+                            (value                   === "" || value                     === null) &&
+                            (rate                    === "" || rate                      === null) &&
+                            (lateInterest            === "" || lateInterest              === null) &&
+                            (additionForDaysOfDelay  === "" || additionForDaysOfDelay    === null) &&
+                            (cashInstallment         === "" || cashInstallment           === null) &&
+                            startDateDue            === undefined
+                        }
+                    />
                     
                     
                 </View>
+
+                <ButtonComponent nameButton={"LIMPAR"} onPress={()=> { handlerCleanFinancial()} } typeButton={"warning"} width={"100%"} />
             </View>
         </BaseScreens>
     )

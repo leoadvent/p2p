@@ -2,6 +2,7 @@ package com.expoMoney.entities.dto;
 
 import com.expoMoney.entities.Customer;
 import com.expoMoney.entities.FinancialLoansPaid;
+import com.expoMoney.security.utils.StringUtils;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
@@ -35,4 +36,16 @@ public class FinancialLoansDTO {
 
     @NotNull(message = "Campo Obrigatório")
     private Customer customer;
+
+    public String getValueFormat(){
+        return StringUtils.formatCurrency(this.value);
+    }
+
+    public String getValueTotalFormat(){
+        Double value = 0.0;
+        for(FinancialLoansPaid x : this.loansPaids){
+            value += x.getInstallmentValue();
+        }
+        return StringUtils.formatCurrency(value);
+    }
 }

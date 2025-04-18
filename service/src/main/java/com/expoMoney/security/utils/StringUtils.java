@@ -1,6 +1,8 @@
 package com.expoMoney.security.utils;
 
 import java.security.SecureRandom;
+import java.text.NumberFormat;
+import java.util.Locale;
 
 public class StringUtils {
 
@@ -18,5 +20,10 @@ public class StringUtils {
         }
 
         return sb.toString();
+    }
+
+    public static String formatCurrency(Double value){
+        NumberFormat format = NumberFormat.getCurrencyInstance(new Locale("pt","BR"));
+        return format.format(value);
     }
 }

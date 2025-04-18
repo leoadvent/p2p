@@ -72,18 +72,14 @@ const NewClient = ({ navigation } : any) => {
 
     }, [customerDTO.endereco.cep, customerDTO.firsName, customerDTO.lastName, customerDTO.contact])
 
-    alert("clientEdit: " + JSON.stringify(clientEdit))
-
     useEffect(() => {
         if(Object.entries(clientEdit).length > 0) {
-            alert("EDITANDO CLIENTE " + clientEdit.firsName)
             if(!clientEdit.endereco) {
                 setCustomerDTO({...clientEdit, endereco: {cep: ""}} as CustomerDTO) 
             }
             setCustomerDTO(clientCopyEdit)
             navigation.setParams({ clientEdit: {} })
         }else {
-            alert("CRIANDO NOVO CLIENTE")
             setCustomerDTO({endereco: {cep: ""}} as CustomerDTO)
         }
     }, [])

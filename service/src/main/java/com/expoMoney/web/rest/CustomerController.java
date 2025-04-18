@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+import java.util.List;
 
 @Slf4j
 @RestController
@@ -44,5 +45,14 @@ public class CustomerController {
     public ResponseEntity<Page<CustomerDTO>> findByFilter(@RequestBody CustomerDTO dto, Pageable pageable){
         log.info("REQUISICAO POST PARA RECUPERAR LISTA DE CLIENTES");
         return ResponseEntity.ok(service.fildByFilter(dto, pageable));
+    }
+
+    @PostMapping("/filterByNome")
+    @Operation(tags = {"CUSTOMER"}, summary = "Recuperar lista de clientes por Filtro Somente pelo Nome",
+            description = "Requisicao POST para Recuperar lista de clientes por Filtro Somente pelo Nome", security = {@SecurityRequirement(name = "BearerJWT")}
+    )
+    public ResponseEntity<List<CustomerDTO>> filterByName(@RequestBody String name){
+        log.info("rREQUISICAO POST PARA RECUPERAR LISTA DE USUARIO FILTRADO POR NOME");
+        return ResponseEntity.ok(service.findLikeByNome(name.replaceAll("\"", "")));
     }
 }

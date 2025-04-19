@@ -31,6 +31,7 @@ public class FinancialLoansService {
         loans.setStartMonth(create.getStartDateDue().getMonthValue());
         loans.setStartYear(create.getStartDateDue().getYear());
         loans.setAdditionForDaysOfDelay(create.getAdditionForDaysOfDelay());
+        loans.setRate(create.getRate());
 
         double totalValue = create.getValue();
         double ratePercent = create.getRate();
@@ -40,8 +41,9 @@ public class FinancialLoansService {
         double totalWithInterest = totalValue + interest;
         double valueInstallment = totalWithInterest / totalInstallments;
 
-        for(int i = 0; i <= create.getCashInstallment(); i++){
+        for(int i = 0; i < create.getCashInstallment(); i++){
             FinancialLoansPaid paid = new FinancialLoansPaid();
+            paid.setPortion(i+1);
             paid.setCustomer(customer);
             paid.setFinancialLoans(loans);
             paid.setRate(create.getRate());

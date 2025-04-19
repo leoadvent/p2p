@@ -48,4 +48,18 @@ public class FinancialLoansDTO {
         }
         return StringUtils.formatCurrency(value);
     }
+
+    public String getAdditionForDaysOfDelayFormat(){
+        return StringUtils.formatCurrency(this.additionForDaysOfDelay);
+    }
+
+    public String getRates(){
+        String rate = this.loansPaids.get(0).getRate() + " %";
+        String interestDelay = this.loansPaids.get(0).getInterestDelay() + " %";
+        return "Juros: " + rate + ", Juros atraso: " + interestDelay;
+    }
+
+    public Integer getCashInstallment(){
+        return this.loansPaids.size();
+    }
 }

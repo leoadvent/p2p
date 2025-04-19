@@ -2,8 +2,9 @@ import { CustomerDTO } from "./customerDTO"
 
 interface FinancialLoansPaid{
     id: string
-    dueDate: Date
-    duePayment: Date
+    portion: number
+    dueDate: string
+    duePayment: string
     installmentValue: number
     amountPaid: number
     additionForDaysOfDelay: number
@@ -17,11 +18,14 @@ export interface FinancialLoans {
     id: string
     value: number
     rate: number
+    rates: string
     lateInterest: number
+    cashInstallment: number
     dueDay: number
     startMonth: number
     startYear: number
     additionForDaysOfDelay: number
+    additionForDaysOfDelayFormat: string
     customer: CustomerDTO
     valueFormat: string
     valueTotalFormat: string

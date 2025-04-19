@@ -1,7 +1,7 @@
-import { Dimensions, TouchableOpacity, View } from "react-native"
+import { Dimensions, FlatList, ScrollView, TouchableOpacity, View } from "react-native"
 import BaseScreens from "./BaseScreens"
 import TextComponent from "../components/text/text"
-import { textColorPrimary } from "../constants/colorsPalette "
+import { flatListBorderColor, textColorPrimary, textColorSuccess, textColorWarning } from "../constants/colorsPalette "
 import InputText from "../components/inputText"
 import { useEffect, useState } from "react"
 import ButtonComponent from "../components/button"
@@ -13,6 +13,7 @@ import { Platform } from 'react-native'
 import { useRoute } from "@react-navigation/native"
 import { FinancialLoans } from "../types/financialLoans"
 import { FinancialLoansCreateDTO } from "../types/financialLoansCreateDTO"
+import { Ionicons } from "@expo/vector-icons"
 
 
 const FinancialLoansCreate = () => {
@@ -49,7 +50,7 @@ const FinancialLoansCreate = () => {
         setCashInstallment("")
         setShowPicker(false)
         setStartDateDue(new Date())
-        setSimulator(false)
+        setSimulator(true)
         setCustomerDTO([])
         setFilter("")
         setShowDropDow(false)
@@ -57,7 +58,7 @@ const FinancialLoansCreate = () => {
         setFinancialLoans({} as FinancialLoans)
     }
 
-    function handlerFinancialLoasnCreate() {
+    function handlerFinancialLoasnCreate(simulator: boolean) {
         const createDTO : FinancialLoansCreateDTO = {
             value: Number.parseFloat(value.replace(".","").replace(",",".")),
             rate: Number.parseFloat(rate.replace(".","").replace(",",".")),
@@ -71,7 +72,6 @@ const FinancialLoansCreate = () => {
 
         api.post('/financial', createDTO).then((response) => {
             setFinancialLoans(response.data)
-            alert(JSON.stringify(response.data))
         }).catch((error) => {
             alert(JSON.stringify(error))
         })
@@ -98,139 +98,219 @@ const FinancialLoansCreate = () => {
 
     return(
         <BaseScreens title=" ">
-            <View style={{ width: width, alignItems:"center", gap: 20, padding: 20 }}>
-                <TextComponent text="Criando Empréstimo" color={textColorPrimary} fontSize={20} textAlign={"auto"} />
-                
-                <InputText 
-                    label="Cliente *" 
-                    value={filter}
-                    width={330}
-                    editable
-                    onChangeText={(text) => setFilter(text) }
-                />
-                <DropDow display={showDropdow ? "flex" : "none"} width={330} top={139}> 
-                    <View style={{ gap: 10, padding: 10}}>
-                        {customerDTO && customerDTO.map((item, key) => (
-                            <TouchableOpacity 
-                                onPress={() => { setShowDropDow(false), setFilter(item.firsName + " " + item.lastName), setCustomerId(item.id)}}
-                            >
-                                <TextComponent key={key.toString()} text={item.firsName + " " + item.lastName} color={"rgb(36, 36, 36)"} fontSize={20} textAlign={"auto"} />
-                            </TouchableOpacity>
-                        ))}
-                    </View>
-                </DropDow>
-
-                <View style={{ width: width, display:"flex", flexDirection:"row", gap: 20, justifyContent: "center", alignItems: "center"}}>
-
-                    <InputText 
-                        editable
-                        label="Valor *" 
-                        money={true}
-                        keyboardType="numeric"
-                        value={value}
-                        width={150}
-                        onChangeText={(text) => {setValue(text)}}
-                    />
-
-                    <InputText 
-                        editable
-                        label="Juros Empréstimo *" 
-                        keyboardType="numeric"
-                        value={rate}
-                        width={150}
-                        onChangeText={(text) => { setRate(text)}}
-                    />
-
-                </View>
-
-                <View style={{ width: width, display:"flex", flexDirection:"row", gap: 20, justifyContent: "center", alignItems: "center"}}>
-                    <InputText 
-                        editable
-                        label="Juros Atraso *" 
-                        keyboardType="numeric"
-                        value={lateInterest}
-                        width={150}
-                        onChangeText={(text) => {setLateInterest(text)}}
-                    />
-
-                    <InputText 
-                        editable
-                        label="Adcional Por Dia Atraso *" 
-                        money
-                        keyboardType="numeric"
-                        value={additionForDaysOfDelay}
-                        width={150}
-                        onChangeText={(text) => { setAdditionForDaysOfDelay(text)}}
-                    />
-                </View>
-
-                <View style={{ width: width, display:"flex", flexDirection:"row", gap: 20, justifyContent: "center", alignItems: "flex-end"}}>
+            <>
+                <View style={{ display: Object.entries(financialLoans).length === 0 ? "flex" : "none", width: width, alignItems:"center", gap: 20, padding: 20 }}>
+                    <TextComponent text="Criando Empréstimo" color={textColorPrimary} fontSize={20} textAlign={"auto"} />
                     
                     <InputText 
+                        label="Cliente *" 
+                        value={filter}
+                        width={330}
                         editable
-                        label="Quantidade Parcelas *" 
-                        keyboardType="numeric"
-                        value={cashInstallment}
-                        width={150}
-                        onChangeText={(text) => { setCashInstallment(text)}}
+                        onChangeText={(text) => setFilter(text) }
                     />
+                    <DropDow display={showDropdow ? "flex" : "none"} width={330} top={139}> 
+                        <View style={{ gap: 10, padding: 10}}>
+                            {customerDTO && customerDTO.map((item, key) => (
+                                <TouchableOpacity 
+                                    onPress={() => { setShowDropDow(false), setFilter(item.firsName + " " + item.lastName), setCustomerId(item.id)}}
+                                >
+                                    <TextComponent key={key.toString()} text={item.firsName + " " + item.lastName} color={"rgb(36, 36, 36)"} fontSize={20} textAlign={"auto"} />
+                                </TouchableOpacity>
+                            ))}
+                        </View>
+                    </DropDow>
 
-                    <TouchableOpacity
-                        onPress={() => setShowPicker(true)}
-                    >
+                    <View style={{ width: width, display:"flex", flexDirection:"row", gap: 20, justifyContent: "center", alignItems: "center"}}>
+
                         <InputText 
-                            label="Data Início"
-                            editable={false}
+                            editable
+                            label="Valor *" 
+                            money={true}
+                            keyboardType="numeric"
+                            value={value}
                             width={150}
-                            value={startDateDue.toLocaleDateString('pt-BR')}
+                            onChangeText={(text) => {setValue(text)}}
                         />
-                    </TouchableOpacity>
 
-                    {showPicker && (
-                        <DateTimePicker
-                            value={startDateDue}
-                            mode="date"
-                            display={Platform.OS === 'ios' ? 'inline' : 'default'}
-                            onChange={(event, selectedDate) => {
-                            setShowPicker(false)
-                            if (selectedDate) setStartDateDue(selectedDate)
-                            }}
+                        <InputText 
+                            editable
+                            label="Juros Empréstimo *" 
+                            keyboardType="numeric"
+                            value={rate}
+                            width={150}
+                            onChangeText={(text) => { setRate(text)}}
                         />
-                    )}
 
-                   
+                    </View>
+
+                    <View style={{ width: width, display:"flex", flexDirection:"row", gap: 20, justifyContent: "center", alignItems: "center"}}>
+                        <InputText 
+                            editable
+                            label="Juros Atraso *" 
+                            keyboardType="numeric"
+                            value={lateInterest}
+                            width={150}
+                            onChangeText={(text) => {setLateInterest(text)}}
+                        />
+
+                        <InputText 
+                            editable
+                            label="Adcional Por Dia Atraso *" 
+                            money
+                            keyboardType="numeric"
+                            value={additionForDaysOfDelay}
+                            width={150}
+                            onChangeText={(text) => { setAdditionForDaysOfDelay(text)}}
+                        />
+                    </View>
+
+                    <View style={{ width: width, display:"flex", flexDirection:"row", gap: 20, justifyContent: "center", alignItems: "flex-end"}}>
+                        
+                        <InputText 
+                            editable
+                            label="Quantidade Parcelas *" 
+                            keyboardType="numeric"
+                            value={cashInstallment}
+                            width={150}
+                            onChangeText={(text) => { setCashInstallment(text)}}
+                        />
+
+                        <TouchableOpacity
+                            onPress={() => setShowPicker(true)}
+                        >
+                            <InputText 
+                                label="Data Início"
+                                editable={false}
+                                width={150}
+                                value={startDateDue.toLocaleDateString('pt-BR')}
+                            />
+                        </TouchableOpacity>
+
+                        {showPicker && (
+                            <DateTimePicker
+                                value={startDateDue}
+                                mode="date"
+                                display={Platform.OS === 'ios' ? 'inline' : 'default'}
+                                onChange={(event, selectedDate) => {
+                                setShowPicker(false)
+                                if (selectedDate) setStartDateDue(selectedDate)
+                                }}
+                            />
+                        )}
+
+                    
+                    </View>
+
+                    <View  style={{ width: width-90, display:"flex", flexDirection:"row", gap: 20, justifyContent: "center", alignItems: "flex-end"}}>
+                    
+                        <ButtonComponent 
+                            nameButton={"PROSSEGUIR"} 
+                            onPress={()=> {handlerFinancialLoasnCreate(false)} } 
+                            typeButton={"primary"} 
+                            width={"100%"} 
+                            isDisabled={
+                                (customerId              === "" || customerId                === null) &&
+                                (value                   === "" || value                     === null) &&
+                                (rate                    === "" || rate                      === null) &&
+                                (lateInterest            === "" || lateInterest              === null) &&
+                                (additionForDaysOfDelay  === "" || additionForDaysOfDelay    === null) &&
+                                (cashInstallment         === "" || cashInstallment           === null) &&
+                                startDateDue            === undefined
+                            }
+                        />
+                        
+                    </View>
                 </View>
+                {Object.entries(financialLoans).length > 0 && 
 
-                <View  style={{ width: width, display:"flex", flexDirection:"row", gap: 20, justifyContent: "center", alignItems: "flex-end"}}>
-                   
-                    <ButtonComponent 
-                        nameButton={simulator ? "SIMULANDO" : "EMPRESTIMO"} 
-                        onPress={()=> {setSimulator(!simulator)} } 
-                        typeButton={ simulator ? "primary" : "success"} 
-                        width={"40%"} 
-                    />
+                    <View style={{ 
+                            display: Object.entries(financialLoans).length > 0 ? "flex" : "none", 
+                            marginTop: 10,
+                            width: width, 
+                            alignItems:"center", 
+                            alignContent:"center",
+                            justifyContent:"center",
+                            gap: 20
+                    }}>
+                        <TextComponent text="Dados do Empréstimo" color={textColorPrimary} fontSize={20} textAlign={"auto"} />
 
-                    <ButtonComponent 
-                        nameButton={"CRIAR"} 
-                        onPress={()=> {handlerFinancialLoasnCreate()} } 
-                        typeButton={"primary"} 
-                        width={"40%"} 
-                        isDisabled={
-                            (customerId              === "" || customerId                === null) &&
-                            (value                   === "" || value                     === null) &&
-                            (rate                    === "" || rate                      === null) &&
-                            (lateInterest            === "" || lateInterest              === null) &&
-                            (additionForDaysOfDelay  === "" || additionForDaysOfDelay    === null) &&
-                            (cashInstallment         === "" || cashInstallment           === null) &&
-                            startDateDue            === undefined
+                        <TextComponent text={`${financialLoans.customer.firsName} ${financialLoans.customer.lastName}`} color={textColorPrimary} fontSize={16} textAlign={"auto"} />
+                        
+                        <View style={{ display: "flex", flexDirection:"row", justifyContent:"space-between", gap:20, alignItems:"center" }}>
+                            <Ionicons name="calendar-number-outline" size={15} color={textColorWarning}/>
+                            <TextComponent text={`Adicional por dia de atraso: ${financialLoans.additionForDaysOfDelayFormat}`} color={textColorPrimary} fontSize={12} textAlign={"auto"} />
+                        </View>
+
+                        <View style={{ display: "flex", flexDirection:"row", justifyContent:"space-between", gap:20, alignItems:"center" }}>
+                            <Ionicons name="pricetag-outline" size={15} color={textColorWarning}/>
+                            <TextComponent text={`Juros: ${financialLoans.rate}%`} color={textColorPrimary} fontSize={12} textAlign={"auto"} />
+                            <TextComponent text={`Em Atraso: ${financialLoans.lateInterest}%`} color={textColorPrimary} fontSize={12} textAlign={"auto"} />
+                        </View>
+
+                        <View style={{ display: "flex", flexDirection:"row", justifyContent:"space-between", gap:20 }}>
+                            <Ionicons name="wallet-outline" size={15} color={textColorWarning}/>
+                            <TextComponent text={`Valor: ${financialLoans.valueFormat}`} color={textColorPrimary} fontSize={14} textAlign={"auto"} />
+                            <TextComponent text={`Total: ${financialLoans.valueTotalFormat}`} color={textColorPrimary} fontSize={14} textAlign={"auto"} />
+                        </View>
+
+                        <ScrollView  style={{ height: 300, padding: 20, gap: 20 }} showsVerticalScrollIndicator={false} showsHorizontalScrollIndicator={false} contentContainerStyle={{ alignItems: "center", padding: 20 }}>
+                            <FlatList 
+                                data={financialLoans.loansPaids}
+                                keyExtractor={(key) => key.toString()}
+                                renderItem={({item}) => (
+                                    <View style={{ 
+                                        display:"flex", 
+                                        width: width-80, 
+                                        flexDirection:"row", 
+                                        alignContent:"space-between", 
+                                        justifyContent:"space-between",
+                                        paddingTop: 15,
+                                        paddingInline: 20,
+                                        paddingBottom: 5,
+                                        borderWidth:1,
+                                        borderRadius: 10,
+                                        marginBottom: 10,
+                                        borderBottomColor: flatListBorderColor,
+                                    }}>
+                                        <Ionicons name="return-up-forward-outline" size={15} color={textColorWarning}/>
+                                        <TextComponent 
+                                            text={`${item.portion}º`}
+                                            color={"rgb(255, 255, 255)"} fontSize={12} textAlign={"center"}
+                                        />
+                                        <Ionicons name="calendar" size={15} color={textColorWarning}/>
+                                        <TextComponent 
+                                            text={`${item.dueDate}`}
+                                            color={"rgb(255, 255, 255)"} fontSize={12} textAlign={"center"}
+                                        />
+                                        <Ionicons name="cash" size={15} color={textColorSuccess}/>
+                                        <TextComponent 
+                                            text={`${item.installmentValueFormat} `} 
+                                            color={"rgb(255, 255, 255)"} fontSize={12} textAlign={"center"} />
+                                    </View>
+                                )}
+                            />
+                        </ScrollView>
+
+                        {simulator && 
+                            <View style={{ display: "flex", flexDirection:"row", gap:20, width: width-70, alignItems:"center"}}>
+                                <ButtonComponent nameButton="EDITAR" onPress={()=> {setFinancialLoans({} as FinancialLoans)} } typeButton={"warning"} width={"50%"} />
+                                <ButtonComponent nameButton="EMPRESTAR" onPress={()=> {setSimulator(false), handlerFinancialLoasnCreate(true)} } typeButton={"success"} width={"50%"} />
+                            </View>
                         }
-                    />
-                    
-                    
+                        {!simulator &&
+                            <View style={{ display: "flex", flexDirection:"row", gap:20, width: width-70, alignItems:"center"}}>
+                                <Ionicons name="ribbon-outline" size={18} color={textColorSuccess}/>
+                                <TextComponent text={`Contrato Realizado com Sucesso!`} color={textColorPrimary} fontSize={18} textAlign={"center"} />
+                            </View>
+                        }
+                        
+                    </View>
+                }
+                <View style={{ width: width, alignItems:"center", gap: 20, padding: 20 }}>
+                    <ButtonComponent nameButton={"LIMPAR"} onPress={()=> { handlerCleanFinancial()} } typeButton={"warning"} width={"100%"} />
                 </View>
-
-                <ButtonComponent nameButton={"LIMPAR"} onPress={()=> { handlerCleanFinancial()} } typeButton={"warning"} width={"100%"} />
-            </View>
+            </>
         </BaseScreens>
     )
 }

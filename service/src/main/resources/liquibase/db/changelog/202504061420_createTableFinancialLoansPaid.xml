@@ -39,4 +39,12 @@
         </addColumn>
     </changeSet>
 
+    <changeSet id="202504061420_3" author="Desenvolvedor Do Sistema">
+        <addColumn tableName="TB_FINANCIAL_LOANS_PAID">
+            <column name="portion" type="INT" >
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
+
 </databaseChangeLog>

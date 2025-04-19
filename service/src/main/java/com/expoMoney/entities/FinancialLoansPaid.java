@@ -1,6 +1,7 @@
 package com.expoMoney.entities;
 
 import com.expoMoney.security.utils.StringUtils;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -21,9 +22,11 @@ public class FinancialLoansPaid {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
+    @JsonFormat(pattern = "dd/MM/yyyy")
     @NotNull(message = "Campo Obrigatório")
     @Column(name = "due_date")
     private LocalDate dueDate;
+    @JsonFormat(pattern = "dd/MM/yyyy")
     @Column(name = "due_payment")
     private LocalDate duePayment;
     @NotNull(message = "Campo Obrigatório")
@@ -39,6 +42,8 @@ public class FinancialLoansPaid {
     @NotNull(message = "Campo Obrigatório")
     @Column(name = "interest_delay")
     private Float interestDelay;
+    @NotNull(message = "Campo Obrigatório")
+    private Integer portion;
 
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)

@@ -58,7 +58,7 @@ const FinancialLoansCreate = () => {
         setFinancialLoans({} as FinancialLoans)
     }
 
-    function handlerFinancialLoasnCreate(simulator: boolean) {
+    function handlerFinancialLoasnCreate(simulatorParam: boolean) {
         const createDTO : FinancialLoansCreateDTO = {
             value: Number.parseFloat(value.replace(".","").replace(",",".")),
             rate: Number.parseFloat(rate.replace(".","").replace(",",".")),
@@ -66,7 +66,7 @@ const FinancialLoansCreate = () => {
             startDateDue: startDateDue,
             cashInstallment: Number.parseFloat(cashInstallment),
             customerId: customerId,
-            simulator: simulator,
+            simulator: simulatorParam,
             additionForDaysOfDelay: Number.parseFloat(additionForDaysOfDelay.replace(".","").replace(",","."))
         }
 
@@ -206,7 +206,7 @@ const FinancialLoansCreate = () => {
                     
                         <ButtonComponent 
                             nameButton={"PROSSEGUIR"} 
-                            onPress={()=> {handlerFinancialLoasnCreate(false)} } 
+                            onPress={()=> {handlerFinancialLoasnCreate(true)} } 
                             typeButton={"primary"} 
                             width={"100%"} 
                             isDisabled={
@@ -295,7 +295,7 @@ const FinancialLoansCreate = () => {
                         {simulator && 
                             <View style={{ display: "flex", flexDirection:"row", gap:20, width: width-70, alignItems:"center"}}>
                                 <ButtonComponent nameButton="EDITAR" onPress={()=> {setFinancialLoans({} as FinancialLoans)} } typeButton={"warning"} width={"50%"} />
-                                <ButtonComponent nameButton="EMPRESTAR" onPress={()=> {setSimulator(false), handlerFinancialLoasnCreate(true)} } typeButton={"success"} width={"50%"} />
+                                <ButtonComponent nameButton="EMPRESTAR" onPress={()=> {setSimulator(false), handlerFinancialLoasnCreate(false)} } typeButton={"success"} width={"50%"} />
                             </View>
                         }
                         {!simulator &&

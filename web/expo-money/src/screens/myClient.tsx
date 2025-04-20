@@ -55,9 +55,11 @@ const MyClient = ({ navigation }:any) => {
                             </View>
                             <TextComponent textAlign="center" color={textColorPrimary} fontSize={16} text={item.firsName + " " + item.lastName } />
                             <View style={{ display: "flex", flexDirection: "row", gap: 10 }}>
-                                <TouchableOpacity onPress={() => item.amountFinancialLoansOpen <= 0 &&  navigation.navigate("CreateFinancial", {customer: item})}>
-                                    <Ionicons name="cash" size={26} color={item.amountFinancialLoansOpen > 0 ? textColorDeactivated : textColorSuccess} />
-                                </TouchableOpacity>
+                                {item.amountFinancialLoansOpen <= 0 && 
+                                    <TouchableOpacity onPress={() => item.amountFinancialLoansOpen <= 0 &&  navigation.navigate("CreateFinancial", {customer: item})}>
+                                        <Ionicons name="cash" size={26} color={item.amountFinancialLoansOpen > 0 ? textColorDeactivated : textColorSuccess} />
+                                    </TouchableOpacity>
+                                }
                                 <TouchableOpacity onPress={() => navigation.navigate("NewClient", { clientEdit: item })}>
                                     <Ionicons name="pencil-sharp" size={26} color={textColorWarning} />
                                 </TouchableOpacity>

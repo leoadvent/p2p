@@ -1,4 +1,5 @@
 import { Endereco } from "./endereco"
+import { FinancialLoans } from "./financialLoans"
 
 export interface CustomerDTO {
     id: string
@@ -6,4 +7,8 @@ export interface CustomerDTO {
     lastName: string
     contact: string
     endereco: Endereco
+    financialLoans: FinancialLoans[]
+    amountFinancialLoans: number
+    amountFinancialLoansOpen: number
+    amountFinancialLoansPending: number
 }

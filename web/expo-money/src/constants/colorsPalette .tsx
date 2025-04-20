@@ -10,6 +10,7 @@ export const textColorError         = "rgb(250, 54, 54)";
 export const textColorStatusBar     = "rgb(255, 255, 255)";
 export const textColorSuccess       = "rgb(21, 201, 66)";
 export const textColorWarning       = "rgb(236, 202, 4)";
+export const textColorDeactivated   = "rgb(194, 193, 191)";
 
 export const inputBackgroundColor   = "rgb(255, 254, 254)";
 export const inputTextColor         = "rgb(52, 53, 51)";

@@ -8,11 +8,11 @@ import com.expoMoney.entities.dto.FinancialLoansDTO;
 import com.expoMoney.entities.dto.FinancialLoansPendingByCustumerDTO;
 import com.expoMoney.mapper.CustomerMapper;
 import com.expoMoney.mapper.FinancialLoansMapper;
+import com.expoMoney.repository.FinancialLoansPaidRepository;
 import com.expoMoney.repository.FinancialLoansRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
@@ -24,7 +24,11 @@ public class FinancialLoansService {
     private final CustomerMapper customerMapper;
     private final CustomerService customerService;
     private final FinancialLoansRepository repository;
+    private final FinancialLoansPaidRepository loansPaidRepository;
 
+    public FinancialLoansPaid save(FinancialLoansPaid loansPaid){
+        return loansPaidRepository.save(loansPaid);
+    }
 
     public FinancialLoansDTO create (FinancialLoansCreateDTO create){
 
@@ -77,5 +81,9 @@ public class FinancialLoansService {
         dto.setLoansPendingDTOS(financialLoans.stream().map(mapper::toDto).toList());
 
         return dto;
+    }
+
+    public List<FinancialLoansPaid> findByOverdueInstallments(){
+        return loansPaidRepository.findByOverdueInstallments();
     }
 }

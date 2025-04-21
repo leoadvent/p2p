@@ -23,7 +23,7 @@ const FinancialLoansPaidPendingByCustumer = () => {
     },[financialLoasPaid])
     
     return(
-        <BaseScreens title={""} rolbackStack>
+        <BaseScreens title={"PARCELA EMPRÉSTIMO"} rolbackStack>
             <View style={{ 
                 marginTop: 10,
                 width: width, 
@@ -32,7 +32,6 @@ const FinancialLoansPaidPendingByCustumer = () => {
                 justifyContent:"center",
                 gap: 20
             }}>
-                <TextComponent text={"Parcelas Empréstimo"} color={textColorPrimary} fontSize={20} textAlign={"center"} />
 
                 {Object.entries(financialLoansPaid).length > 0 &&
                     <FlatList 

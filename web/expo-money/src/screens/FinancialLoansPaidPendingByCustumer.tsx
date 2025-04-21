@@ -1,11 +1,12 @@
 import { Dimensions, FlatList, View } from "react-native"
 import BaseScreens from "./BaseScreens"
 import TextComponent from "../components/text/text"
-import { flatListBorderColor, textColorPrimary } from "../constants/colorsPalette "
+import { flatListBorderColor, textColorError, textColorPrimary, textColorSuccess, textColorWarning } from "../constants/colorsPalette "
 import { useRoute } from "@react-navigation/native"
 import { useEffect, useState } from "react"
 import { FinancialLoansPaid } from "../types/financialLoans"
 import InputText from "../components/inputText"
+import { Ionicons } from "@expo/vector-icons"
 
 const FinancialLoansPaidPendingByCustumer = () => {
 
@@ -53,8 +54,22 @@ const FinancialLoansPaidPendingByCustumer = () => {
                                 }}
                             >
                                 <View style={{ display:"flex", flexDirection:"column"}}>
-                                    <TextComponent text={`${item.dueDate}`} color={textColorPrimary} fontSize={10} textAlign={"auto"} />
-                                    <TextComponent text={`${item.installmentValueFormat}`} color={textColorPrimary} fontSize={10} textAlign={"auto"} />
+                                    <View style={{ display:"flex", flexDirection:"row", gap:10}}>
+                                        <Ionicons name="pricetag-outline" size={15} color={textColorWarning}/>
+                                        <TextComponent text={`${item.rate}%`} color={textColorPrimary} fontSize={10} textAlign={"auto"}/> 
+                                        <Ionicons name="pricetag-outline" size={15} color={textColorError}/>
+                                        <TextComponent text={`${item.interestDelay}%`} color={textColorPrimary} fontSize={10} textAlign={"auto"}/> 
+                                        <Ionicons name="calendar-clear-outline" size={15} color={textColorError}/>
+                                        <TextComponent text={`${item.additionForDaysOfDelayFormat}`} color={textColorPrimary} fontSize={10} textAlign={"auto"}/> 
+                                    </View>
+                                    <View style={{ display:"flex", flexDirection:"row", gap:10}}>
+                                        <Ionicons name="calendar-number-outline" size={15} color={item.lateInstallment ? textColorError : textColorSuccess}/>
+                                        <TextComponent text={`${item.dueDate}`} color={textColorPrimary} fontSize={10} textAlign={"auto"} />
+                                    </View>
+                                    
+                                    <TextComponent text={`Valor: ${item.installmentValueFormat}`} color={textColorPrimary} fontSize={10} textAlign={"auto"} />
+                                    <TextComponent text={`Valor Atual: ${item.currencyValueFormat}`} color={textColorPrimary} fontSize={10} textAlign={"auto"} />
+                                    <TextComponent text={`Valor Pago: ${item.amountPaidFormat}`} color={textColorPrimary} fontSize={10} textAlign={"auto"} />
                                 </View>
                                 <InputText 
                                     editable

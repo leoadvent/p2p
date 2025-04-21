@@ -34,7 +34,7 @@ public class CustomerDTO {
     public Integer getAmountFinancialLoansOpen() {
         return (int) this.financialLoans.stream()
                 .filter(loan -> loan.getLoansPaids().stream()
-                        .anyMatch(paid -> paid.getAmountPaid() == null || paid.getAmountPaid() < paid.getInstallmentValue()))
+                        .anyMatch(paid -> paid.getAmountPaid() == null || paid.getAmountPaid() < paid.getCurrencyValue()))
                 .count();
     }
 
@@ -42,7 +42,7 @@ public class CustomerDTO {
         return (int) this.financialLoans.stream()
                 .filter(loan -> loan.getLoansPaids().stream()
                         .anyMatch(
-                                paid -> (paid.getAmountPaid() == null || paid.getAmountPaid() < paid.getInstallmentValue())
+                                paid -> (paid.getAmountPaid() == null || paid.getAmountPaid() < paid.getCurrencyValue())
                                 && paid.getDueDate().isBefore(LocalDate.now())
                         ))
                 .count();

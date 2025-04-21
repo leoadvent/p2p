@@ -47,4 +47,11 @@
         </addColumn>
     </changeSet>
 
+    <changeSet id="202504061420_4" author="Desenvolvedor Do Sistema">
+        <addColumn tableName="TB_FINANCIAL_LOANS_PAID">
+            <column name="currency_value" type="DOUBLE PRECISION">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
 </databaseChangeLog>

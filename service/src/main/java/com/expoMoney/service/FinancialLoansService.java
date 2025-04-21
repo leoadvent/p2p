@@ -57,6 +57,7 @@ public class FinancialLoansService {
             paid.setInterestDelay(create.getLateInterest());
             paid.setAdditionForDaysOfDelay(create.getAdditionForDaysOfDelay());
             paid.setAmountPaid((double) 0);
+            paid.setCurrencyValue(valueInstallment);
             loans.getLoansPaids().add(paid);
         }
 

@@ -32,6 +32,9 @@ public class FinancialLoansPaid {
     @NotNull(message = "Campo Obrigatório")
     @Column(name = "install_meant_value")
     private Double installmentValue;
+    @NotNull(message = "Campo Obrigatório")
+    @Column(name = "currency_value")
+    private Double currencyValue;
     @Column(name = "amount_paid")
     private Double amountPaid;
     @NotNull(message = "Campo Obrigatório")
@@ -59,8 +62,20 @@ public class FinancialLoansPaid {
         return StringUtils.formatCurrency(this.installmentValue == null ? 0 : this.installmentValue);
     }
 
+    public String getCurrencyValueFormat(){
+        return StringUtils.formatCurrency(this.currencyValue);
+    }
+
+    public String getAdditionForDaysOfDelayFormat(){
+        return StringUtils.formatCurrency(this.additionForDaysOfDelay);
+    }
+
     public String getAmountPaidFormat(){
         return StringUtils.formatCurrency(this.amountPaid == null ? 0 : this.amountPaid);
+    }
+
+    public boolean getLateInstallment(){
+        return this.getDueDate().isBefore(LocalDate.now()) && this.currencyValue > this.amountPaid;
     }
 
     @PrePersist

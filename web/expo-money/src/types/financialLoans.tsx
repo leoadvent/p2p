@@ -6,12 +6,16 @@ export interface FinancialLoansPaid{
     dueDate: string
     duePayment: string
     installmentValue: number
+    currencyValue: number
+    currencyValueFormat: string
     amountPaid: number
     additionForDaysOfDelay: number
+    additionForDaysOfDelayFormat: string
     rate: number
     interestDelay: number
     amountPaidFormat: string
     installmentValueFormat: string
+    lateInstallment: boolean
 }
 
 export interface FinancialLoans {

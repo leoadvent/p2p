@@ -14,6 +14,8 @@ import NewClient from '../screens/newClient';
 import MyClient from '../screens/myClient';
 import { CustomerDTO } from '../types/customerDTO';
 import FinancialLoansCreate from '../screens/financialLoansCreate';
+import FinancialLoansPendingByCustumer from '../screens/financialLoansPendingByCustomer';
+import FinancialLoansPaidPendingByCustumer from '../screens/FinancialLoansPaidPendingByCustumer';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator()
@@ -26,6 +28,8 @@ type RootStackParamList = {
   Clients: undefined;
   NewClient: { clientEdit?: {}  | undefined;};
   CreateFinancial: {customer?: {} | undefined}
+  FinanciamentoPendentePorCliente: {customerId: string}
+  FinanciamentoPendenteParcelasPorCliente: {financialLoasPaid: {} }
 };
 
 export type NavigationProp = NativeStackNavigationProp<RootStackParamList>;
@@ -141,6 +145,8 @@ export default function NavigationStack() {
         <Stack.Screen name="MyTabs"  component={MyTabs} />
         <Stack.Screen name="newRealm" component={CreateRealm} />
         <Stack.Screen name="CreateFinancial" component={FinancialLoansCreate} />
+        <Stack.Screen name="FinanciamentoPendentePorCliente" component={FinancialLoansPendingByCustumer} />
+        <Stack.Screen name="FinanciamentoPendenteParcelasPorCliente" component={FinancialLoansPaidPendingByCustumer} />
       </Stack.Navigator>
     </NavigationContainer>
   );

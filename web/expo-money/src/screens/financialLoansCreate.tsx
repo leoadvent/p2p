@@ -79,6 +79,7 @@ const FinancialLoansCreate = () => {
     }
 
     useEffect(() => {
+        handlerCleanFinancial();
         setFilter(customer === undefined ? "" : `${customer.firsName} ${customer.lastName}`)
         setCustomerId(customer === undefined ? "" : customer.id)
     },[customer])
@@ -94,7 +95,7 @@ const FinancialLoansCreate = () => {
             if(response.data.length === 0) {setShowDropDow(false)}
             setCustomerDTO(response.data)
         })
-    },[filter])
+    },[filter, customer])
 
     return(
         <BaseScreens title=" ">

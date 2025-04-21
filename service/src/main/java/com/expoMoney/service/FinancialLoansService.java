@@ -5,18 +5,23 @@ import com.expoMoney.entities.FinancialLoans;
 import com.expoMoney.entities.FinancialLoansPaid;
 import com.expoMoney.entities.dto.FinancialLoansCreateDTO;
 import com.expoMoney.entities.dto.FinancialLoansDTO;
+import com.expoMoney.entities.dto.FinancialLoansPendingByCustumerDTO;
+import com.expoMoney.mapper.CustomerMapper;
 import com.expoMoney.mapper.FinancialLoansMapper;
 import com.expoMoney.repository.FinancialLoansRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
 public class FinancialLoansService {
 
     private final FinancialLoansMapper mapper;
+    private final CustomerMapper customerMapper;
     private final CustomerService customerService;
     private final FinancialLoansRepository repository;
 
@@ -51,11 +56,25 @@ public class FinancialLoansService {
             paid.setInstallmentValue(valueInstallment);
             paid.setInterestDelay(create.getLateInterest());
             paid.setAdditionForDaysOfDelay(create.getAdditionForDaysOfDelay());
+            paid.setAmountPaid((double) 0);
             loans.getLoansPaids().add(paid);
         }
 
         if(!create.getSimulator()){ repository.save(loans); }
 
         return mapper.toDto(loans);
+    }
+
+    public FinancialLoansPendingByCustumerDTO findLoansPendingByCustomer(UUID idCustumer){
+
+        Customer customer = customerService.findById(idCustumer);
+        customer.setFinancialLoans(null);
+        List<FinancialLoans> financialLoans = repository.paimentsPending(idCustumer);
+
+        FinancialLoansPendingByCustumerDTO dto = new FinancialLoansPendingByCustumerDTO();
+        dto.setCustomer(customerMapper.toDto(customer));
+        dto.setLoansPendingDTOS(financialLoans.stream().map(mapper::toDto).toList());
+
+        return dto;
     }
 }

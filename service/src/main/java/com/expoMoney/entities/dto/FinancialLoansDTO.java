@@ -7,6 +7,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -61,5 +62,12 @@ public class FinancialLoansDTO {
 
     public Integer getCashInstallment(){
         return this.loansPaids.size();
+    }
+
+    public Integer getTotalInstallmentPending(){
+        return this.loansPaids.stream().filter(
+                item -> item.getDueDate().isBefore(LocalDate.now())
+                        && item.getAmountPaid() < item.getInstallmentValue()
+                ).toList().size();
     }
 }

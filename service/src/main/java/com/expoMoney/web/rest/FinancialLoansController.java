@@ -2,6 +2,7 @@ package com.expoMoney.web.rest;
 
 import com.expoMoney.entities.dto.FinancialLoansCreateDTO;
 import com.expoMoney.entities.dto.FinancialLoansDTO;
+import com.expoMoney.entities.dto.FinancialLoansPendingByCustumerDTO;
 import com.expoMoney.service.FinancialLoansService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -9,13 +10,11 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+import java.util.UUID;
 
 @Slf4j
 @RestController
@@ -37,5 +36,14 @@ public class FinancialLoansController {
         }
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(loansDTO.getId()).toUri();
         return ResponseEntity.created(uri).body(loansDTO);
+    }
+
+    @GetMapping("/findByLoansPendingByCustomer/{idCustomer}")
+    @Operation(tags = {"FINANCIAL LOANS"}, summary = "Recuperar Empréstimo Em Aberto por CLIENTE",
+            description = "Requisicao GET para Recuperar Empréstimo Em Aberto por CLIENTE", security = {@SecurityRequirement(name = "BearerJWT")}
+    )
+    public ResponseEntity<FinancialLoansPendingByCustumerDTO> findLoansPendingByCustumer(@PathVariable("idCustomer")UUID idCustomer){
+        log.info("REQUISICAO GET PARA RECUPERAR FINANCIAMENTO PENDENTE POR CLIENTE");
+        return ResponseEntity.ok(service.findLoansPendingByCustomer(idCustomer));
     }
 }

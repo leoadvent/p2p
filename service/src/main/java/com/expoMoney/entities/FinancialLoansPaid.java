@@ -62,4 +62,9 @@ public class FinancialLoansPaid {
     public String getAmountPaidFormat(){
         return StringUtils.formatCurrency(this.amountPaid == null ? 0 : this.amountPaid);
     }
+
+    @PrePersist
+    private void prePersist(){
+        this.setAmountPaid((double) 0);
+    }
 }

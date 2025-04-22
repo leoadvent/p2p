@@ -1,5 +1,6 @@
 package com.expoMoney.web.rest;
 
+import com.expoMoney.entities.FinancialLoansPaid;
 import com.expoMoney.entities.dto.FinancialLoansCreateDTO;
 import com.expoMoney.entities.dto.FinancialLoansDTO;
 import com.expoMoney.entities.dto.FinancialLoansPendingByCustumerDTO;
@@ -45,5 +46,14 @@ public class FinancialLoansController {
     public ResponseEntity<FinancialLoansPendingByCustumerDTO> findLoansPendingByCustumer(@PathVariable("idCustomer")UUID idCustomer){
         log.info("REQUISICAO GET PARA RECUPERAR FINANCIAMENTO PENDENTE POR CLIENTE");
         return ResponseEntity.ok(service.findLoansPendingByCustomer(idCustomer));
+    }
+
+    @PostMapping("/loansPaid")
+    @Operation(tags = {"FINANCIAL LOANS"}, summary = "Realizar pagamento de Parcela",
+            description = "Requisicao POST para Realizar pagamento de Parcela", security = {@SecurityRequirement(name = "BearerJWT")}
+    )
+    public ResponseEntity<FinancialLoansPaid> loansPaid(@RequestBody FinancialLoansPaid paid){
+        log.info("REQUISICAO POST PARA REALIZAR PAGAMENTO DE PARCELAS");
+        return ResponseEntity.ok(service.loansPaid(paid));
     }
 }

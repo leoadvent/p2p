@@ -78,6 +78,10 @@ public class FinancialLoansPaid {
         return this.getDueDate().isBefore(LocalDate.now()) && this.currencyValue > this.amountPaid;
     }
 
+    public String getDebitBalance(){
+        return StringUtils.formatCurrency(this.currencyValue - this.amountPaid);
+    }
+
     @PrePersist
     private void prePersist(){
         this.setAmountPaid((double) 0);

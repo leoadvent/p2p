@@ -13,7 +13,10 @@ import com.expoMoney.repository.FinancialLoansRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Objects;
 import java.util.UUID;
 
 @Service
@@ -26,8 +29,12 @@ public class FinancialLoansService {
     private final FinancialLoansRepository repository;
     private final FinancialLoansPaidRepository loansPaidRepository;
 
-    public FinancialLoansPaid save(FinancialLoansPaid loansPaid){
+    public FinancialLoansPaid saveLoansPaid(FinancialLoansPaid loansPaid){
         return loansPaidRepository.save(loansPaid);
+    }
+
+    private FinancialLoansPaid findLoansPaidById(UUID idLoansPaid){
+        return loansPaidRepository.findById(idLoansPaid).orElseThrow(() -> new NoSuchElementException("Parcela não localizada"));
     }
 
     public FinancialLoansDTO create (FinancialLoansCreateDTO create){
@@ -85,5 +92,18 @@ public class FinancialLoansService {
 
     public List<FinancialLoansPaid> findByOverdueInstallments(){
         return loansPaidRepository.findByOverdueInstallments();
+    }
+
+    public FinancialLoansPaid loansPaid (FinancialLoansPaid paid){
+        FinancialLoansPaid paidAux = findLoansPaidById(paid.getId());
+
+        Double valuePaid = paidAux.getAmountPaid() + paid.getAmountPaid();
+
+        valuePaid = valuePaid >= paidAux.getCurrencyValue() ? paidAux.getCurrencyValue() : valuePaid;
+
+        paidAux.setAmountPaid(valuePaid);
+        paidAux.setDuePayment(Objects.equals(paidAux.getAmountPaid(), paidAux.getCurrencyValue()) ? LocalDate.now() : null);
+
+        return saveLoansPaid(paidAux);
     }
 }

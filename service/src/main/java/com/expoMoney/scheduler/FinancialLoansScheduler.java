@@ -45,7 +45,7 @@ public class FinancialLoansScheduler {
 
                 loansPaid.setCurrencyValue(currencyValue);
 
-                service.save(loansPaid);
+                service.saveLoansPaid(loansPaid);
 
                 log.info("MULTA APLICADA PARCELA {} DIAS ATRASADO: {}, JUROS ATRASO: {}, ADICIONAL DIARIO: {}, VALOR TOTAL: {}",
                         loansPaid.getId(),

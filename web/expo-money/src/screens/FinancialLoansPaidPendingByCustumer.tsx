@@ -68,7 +68,7 @@ const FinancialLoansPaidPendingByCustumer = () => {
 
                 {Object.entries(financialLoansPaid).length > 0 &&
                     <FlatList 
-                        data={financialLoansPaid}
+                        data={[...financialLoansPaid].sort((a, b) => Number(a.portion) - Number(b.portion))}
                         keyExtractor={(item) => item.id.toString()}
                         renderItem={({ item }) => (
                             <View style={{ 
@@ -127,7 +127,7 @@ const FinancialLoansPaidPendingByCustumer = () => {
                                 </View>
                                 <View style={{ display:item.amountPaid === item.currencyValue ? "flex": "none", flexDirection:"row", padding:20, gap:10, width:"100%", justifyContent:"space-between", alignItems:"center"}}>
                                     <Ionicons name="checkmark-done-outline" size={25} color={textColorSuccess}/>
-                                    <TextComponent text={`Parcela paga em ${item.duePayment} no valor de: ${item.amountPaidFormat}`} color={"rgb(255, 255, 255)"} fontSize={14} textAlign={"center"} />
+                                    <TextComponent text={`Pago em ${item.duePayment} no valor de: ${item.amountPaidFormat}`} color={"rgb(255, 255, 255)"} fontSize={14} textAlign={"center"} />
                                 </View>
                             </View>
                         )}

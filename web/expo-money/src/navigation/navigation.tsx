@@ -16,6 +16,7 @@ import { CustomerDTO } from '../types/customerDTO';
 import FinancialLoansCreate from '../screens/financialLoansCreate';
 import FinancialLoansPendingByCustumer from '../screens/financialLoansPendingByCustomer';
 import FinancialLoansPaidPendingByCustumer from '../screens/FinancialLoansPaidPendingByCustumer';
+import CustomerDefaulting from '../screens/customerDefaulting';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator()
@@ -25,6 +26,7 @@ type RootStackParamList = {
   Login: undefined;
   MyTabs: undefined;
   newRealm: undefined;
+  CustomerDefaulting: undefined;
   Clients: undefined;
   NewClient: { clientEdit?: {}  | undefined;};
   CreateFinancial: {customer?: {} | undefined}
@@ -87,6 +89,15 @@ function MyDrawerCient() {
           title: "FINANCIAR" ,
           drawerIcon: () => <Ionicons name='cash-sharp' size={sizeIcon} color={colorIcon} />
         }} 
+      />
+      <DrawerClient.Screen 
+        name='CustomerDefaulting'
+        component={CustomerDefaulting}
+        options={{
+          headerTransparent: true,
+          title: "CLIENTES INADÍMPLENTES" ,
+          drawerIcon: () => <Ionicons name='trending-down-outline' size={sizeIcon} color={colorIcon} />
+        }}
       />
     </DrawerClient.Navigator>
   );

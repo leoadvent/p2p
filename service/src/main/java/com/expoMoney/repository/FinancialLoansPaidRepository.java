@@ -1,6 +1,7 @@
 package com.expoMoney.repository;
 
 import com.expoMoney.entities.FinancialLoansPaid;
+import com.expoMoney.entities.dto.CustomerDueToday;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -21,4 +22,22 @@ public interface FinancialLoansPaidRepository extends JpaRepository<FinancialLoa
                 AND fp.amountPaid < fp.installmentValue
            """)
     List<FinancialLoansPaid> findByOverdueInstallments();
+
+    @Query("""
+            SELECT
+             new com.expoMoney.entities.dto.CustomerDueToday(
+                ct.id,
+                ct.firsName,
+                ct.lastName,
+                lp
+             )
+            FROM
+                FinancialLoansPaid lp
+                JOIN lp.financialLoans fl
+                JOIN fl.customer ct
+            WHERE
+                lp.dueDate = CURRENT_DATE
+                AND lp.amountPaid < lp.currencyValue
+            """)
+    List<CustomerDueToday> customerDuaToday();
 }

@@ -55,10 +55,19 @@ public class CustomerController {
 
     @GetMapping("/defaulting")
     @Operation(tags = {"CUSTOMER"}, summary = "Recuperar lista de clientes Inadimplentes",
-            description = "Requisicao POST para Recuperar lista de clientes Inadimplentes", security = {@SecurityRequirement(name = "BearerJWT")}
+            description = "Requisicao GET para Recuperar lista de clientes Inadimplentes", security = {@SecurityRequirement(name = "BearerJWT")}
     )
     public ResponseEntity<List<CustomerDTO>> findByDefaulting(){
         log.info("REQUISICAO GET PARA RECUPERAR USUARIOS INADIMPLENTE");
         return ResponseEntity.ok(service.findByDefaulting());
+    }
+
+    @GetMapping("/dueToday")
+    @Operation(tags = {"CUSTOMER"}, summary = "Recuperar lista de clientes Com Vencimento no dia de Hoje",
+            description = "Requisicao GET para Recuperar lista de clientes Com Vencimento no dia de Hoje", security = {@SecurityRequirement(name = "BearerJWT")}
+    )
+    public ResponseEntity<List<CustomerDTO>> findByDueToday(){
+        log.info("REQUISICAO GET PARA RECUPERAR CLIENTES COM PARCELA VENCENDO NO DIA DE HOJE");
+        return ResponseEntity.ok(service.findByDueToday());
     }
 }

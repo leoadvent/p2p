@@ -27,4 +27,17 @@ public interface CustomerRepository extends JpaRepository<Customer, UUID> {
         AND lp.dueDate < CURRENT_DATE
     """)
     List<Customer> findByDefaulting();
+
+    @Query("""
+    SELECT
+        DISTINCT c
+    FROM
+        Customer c
+        JOIN c.financialLoans fl
+        JOIN fl.loansPaids lp
+    WHERE
+        lp.amountPaid < lp.currencyValue
+        AND lp.dueDate = CURRENT_DATE
+    """)
+    List<Customer> findDueToday();
 }

@@ -1,6 +1,7 @@
 import { View, Text } from "react-native";
 import BaseScreens from "./BaseScreens";
 import { backgroundPrimary } from "../constants/colorsPalette ";
+import DueToday from "../components/dueToday";
 
 const HomeScreen = () => {
   return (
@@ -12,6 +13,7 @@ const HomeScreen = () => {
               alignItems: "center",
           }}
       >
+        <DueToday />
         <Text>Home Screen</Text>
         <Text>Welcome to the home screen!</Text>
       </View>

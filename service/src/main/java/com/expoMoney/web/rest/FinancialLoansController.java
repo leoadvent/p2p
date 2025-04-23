@@ -1,6 +1,7 @@
 package com.expoMoney.web.rest;
 
 import com.expoMoney.entities.FinancialLoansPaid;
+import com.expoMoney.entities.dto.CustomerDueToday;
 import com.expoMoney.entities.dto.FinancialLoansCreateDTO;
 import com.expoMoney.entities.dto.FinancialLoansDTO;
 import com.expoMoney.entities.dto.FinancialLoansPendingByCustumerDTO;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+import java.util.List;
 import java.util.UUID;
 
 @Slf4j
@@ -55,5 +57,14 @@ public class FinancialLoansController {
     public ResponseEntity<FinancialLoansPaid> loansPaid(@RequestBody FinancialLoansPaid paid){
         log.info("REQUISICAO POST PARA REALIZAR PAGAMENTO DE PARCELAS");
         return ResponseEntity.ok(service.loansPaid(paid));
+    }
+
+    @GetMapping("/dueToday")
+    @Operation(tags = {"FINANCIAL LOANS"}, summary = "Buscar Clientes com o Vencimento para o Dia de Hoje",
+            description = "Requisicao GET para Buscar Clientes com o Vencimento para o Dia de Hoje", security = {@SecurityRequirement(name = "BearerJWT")}
+    )
+    public ResponseEntity<List<CustomerDueToday>> findByCustomerDueToday(){
+        log.info("REQUSICAO GET PARA RECUPERAR LISTA DE CLIENTES COM VENCIMENTO PARA O DIA DE HOJE");
+        return ResponseEntity.ok(service.customerDueToday());
     }
 }

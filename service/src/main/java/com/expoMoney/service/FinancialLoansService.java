@@ -3,6 +3,7 @@ package com.expoMoney.service;
 import com.expoMoney.entities.Customer;
 import com.expoMoney.entities.FinancialLoans;
 import com.expoMoney.entities.FinancialLoansPaid;
+import com.expoMoney.entities.dto.CustomerDueToday;
 import com.expoMoney.entities.dto.FinancialLoansCreateDTO;
 import com.expoMoney.entities.dto.FinancialLoansDTO;
 import com.expoMoney.entities.dto.FinancialLoansPendingByCustumerDTO;
@@ -105,5 +106,9 @@ public class FinancialLoansService {
         paidAux.setDuePayment(Objects.equals(paidAux.getAmountPaid(), paidAux.getCurrencyValue()) ? LocalDate.now() : null);
 
         return saveLoansPaid(paidAux);
+    }
+
+    public List<CustomerDueToday> customerDueToday(){
+        return loansPaidRepository.customerDuaToday();
     }
 }

@@ -67,6 +67,11 @@ public class CustomerService {
         return customersDefaulting.stream().map(mapper::toDto).toList();
     }
 
+    public List<CustomerDTO> findByDueToday(){
+        List<Customer> customers = repository.findDueToday();
+        return customers.stream().map(mapper::toDto).toList();
+    }
+
     public void delete(UUID idUsuario){
         Customer cliente = findById(idUsuario);
         repository.delete(cliente);

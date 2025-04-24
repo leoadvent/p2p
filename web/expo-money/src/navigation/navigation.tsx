@@ -17,7 +17,6 @@ import FinancialLoansCreate from '../screens/financialLoansCreate';
 import FinancialLoansPendingByCustumer from '../screens/financialLoansPendingByCustomer';
 import FinancialLoansPaidPendingByCustumer from '../screens/FinancialLoansPaidPendingByCustumer';
 import CustomerDefaulting from '../screens/customerDefaulting';
-import DueToday from '../components/dueToday';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator()
@@ -160,7 +159,6 @@ export default function NavigationStack() {
         <Stack.Screen name="CreateFinancial" component={FinancialLoansCreate} />
         <Stack.Screen name="FinanciamentoPendentePorCliente" component={FinancialLoansPendingByCustumer} />
         <Stack.Screen name="FinanciamentoPendenteParcelasPorCliente" component={FinancialLoansPaidPendingByCustumer} />
-        <Stack.Screen name="DueToday" component={DueToday} />
       </Stack.Navigator>
     </NavigationContainer>
   );

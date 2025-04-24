@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
@@ -36,8 +37,9 @@ public interface FinancialLoansPaidRepository extends JpaRepository<FinancialLoa
                 JOIN lp.financialLoans fl
                 JOIN fl.customer ct
             WHERE
-                lp.dueDate = CURRENT_DATE
+                lp.dueDate <= :date
+                AND lp.dueDate >= CURRENT_DATE
                 AND lp.amountPaid < lp.currencyValue
             """)
-    List<CustomerDueToday> customerDuaToday();
+    List<CustomerDueToday> customerDuaToday(LocalDate date);
 }

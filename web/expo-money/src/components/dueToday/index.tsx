@@ -1,8 +1,8 @@
 import BaseScreens from "@/src/screens/BaseScreens"
 import { Dimensions, FlatList, View } from "react-native"
 import TextComponent from "../text/text";
-import { flatListBorderColor, textColorPrimary, textColorWarning } from "@/src/constants/colorsPalette ";
-import { useEffect, useState } from "react";
+import { backgroundOpacity, flatListBorderColor, textColorPrimary, textColorWarning } from "@/src/constants/colorsPalette ";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { CustomerDTO } from "@/src/types/customerDTO";
 import api from "@/src/integration/axiosconfig";
 import ButtonComponent from "../button";
@@ -11,7 +11,13 @@ import { Ionicons } from "@expo/vector-icons";
 import InputText from "../inputText";
 import { FinancialLoansPaid } from "@/src/types/financialLoans";
 
-const DueToday = () => {
+interface Props{
+    days: number
+    dueTodayActive: number
+    setDueTodayActive: Dispatch<SetStateAction<number>>
+    idComponent: number
+}
+const DueToday = ({days, idComponent, dueTodayActive, setDueTodayActive} : Props) => {
 
     const width = Dimensions.get("screen").width;
 
@@ -44,7 +50,7 @@ const DueToday = () => {
       };
 
     useEffect(() => {
-        api.get('/financial/dueToday').then((response) => {
+        api.get(`/financial/dueToday/${days}`).then((response) => {
             setCustomerDueToday(response.data)
         }).catch((error) => {
             alert(error)
@@ -52,14 +58,23 @@ const DueToday = () => {
     },[refresh])
 
     return(
-        <View style={{ display: Object.entries(customerDueToday).length > 0 ? "flex": "none", height: 600, width: width, justifyContent: "center", alignItems: "center", gap: 20, padding: 20 }}>
+        <View style={{ 
+            display: Object.entries(customerDueToday).length > 0 ? "flex": "none", 
+            width: width-30, 
+            justifyContent: "center", 
+            alignItems: "center", 
+            gap: 20, 
+            padding: 20, 
+            backgroundColor: showDueToday ? backgroundOpacity : "transparent",
+            borderRadius: 10
+        }}>
             <ButtonComponent 
-                nameButton={`Vencendo Hoje ${Object.entries(customerDueToday).length}`} 
-                onPress={ ()=> {setShowCustomToday(!showDueToday)} } 
+                nameButton={`Vencendo ${days === 0 ? 'Hoje' : `em ${days} dias`} ${Object.entries(customerDueToday).length}`} 
+                onPress={ ()=> {setShowCustomToday(!showDueToday), setDueTodayActive(idComponent)} } 
                 typeButton={"primary"} 
                 width={"100%"} 
             />
-            <View style={{ display: showDueToday ? "flex" : "none", width:"100%" }}>
+            <View style={{ display: showDueToday && idComponent==dueTodayActive ? "flex" : "none" }}>
                 <FlatList 
                     data={customerDueToday}
                     keyExtractor={(item) => item.paid.id.toString()}
@@ -68,9 +83,9 @@ const DueToday = () => {
                             display: "flex",
                             flexDirection: "column",
                             justifyContent: "space-between",
-                            width: width-40, 
                             borderWidth: 1, 
-                            marginBottom: 10,
+                            marginBottom: 5,
+                            width: width-70,
                             borderBottomColor: flatListBorderColor,
                             borderRadius: 5,
                             padding: 10,

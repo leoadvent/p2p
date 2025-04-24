@@ -59,12 +59,12 @@ public class FinancialLoansController {
         return ResponseEntity.ok(service.loansPaid(paid));
     }
 
-    @GetMapping("/dueToday")
+    @GetMapping("/dueToday/{days}")
     @Operation(tags = {"FINANCIAL LOANS"}, summary = "Buscar Clientes com o Vencimento para o Dia de Hoje",
             description = "Requisicao GET para Buscar Clientes com o Vencimento para o Dia de Hoje", security = {@SecurityRequirement(name = "BearerJWT")}
     )
-    public ResponseEntity<List<CustomerDueToday>> findByCustomerDueToday(){
-        log.info("REQUSICAO GET PARA RECUPERAR LISTA DE CLIENTES COM VENCIMENTO PARA O DIA DE HOJE");
-        return ResponseEntity.ok(service.customerDueToday());
+    public ResponseEntity<List<CustomerDueToday>> findByCustomerDueToday(@PathVariable("days") Integer days){
+        log.info("REQUSICAO GET PARA RECUPERAR LISTA DE CLIENTES COM VENCIMENTO EM {} DIAS", days);
+        return ResponseEntity.ok(service.customerDueToday(days));
     }
 }

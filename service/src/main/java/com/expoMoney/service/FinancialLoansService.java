@@ -108,7 +108,9 @@ public class FinancialLoansService {
         return saveLoansPaid(paidAux);
     }
 
-    public List<CustomerDueToday> customerDueToday(){
-        return loansPaidRepository.customerDuaToday();
+    public List<CustomerDueToday> customerDueToday(Integer days){
+        LocalDate date =  LocalDate.now().plusDays(days);
+
+        return loansPaidRepository.customerDuaToday(date);
     }
 }

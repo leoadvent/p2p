@@ -24,14 +24,16 @@ export function AuthProvider({ children }: any) {
     const [logado, setLogado] = useState<boolean>(false)
     const [userintrospect, setUserIntrospect] = useState<Userintrospect>({} as Userintrospect)
 
-    function recoveryRealm(login: string){
-        const data: UserRealmFindNameDTO = { username: login}
-        api.post<string>(`/userRealm/recoveryRealm`, data).then((response) => {
-            realmName = response.data
-            AsyncStorage.setItem("realmName", response.data)
-        }).catch((error) => {
-            alert("Erro ao recuperar o Realm. Verifique os dados e tente novamente.")
-        })
+    async function recoveryRealm(login: string): Promise<string | null> {
+        const data: UserRealmFindNameDTO = { username: login };
+        try {
+            const response = await api.post<string>(`/userRealm/recoveryRealm`, data);
+            await AsyncStorage.setItem("realmName", response.data);
+            return response.data;
+        } catch (error) {
+            alert("Erro ao recuperar o Realm. Verifique os dados e tente novamente.");
+            return null;
+        }
     }
 
     function logoutRealm(){
@@ -49,33 +51,36 @@ export function AuthProvider({ children }: any) {
             username: loginRealmClient.username, 
             password: loginRealmClient.password
         }
-        api.post<AccessTokenResponse>(`/keycloak/login`, data).then((response) => {
+
+        try{
+            const response = await api.post<AccessTokenResponse>(`/keycloak/login`, data)
+
             setAccessTokenResponse(response.data)
             AsyncStorage.setItem("token_api", response.data.access_token)
             AsyncStorage.setItem("refresh_token_api", response.data.refresh_token)
             setLogado(true)
             userIntrospect()
-        }).catch((error) => {
+
+            
+        } catch(error) {
             console.error("Erro ao realizar o login: ", error)
             setLogado(false)
             setAccessTokenResponse({} as AccessTokenResponse)
             AsyncStorage.removeItem("token_api")
             AsyncStorage.removeItem("refresh_token_api")
-            alert("Usuário ou senha estão incorretos.")
-        })
-
-        
-
-        function userIntrospect() {
-            api.get<Userintrospect>(`/keycloak/userintrospect`).then((response) => {
-                setUserIntrospect(response.data)
-                AsyncStorage.setItem("userIntrospect", JSON.stringify(response.data))
-            }).catch((error) => {
-                console.error("Erro ao realizar o userIntrospect: ", error)
-                alert("Erro ao realizar o userIntrospect.")
-            })
         }
 
+
+    }
+
+    function userIntrospect() {
+        api.get<Userintrospect>(`/keycloak/userintrospect`).then((response) => {
+            setUserIntrospect(response.data)
+            AsyncStorage.setItem("userIntrospect", JSON.stringify(response.data))
+        }).catch((error) => {
+            console.error("Erro ao realizar o userIntrospect: ", error)
+            alert("Erro ao realizar o userIntrospect.")
+        })
     }
 
     return (

@@ -4,7 +4,7 @@ import TextComponent from "../components/text/text"
 import { backgroundPrimary, textColorPrimary } from "../constants/colorsPalette "
 import ButtonComponent from "../components/button"
 import InputText from "../components/inputText"
-import { useContext, useState } from "react"
+import { useContext, useEffect, useState } from "react"
 import { AuthContext } from "../context/AuthContext"
 import AsyncStorage from "@react-native-async-storage/async-storage"
 
@@ -23,7 +23,7 @@ const Login = ({ navigation }:any) => {
 
         const data: LoginRealmClient = { realm: realmName, username: loginRealmClient.username, password: loginRealmClient.password}
         
-        loginRealm(data)
+        await loginRealm(data)
         setIsSpinner(false)
 
         if(await AsyncStorage.getItem("token_api") !== null) {

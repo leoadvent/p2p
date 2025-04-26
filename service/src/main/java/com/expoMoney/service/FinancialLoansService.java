@@ -3,10 +3,7 @@ package com.expoMoney.service;
 import com.expoMoney.entities.Customer;
 import com.expoMoney.entities.FinancialLoans;
 import com.expoMoney.entities.FinancialLoansPaid;
-import com.expoMoney.entities.dto.CustomerDueToday;
-import com.expoMoney.entities.dto.FinancialLoansCreateDTO;
-import com.expoMoney.entities.dto.FinancialLoansDTO;
-import com.expoMoney.entities.dto.FinancialLoansPendingByCustumerDTO;
+import com.expoMoney.entities.dto.*;
 import com.expoMoney.mapper.CustomerMapper;
 import com.expoMoney.mapper.FinancialLoansMapper;
 import com.expoMoney.repository.FinancialLoansPaidRepository;
@@ -112,5 +109,9 @@ public class FinancialLoansService {
         LocalDate date =  LocalDate.now().plusDays(days);
 
         return loansPaidRepository.customerDuaToday(date);
+    }
+
+    public List<DelinquentCustomer> delinquentCustomers () {
+        return loansPaidRepository.findByDeliquentCustomer();
     }
 }

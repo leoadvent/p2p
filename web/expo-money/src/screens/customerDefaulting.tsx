@@ -43,7 +43,7 @@ const CustomerDefaulting = ({ navigation }:any) => {
                                     borderRadius: 5,
                                     padding: 10,
                                 }}>
-                                    <View style={{ display: "flex", flexDirection: "row", alignItems:"center", gap: 10 }}>
+                                    <View style={{ display: "flex", flexDirection: "row", alignItems:"center", justifyContent: "space-between", gap: 10 }}>
                                         <Ionicons name="ribbon-outline" size={14} color={textColorError} />
                                         <TextComponent text={`${item.amountFinancialLoansPending}`} color={textColorPrimary} fontSize={16} textAlign={"center"} />
                                     </View>

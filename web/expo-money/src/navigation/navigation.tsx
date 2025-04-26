@@ -17,6 +17,7 @@ import FinancialLoansCreate from '../screens/financialLoansCreate';
 import FinancialLoansPendingByCustumer from '../screens/financialLoansPendingByCustomer';
 import FinancialLoansPaidPendingByCustumer from '../screens/FinancialLoansPaidPendingByCustumer';
 import CustomerDefaulting from '../screens/customerDefaulting';
+import DelinquentCustomerScreen from '../screens/deliquentCustomer';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator()
@@ -29,6 +30,7 @@ type RootStackParamList = {
   CustomerDefaulting: undefined;
   Clients: undefined;
   DueToday: undefined;
+  DeliquentCustomer: undefined;
   NewClient: { clientEdit?: {}  | undefined;};
   CreateFinancial: {customer?: {} | undefined}
   FinanciamentoPendentePorCliente: {customerId: string}
@@ -98,6 +100,15 @@ function MyDrawerCient() {
           headerTransparent: true,
           title: "CLIENTES INADÍMPLENTES" ,
           drawerIcon: () => <Ionicons name='trending-down-outline' size={sizeIcon} color={colorIcon} />
+        }}
+      />
+      <DrawerClient.Screen 
+        name='DeliquentCustomer'
+        component={DelinquentCustomerScreen}
+        options={{
+          headerTransparent: true,
+          title: "PARCELAS ATRASADAS" ,
+          drawerIcon: () => <Ionicons name='calendar-clear-outline' size={sizeIcon} color={colorIcon} />
         }}
       />
     </DrawerClient.Navigator>

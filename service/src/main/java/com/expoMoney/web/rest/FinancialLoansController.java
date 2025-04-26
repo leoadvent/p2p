@@ -1,10 +1,7 @@
 package com.expoMoney.web.rest;
 
 import com.expoMoney.entities.FinancialLoansPaid;
-import com.expoMoney.entities.dto.CustomerDueToday;
-import com.expoMoney.entities.dto.FinancialLoansCreateDTO;
-import com.expoMoney.entities.dto.FinancialLoansDTO;
-import com.expoMoney.entities.dto.FinancialLoansPendingByCustumerDTO;
+import com.expoMoney.entities.dto.*;
 import com.expoMoney.service.FinancialLoansService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -66,5 +63,14 @@ public class FinancialLoansController {
     public ResponseEntity<List<CustomerDueToday>> findByCustomerDueToday(@PathVariable("days") Integer days){
         log.info("REQUSICAO GET PARA RECUPERAR LISTA DE CLIENTES COM VENCIMENTO EM {} DIAS", days);
         return ResponseEntity.ok(service.customerDueToday(days));
+    }
+
+    @GetMapping("/deliquentCustomer")
+    @Operation(tags = {"FINANCIAL LOANS"}, summary = "Buscar Parcela de cliente Atrasadas",
+            description = "Requisicao GET para Buscar Parcela de cliente Atrasadas", security = {@SecurityRequirement(name = "BearerJWT")}
+    )
+    public ResponseEntity<List<DelinquentCustomer>> findByDeliquentCustomer(){
+        log.info("REQUISICAO GET PARA RECUPERAR PARCELAS DE CLIENTE ATRASADAS");
+        return ResponseEntity.ok(service.delinquentCustomers());
     }
 }

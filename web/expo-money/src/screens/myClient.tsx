@@ -4,11 +4,12 @@ import { CustomerDTO } from "../types/customerDTO"
 import { useEffect, useState } from "react"
 import api from "../integration/axiosconfig"
 import TextComponent from "../components/text/text"
-import { flatListBorderColor, textColorError, textColorPrimary, textColorSuccess, textColorWarning } from "../constants/colorsPalette "
+import { backgroundPrimary, flatListBorderColor, textColorError, textColorPrimary, textColorSuccess, textColorWarning } from "../constants/colorsPalette "
 import { Ionicons } from "@expo/vector-icons"
 import { stylesGlobal } from "../constants/styles"
 import { useFocusEffect } from '@react-navigation/native' 
 import React from "react"
+import InputText from "../components/inputText"
 
 
 const MyClient = ({ navigation }:any) => {
@@ -33,7 +34,23 @@ const MyClient = ({ navigation }:any) => {
     )
 
     return(
-        <BaseScreens title=" ">
+        <BaseScreens backgroundColor={backgroundPrimary}  title=" " showChildrenParan={true} childrenParam={
+            <View style={{
+                display: "flex",
+                flexDirection: "column",
+                flex: 1,
+                justifyContent: "space-between",
+                alignItems: "center",
+                width: width,
+            }}>
+                <InputText label={"Nome"} editable={true}
+                    width={width-50}
+                    placeholder="Filtro Nome"
+                    value={customerDTOFilter.firsName}
+                    onChangeText={(text) => {setCustomerDTOFilter({...customerDTOFilter, firsName: text})}}
+                />
+            </View>
+        }>
             <View style={ [stylesGlobal.viewComponentBaseScree, {height: 600}]}>
                 <FlatList 
                     data={customersDTO}

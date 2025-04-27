@@ -9,13 +9,15 @@ import UserIntrospect from "../components/userintrospect/index";
 
 type Props = {
     children: React.ReactNode;
+    childrenParam?: React.ReactNode;
+    showChildrenParan?: boolean;
     title: string;
     backgroundColor?: typeof backgroundPrimary | typeof backgroundSecondary
     rolbackStack?: boolean
     showUserIntrospect?: boolean
   }
 
-const BaseScreens = ( { children, title, backgroundColor, rolbackStack, showUserIntrospect} : Props) => {
+const BaseScreens = ( { children, title, backgroundColor, rolbackStack, showUserIntrospect, childrenParam, showChildrenParan} : Props) => {
 
   const navigation = useNavigation();
   
@@ -36,7 +38,7 @@ const BaseScreens = ( { children, title, backgroundColor, rolbackStack, showUser
         <StatusBar barStyle="light-content" backgroundColor={statusBarColorPrimary} />
         
         <View style={
-            [ styles(title.length === 0 && !rolbackStack ? false : true, showUserIntrospect ? true : false).title,
+            [ styles(title.length === 0 && !rolbackStack ? false : true, showUserIntrospect ? true : false, showChildrenParan ? true : false).title,
               {
                 backgroundColor: statusBarColorPrimary, paddingLeft:15
               }
@@ -56,6 +58,10 @@ const BaseScreens = ( { children, title, backgroundColor, rolbackStack, showUser
           </View>
           
           {showUserIntrospect && <UserIntrospect />}
+          
+          { showChildrenParan && childrenParam && (
+            <>{childrenParam}</>
+          )}
 
         </View>
         <KeyboardAvoidingView
@@ -68,8 +74,9 @@ const BaseScreens = ( { children, title, backgroundColor, rolbackStack, showUser
             keyboardShouldPersistTaps="handled"
           >
             <View style={{ display:"flex", width:"100%", alignItems:"center", flex: 1, padding: 10}}>
-              { children}
+              { children }
             </View>
+            
           </ScrollView>
         </KeyboardAvoidingView>
     </SafeAreaView>
@@ -77,12 +84,12 @@ const BaseScreens = ( { children, title, backgroundColor, rolbackStack, showUser
 }
 export default BaseScreens;
 
-const styles = (isTitle: boolean, showUserIntrospect: boolean ) => StyleSheet.create({
+const styles = (isTitle: boolean, showUserIntrospect: boolean, showChildrenParan: boolean ) => StyleSheet.create({
   title:{
     display: "flex",
     flexDirection: "column",
     width: "100%",
-    minHeight: isTitle ? showUserIntrospect ? 180 : 50 :  1,
+    minHeight: isTitle ? showUserIntrospect || showChildrenParan ? 180 : 50 :  20,
     marginTop: 0,
     textAlign: "center",
     alignContent: "center",

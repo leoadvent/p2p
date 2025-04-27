@@ -41,7 +41,6 @@ const DelinquentCustomerScreen = () => {
     useEffect(() => {
         api.get("/financial/deliquentCustomer").then((response) => {
             setDeliquentCustomers(response.data)
-            alert(response.data)
         }).catch((error) => {
             alert(error)
         })

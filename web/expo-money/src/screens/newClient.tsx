@@ -87,8 +87,11 @@ const NewClient = ({ navigation } : any) => {
 
     return (
         <BaseScreens title="" >
-            <View style={ [stylesGlobal.viewComponentBaseScree, {height:600}]}>
-                <KeyboardAvoidingView>
+            <View style={ [stylesGlobal.viewComponentBaseScree]}>
+
+                
+                
+                    
                     <ScrollView style={{ padding: 20, gap: 20 }} showsVerticalScrollIndicator={false} showsHorizontalScrollIndicator={false} contentContainerStyle={{ alignItems: "center", padding: 20 }}>
                         <InputText 
                             editable
@@ -174,15 +177,13 @@ const NewClient = ({ navigation } : any) => {
                             placeholder="UF"
                             value={customerDTO.endereco.uf}
                             onChangeText={(text) => setCustomerDTO({...customerDTO, endereco: {...customerDTO.endereco, uf: text}})} width={300}/>
-                        
+                      
                     </ScrollView>
-
-                </KeyboardAvoidingView>
+                
+                <ButtonComponent nameButton="Limpar" onPress={() => handleClearCustomer()} typeButton="warning" width="50%"/> 
+                <ButtonComponent nameButton="Salvar" onPress={() => handleSaveCustomer()}  typeButton="success" width="50%" isSpinner={isSpinner} isDisabled={isDisabled}/> 
                 <TextComponent textAlign="center" color={isSuccess ? textColorPrimary : textColorError} fontSize={16} text={message} />
-                <View style={{ display: "flex", flexDirection: "row", gap: 10, width: "80%", justifyContent: "center", alignItems: "center"}}>
-                    <ButtonComponent nameButton="Limpar" onPress={() => handleClearCustomer()} typeButton="warning" width="50%"/> 
-                    <ButtonComponent nameButton="Salvar" onPress={() => handleSaveCustomer()}  typeButton="success" width="50%" isSpinner={isSpinner} isDisabled={isDisabled}/> 
-                </View>
+                
             </View>
         </BaseScreens>
     )

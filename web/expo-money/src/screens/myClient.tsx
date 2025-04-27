@@ -16,6 +16,7 @@ const MyClient = ({ navigation }:any) => {
 
     const [customerDTOFilter, setCustomerDTOFilter] = useState<CustomerDTO>({} as CustomerDTO)
     const [customersDTO, setCustomersDTO] = useState<CustomerDTO[]>([] as CustomerDTO[])
+    const [totalCustomers, setTotalCustomers] = useState<number>(0)
 
     const width = Dimensions.get("window").width;
 
@@ -23,7 +24,7 @@ const MyClient = ({ navigation }:any) => {
         React.useCallback(() => {
             // Esse código será executado sempre que a tela for focada
             api.post("/customer/filter", customerDTOFilter).then((response) => {
-                console.log("Clientes: ", response.data)
+                setTotalCustomers(response.data.totalElements)
                 setCustomersDTO(response.data.content)
             }).catch((error) => {
                 console.error("Erro ao buscar clientes: ", error)
@@ -43,6 +44,7 @@ const MyClient = ({ navigation }:any) => {
                 alignItems: "center",
                 width: width,
             }}>
+                <TextComponent text={`Total de clientes: ${totalCustomers}`} color={textColorPrimary} fontSize={10} textAlign={"center"} />
                 <InputText label={"Nome"} editable={true}
                     width={width-50}
                     placeholder="Filtro Nome"

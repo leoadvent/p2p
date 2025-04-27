@@ -3,6 +3,7 @@ import BaseScreens from "./BaseScreens";
 import { backgroundPrimary } from "../constants/colorsPalette ";
 import DueToday from "../components/dueToday";
 import { useState } from "react";
+import { stylesGlobal } from "../constants/styles";
 
 const HomeScreen = () => {
 
@@ -10,7 +11,7 @@ const HomeScreen = () => {
 
   return (
     <BaseScreens backgroundColor={backgroundPrimary} title="Home" showUserIntrospect={true}>
-       <View style={{ height: 600, justifyContent: "center", alignItems: "center", gap: 20 }}>
+       <View style={ [stylesGlobal.viewComponentBaseScree, {width: 600, justifyContent:"center"}]}>
         <KeyboardAvoidingView>
         <ScrollView style={{ height: 150, padding: 20, gap: 20 }} showsVerticalScrollIndicator={false} showsHorizontalScrollIndicator={false} contentContainerStyle={{ alignItems: "center", padding: 20 }}>
             

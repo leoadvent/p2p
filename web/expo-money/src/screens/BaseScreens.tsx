@@ -60,6 +60,7 @@ const BaseScreens = ( { children, title, backgroundColor, rolbackStack, showUser
         </View>
         <KeyboardAvoidingView
           behavior={Platform.OS === "ios" ? "padding" : "height"}
+          keyboardVerticalOffset={Platform.OS === "ios" ? 100 : 0}
           style={{ flex: 1 }}
         >
           <View style={{ display:"flex", width:"100%", alignItems:"center", flex: 1, padding: 10}}>

@@ -9,6 +9,7 @@ import { Ionicons } from "@expo/vector-icons"
 import ButtonComponent from "../components/button"
 import { FinancialLoansPaid } from "../types/financialLoans"
 import InputText from "../components/inputText"
+import { stylesGlobal } from "../constants/styles"
 
 const DelinquentCustomerScreen = () => {
 
@@ -74,7 +75,7 @@ const DelinquentCustomerScreen = () => {
      
     return(
         <BaseScreens title=" ">
-            <View style={{ display: "flex", gap: 20, alignItems: "center", flex: 1, padding: 10}}>
+            <View style={ stylesGlobal.viewComponentBaseScree}>
                 <TextComponent text={" PARCELAS EM ATRASO POR CLIENTE"} color={textColorPrimary} fontSize={10} textAlign={"center"} />
                 {Object.entries(deliquentCustomers).length > 0 && 
                     <FlatList 

@@ -59,6 +59,7 @@ const ButtonComponent = ({ nameButton, onPress, typeButton, isDisabled, isSpinne
                     justifyContent: "center",
                     alignItems: "center",
                     width: "100%",
+                    height: 45,
                     gap: 10,
                     backgroundColor: isDisabled ? buttonBackgroundColorDisabled : backgroundButton,
                     opacity: isDisabled ? 0.5 : 1,

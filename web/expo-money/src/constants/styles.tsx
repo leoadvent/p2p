@@ -1,5 +1,5 @@
 import { StyleSheet } from "react-native";
-import { inputBackgroundColor, inputBorderColor, inputTextColor } from "./colorsPalette ";
+import { inputBorderColor, inputTextColor } from "./colorsPalette ";
 
 export const stylesGlobal = StyleSheet.create({
     inputText: {
@@ -10,5 +10,13 @@ export const stylesGlobal = StyleSheet.create({
         color: inputTextColor,
         borderWidth: 1,
         borderColor: inputBorderColor,
+    },
+    viewComponentBaseScree: {
+        display: "flex", 
+        alignItems: "center", 
+        width: "100%",
+        flex: 1, 
+        gap: 20, 
+        padding: 10,
     }
 })

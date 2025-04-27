@@ -1,8 +1,9 @@
 import { stylesGlobal } from "@/src/constants/styles";
-import { Dispatch, SetStateAction } from "react";
 import { KeyboardType, TextInput, View } from "react-native"
 import TextComponent from "../text/text";
 import { textColorError, textColorPrimary } from "@/src/constants/colorsPalette ";
+import { useRef } from "react";
+import { TextInput as RNTextInput } from "react-native";
 
 interface Props {
     label: string;
@@ -20,9 +21,10 @@ interface Props {
     width?: number,
     money?: boolean,
     editable: boolean
+    display? : "none" | "flex"
   }
 
-const InputText = ({ value, placeholder, width, label, money, onChangeText, keyboardType, isPassword, inputError, editable } : Props) => {
+const InputText = ({ value, placeholder, width, label, money, onChangeText, keyboardType, isPassword, inputError, editable, display } : Props) => {
 
     const formatMoney = (value: string): string => {
         // Remove caracteres que não são dígitos
@@ -48,7 +50,7 @@ const InputText = ({ value, placeholder, width, label, money, onChangeText, keyb
       };
 
     return (    
-        <View style={{ width: width}}>
+        <View style={{ width: width, display: display === undefined ? "flex" : display}}>
             <TextComponent color={inputError ? textColorError : textColorPrimary} fontSize={12} text={label} textAlign="left" />
             <TextInput 
                 editable={editable}

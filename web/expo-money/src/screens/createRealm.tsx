@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import { Realm } from "../types/createType";
 import ButtonComponent from "../components/button";
 import api from "../integration/axiosconfig";
+import { stylesGlobal } from "../constants/styles";
 
 const CreateRealm = () => {
 
@@ -59,7 +60,7 @@ const CreateRealm = () => {
 
     return(
         <BaseScreens backgroundColor={backgroundPrimary} title="Novo Usuário" rolbackStack={true}>
-            <View style={{ display: "flex", gap: 20, alignItems: "center", flex: 1, padding: 10}}>
+            <View style={ stylesGlobal.viewComponentBaseScree}>
                 <TextComponent textAlign="auto" color={textColorPrimary} fontSize={18} text={"Novo Usuário"}/> 
 
                 <InputText 

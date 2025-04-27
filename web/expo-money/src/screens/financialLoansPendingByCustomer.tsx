@@ -7,6 +7,7 @@ import { useEffect, useState } from "react"
 import { FinancialLoansPendingByCustumerDTO } from "../types/financialLoansPendingByCustumerDTO"
 import api from "../integration/axiosconfig"
 import { Ionicons } from "@expo/vector-icons"
+import { stylesGlobal } from "../constants/styles"
 
 const FinancialLoansPendingByCustumer = ({ navigation }:any) => {
 
@@ -30,12 +31,7 @@ const FinancialLoansPendingByCustumer = ({ navigation }:any) => {
     
     return(
         <BaseScreens backgroundColor={backgroundPrimary} title="EMPRÉSTIMOS PENDENTES" rolbackStack>
-            <View
-                style={{
-                    flex: 1,
-                    justifyContent: "center",
-                    alignItems: "center",
-            }}>
+            <View style={ stylesGlobal.viewComponentBaseScree}>
                 {Object.entries(financialPendingByCustomer).length > 0 &&
                     <View style={{ gap: 10, paddingTop: 10}}>
                         <TextComponent text={`${financialPendingByCustomer.customer.firsName} ${financialPendingByCustomer.customer.lastName}`} color={textColorPrimary} fontSize={18} textAlign={"center"}/>

@@ -7,6 +7,7 @@ import InputText from "../components/inputText"
 import { useContext, useEffect, useState } from "react"
 import { AuthContext } from "../context/AuthContext"
 import AsyncStorage from "@react-native-async-storage/async-storage"
+import { stylesGlobal } from "../constants/styles"
 
 const Login = ({ navigation }:any) => {
 
@@ -35,15 +36,8 @@ const Login = ({ navigation }:any) => {
     }
 
     return (
-        <BaseScreens backgroundColor={backgroundPrimary} title="LOGIN">
-            <View
-                style={{
-                    flex: 1,
-                    justifyContent: "center",
-                    alignItems: "center",
-                    gap: 30,
-                }}  
-            >
+        <BaseScreens backgroundColor={backgroundPrimary} title="EXPO MONEY">
+            <View style={[stylesGlobal.viewComponentBaseScree, {justifyContent:"center"}]}>
 
                 <Image source={require("../../assets/images/logo.png")}
                     style={{

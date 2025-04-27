@@ -8,6 +8,7 @@ import api from "../integration/axiosconfig";
 import TextComponent from "../components/text/text";
 import { textColorError, textColorPrimary } from "../constants/colorsPalette ";
 import { useRoute } from "@react-navigation/native";
+import { stylesGlobal } from "../constants/styles";
 
 const NewClient = ({ navigation } : any) => {
 
@@ -86,7 +87,7 @@ const NewClient = ({ navigation } : any) => {
 
     return (
         <BaseScreens title="" >
-            <View style={{ height: 600, justifyContent: "center", alignItems: "center", gap: 20 }}>
+            <View style={ [stylesGlobal.viewComponentBaseScree, {height:600}]}>
                 <KeyboardAvoidingView>
                     <ScrollView style={{ padding: 20, gap: 20 }} showsVerticalScrollIndicator={false} showsHorizontalScrollIndicator={false} contentContainerStyle={{ alignItems: "center", padding: 20 }}>
                         <InputText 

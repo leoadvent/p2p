@@ -6,6 +6,7 @@ import api from "../integration/axiosconfig"
 import TextComponent from "../components/text/text"
 import { flatListBorderColor, textColorError, textColorPrimary, textColorSuccess, textColorWarning } from "../constants/colorsPalette "
 import { Ionicons } from "@expo/vector-icons"
+import { stylesGlobal } from "../constants/styles"
 
 
 const MyClient = ({ navigation }:any) => {
@@ -30,8 +31,7 @@ const MyClient = ({ navigation }:any) => {
 
     return(
         <BaseScreens title=" ">
-            <View style={{ height: 600, width: width, justifyContent: "center", alignItems: "center", gap: 20, padding: 20 }}>
-
+            <View style={ [stylesGlobal.viewComponentBaseScree, {height: 600}]}>
                 <FlatList 
                     data={customersDTO}
                     keyExtractor={(item) => item.id.toString()}

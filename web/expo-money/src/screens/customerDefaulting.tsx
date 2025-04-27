@@ -6,6 +6,7 @@ import { CustomerDTO } from "../types/customerDTO"
 import api from "../integration/axiosconfig"
 import { flatListBorderColor, textColorError, textColorPrimary, textColorSuccess, textColorWarning } from "../constants/colorsPalette "
 import { Ionicons } from "@expo/vector-icons"
+import { stylesGlobal } from "../constants/styles"
 
 const CustomerDefaulting = ({ navigation }:any) => {
 
@@ -22,7 +23,7 @@ const CustomerDefaulting = ({ navigation }:any) => {
     },[])
     return(
         <BaseScreens title=" ">
-             <View style={{ display: "flex", gap: 20, alignItems: "center", flex: 1, padding: 10}}>
+             <View style={ stylesGlobal.viewComponentBaseScree}>
 
                 {Object.entries(customerDefaultin).length > 0 &&
                     <FlatList 

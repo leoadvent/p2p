@@ -1,7 +1,7 @@
 import { Dimensions, FlatList, KeyboardAvoidingView, View } from "react-native"
 import BaseScreens from "./BaseScreens"
 import TextComponent from "../components/text/text"
-import { backgroundOpacity, flatListBorderColor, textColorError, textColorPrimary, textColorSuccess, textColorWarning } from "../constants/colorsPalette "
+import { backgroundOpacity, backgroundPrimary, backgroundSolid, flatListBorderColor, textColorError, textColorPrimary, textColorSuccess, textColorWarning } from "../constants/colorsPalette "
 import { useRoute } from "@react-navigation/native"
 import { SetStateAction, useEffect, useRef, useState } from "react"
 import { FinancialLoansPaid } from "../types/financialLoans"
@@ -13,7 +13,8 @@ import { stylesGlobal } from "../constants/styles"
 
 const FinancialLoansPaidPendingByCustumer = () => {
 
-    const width = Dimensions.get("window").width;
+    const width = Dimensions.get("screen").width
+    const height = Dimensions.get("screen").height
 
     const route = useRoute();
     const { financialLoasPaid } : any = route.params;
@@ -122,9 +123,9 @@ const FinancialLoansPaidPendingByCustumer = () => {
     
     return(
         <BaseScreens title={"PARCELA EMPRÉSTIMO"} rolbackStack>
-            <View style={ stylesGlobal.viewComponentBaseScree}>
+            <View style={ [stylesGlobal.viewComponentBaseScree, {width: width}]}>
 
-                {Object.entries(financialLoansPaid).length > 0 &&
+                {Object.entries(financialLoansPaid).length > 0 && editingItemId === null &&
                     <FlatList 
                         keyboardShouldPersistTaps="always"
                         extraData={editingItemId}
@@ -134,11 +135,11 @@ const FinancialLoansPaidPendingByCustumer = () => {
                     />
                 }
                 {editingItemId !== null &&
-                    <View style={{ display: "flex", margin: 10, flexDirection:"column", gap:10, alignItems:"center", alignContent:"center", justifyContent:"center", backgroundColor:backgroundOpacity }}>
+                    <View style={{ display: "flex", flex: 1, position:"absolute", margin: 10, marginTop: 20, flexDirection:"column", gap:10, alignItems:"center", alignContent:"center", justifyContent:"center", backgroundColor:backgroundPrimary, borderRadius:10, zIndex:2 }}>
                        
                         {renderView(financialLonasPaidSelected)}
 
-                        <View style={{ display: "flex", margin: 10, flexDirection:"row", gap:10, alignItems:"flex-end", alignContent:"center", justifyContent:"center" }}>
+                        <View style={{ display: "flex",  margin: 10, flexDirection:"row", gap:10, alignItems:"flex-end", alignContent:"center", justifyContent:"center" }}>
                             
                             <ButtonComponent 
                                 nameButton={"PAGAR"} 

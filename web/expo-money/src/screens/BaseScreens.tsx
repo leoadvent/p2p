@@ -1,4 +1,4 @@
-import { View, StatusBar, StyleSheet, Text, TouchableOpacity, KeyboardAvoidingView, Platform } from "react-native";
+import { View, StatusBar, StyleSheet, Text, TouchableOpacity, KeyboardAvoidingView, Platform, ScrollView } from "react-native";
 import TextComponent from "../components/text/text";
 import { backgroundPrimary, backgroundSecondary, statusBarColorPrimary, textColorPrimary, textColorStatusBar } from "../constants/colorsPalette ";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -63,9 +63,14 @@ const BaseScreens = ( { children, title, backgroundColor, rolbackStack, showUser
           keyboardVerticalOffset={Platform.OS === "ios" ? 100 : 0}
           style={{ flex: 1 }}
         >
-          <View style={{ display:"flex", width:"100%", alignItems:"center", flex: 1, padding: 10}}>
-            { children}
-          </View>
+          <ScrollView 
+            contentContainerStyle={{ flexGrow: 1 }}
+            keyboardShouldPersistTaps="handled"
+          >
+            <View style={{ display:"flex", width:"100%", alignItems:"center", flex: 1, padding: 10}}>
+              { children}
+            </View>
+          </ScrollView>
         </KeyboardAvoidingView>
     </SafeAreaView>
   );

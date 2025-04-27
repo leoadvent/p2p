@@ -7,6 +7,8 @@ import TextComponent from "../components/text/text"
 import { flatListBorderColor, textColorError, textColorPrimary, textColorSuccess, textColorWarning } from "../constants/colorsPalette "
 import { Ionicons } from "@expo/vector-icons"
 import { stylesGlobal } from "../constants/styles"
+import { useFocusEffect } from '@react-navigation/native' 
+import React from "react"
 
 
 const MyClient = ({ navigation }:any) => {
@@ -14,20 +16,21 @@ const MyClient = ({ navigation }:any) => {
     const [customerDTOFilter, setCustomerDTOFilter] = useState<CustomerDTO>({} as CustomerDTO)
     const [customersDTO, setCustomersDTO] = useState<CustomerDTO[]>([] as CustomerDTO[])
 
- 
-
     const width = Dimensions.get("window").width;
 
-    useEffect(() => {
-        api.post("/customer/filter", customerDTOFilter).then((response) => {
-            console.log("Clientes: ", response.data)
-            setCustomersDTO(response.data.content)
-        }).catch((error) => {
-            console.error("Erro ao buscar clientes: ", error)
-        }).finally(() => {
-            console.log("Clientes: ", customersDTO)
-        })
-    }, [])
+    useFocusEffect(
+        React.useCallback(() => {
+            // Esse código será executado sempre que a tela for focada
+            api.post("/customer/filter", customerDTOFilter).then((response) => {
+                console.log("Clientes: ", response.data)
+                setCustomersDTO(response.data.content)
+            }).catch((error) => {
+                console.error("Erro ao buscar clientes: ", error)
+            }).finally(() => {
+                console.log("Clientes: ", customersDTO)
+            })
+        }, [customerDTOFilter]) // Dependência para que a busca aconteça quando o filtro mudar
+    )
 
     return(
         <BaseScreens title=" ">

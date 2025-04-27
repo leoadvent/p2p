@@ -31,12 +31,19 @@ const FinancialLoansPaidPendingByCustumer = () => {
         const paid = { ...item, amountPaid };
       
         try {
-          await api.post('/financial/loansPaid', paid);
+          const amaoutPaid = await api.post('/financial/loansPaid', paid);
           
+          console.log("------", amaoutPaid.data)
+
+          alert(JSON.stringify(amaoutPaid.data))
           // Atualiza localmente o array
           setFinancialLoansPaid(prev =>
             prev.map((loan) =>
-              loan.id === paid.id ? { ...loan, amountPaid: paid.amountPaid } : loan
+              loan.id === paid.id ? { ...loan, 
+                amountPaid: paid.amountPaid, 
+                dueDate: amaoutPaid.data.dueDate, 
+                duePayment: amaoutPaid.data.duePayment, 
+                amountPaidFormat: amaoutPaid.data.amountPaidFormat  } : loan
             )
           );
       

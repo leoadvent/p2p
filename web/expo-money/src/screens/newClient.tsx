@@ -1,5 +1,5 @@
 import BaseScreens from "./BaseScreens";
-import { KeyboardAvoidingView, ScrollView, View } from "react-native";
+import { ScrollView, View } from "react-native";
 import { useEffect, useState } from "react";
 import { CustomerDTO } from "../types/customerDTO";
 import InputText from "../components/inputText";

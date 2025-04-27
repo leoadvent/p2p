@@ -8,4 +8,8 @@ export interface DelinquentCustomer {
     dueDate: string
     loansPaid: FinancialLoansPaid
     daysOverdue: number
+    value: number
+    valueFinancialFormat: string
+    valueAmountPaid: number
+    valueAmountPaidFormat: string
 }

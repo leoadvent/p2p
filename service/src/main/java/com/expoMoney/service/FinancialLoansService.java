@@ -105,6 +105,19 @@ public class FinancialLoansService {
         return saveLoansPaid(paidAux);
     }
 
+    public FinancialLoansPaid loansPaidRenegotiation (FinancialLoansPaid paid){
+        FinancialLoansPaid paidAux = findLoansPaidById(paid.getId());
+
+        if(paid.getRenegotiation() == null || !paid.getRenegotiation()) {
+            throw new IllegalArgumentException("A parcela tem que ser do tipo renegociação");
+        }
+        paidAux.setRenegotiation(true);
+        paidAux.setRenegotiationDate(LocalDate.now());
+        paidAux.setAmountPaid(paid.getAmountPaid() + paid.getAmountPaid());
+        paidAux.setCurrencyValue(paid.getAmountPaid());
+        return loansPaidRepository.save(paidAux);
+    }
+
     public List<CustomerDueToday> customerDueToday(Integer days){
         LocalDate date =  LocalDate.now().plusDays(days);
 

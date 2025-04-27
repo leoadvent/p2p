@@ -15,8 +15,32 @@ const DelinquentCustomerScreen = () => {
     const [deliquentCustomers, setDeliquentCustomers] = useState<DelinquentCustomer[]>([])
 
     const [editingItemId, setEditingItemId] = useState<string | null>(null);
+    const [editingItemIdNegotiation, setEditingItemIdNegotiation] = useState<string | null>(null);
     const [paymentValue, setPaymentValue] = useState("");
+    const [paymentValueNegotiation, setPaymentValueNegotiation] = useState("");
     const [refresh, setRefresh] = useState<any>()
+
+    const handlePayPressNegotiation = async (item: FinancialLoansPaid) => {
+        const amountPaid = parseFloat(paymentValueNegotiation.replace(/\D/g, "")) / 100;
+      
+        item.renegotiation = true;
+        const paid = { ...item, amountPaid };
+      
+        try {
+            const paiding = await api.post('/financial/loansPaid/renegotiation', paid);
+          
+            setRefresh(paiding)
+      
+            alert("Pagamento registrado com sucesso!");
+        } catch (error) {
+            console.error(error)
+            alert("Erro ao registrar pagamento");
+        } finally {
+            setEditingItemId(null);
+            setPaymentValueNegotiation("");
+        }
+      };
+
 
     const handlePayPress = async (item: FinancialLoansPaid) => {
         const amountPaid = parseFloat(paymentValue.replace(/\D/g, "")) / 100;
@@ -98,10 +122,20 @@ const DelinquentCustomerScreen = () => {
                                     <TextComponent text={`Atraso de ${item.daysOverdue} dias`} color={textColorPrimary} fontSize={10} textAlign={"center"} />
                                 </View>
                                 <View style={{ display: "flex", flexDirection: "row", alignItems:"center", justifyContent:"space-between", gap: 10 }}>
+                                    <View style={{ display: "flex", flexDirection: "row", alignItems:"center", gap: 10 }}>
+                                        <Ionicons name="wallet-outline" size={15} color={textColorError}/>
+                                        <TextComponent text={`Valor Solicitado: ${item.valueFinancialFormat}`} color={textColorPrimary} fontSize={10} textAlign={"center"} />
+                                    </View>
+                                    <TextComponent text={`Valor Pago: ${item.valueAmountPaidFormat}`} color={textColorPrimary} fontSize={10} textAlign={"center"} />
+                                </View>
+                                <View style={{ display: "flex", flexDirection: "row", alignItems:"center", justifyContent:"space-between", gap: 10 }}>
                                     <TextComponent text={`Valor: ${item.loansPaid.installmentValueFormat}`} color={textColorPrimary} fontSize={10} textAlign={"center"} />
                                     <TextComponent text={`Valor Atual: ${item.loansPaid.currencyValueFormat}`} color={textColorPrimary} fontSize={10} textAlign={"center"} />
                                     <TextComponent text={`Valor Pago: ${item.loansPaid.amountPaidFormat}`} color={textColorPrimary} fontSize={10} textAlign={"center"} />
                                 </View>
+                                <View style={{ display: "flex", flexDirection: "row", alignItems:"center", justifyContent:"space-between", gap: 10 }}>
+                                <   TextComponent text={`Saldo Devedor: ${item.loansPaid.debitBalance}`} color={textColorPrimary} fontSize={10} textAlign={"center"} />
+                                </View>                            
                                 <View style={{ display: "flex", flexDirection: "row", alignItems:"center", justifyContent:"space-between", gap: 10 }}>
 
                                     <ButtonComponent 
@@ -121,6 +155,26 @@ const DelinquentCustomerScreen = () => {
                                             width={150}
                                             value={paymentValue}
                                             onChangeText={(text) => setPaymentValue(text)}
+                                        />
+                                    )}
+                                </View>
+                                <View style={{ display: "flex", flexDirection: "row", alignItems:"center", justifyContent:"space-between", gap: 10 }}>
+                                    <ButtonComponent 
+                                        nameButton={editingItemIdNegotiation === item.loansPaid.id ? "CONFIRMAR" : "NEGOCIAR"}
+                                        onPress={() => {editingItemIdNegotiation === item.loansPaid.id ? handlePayPressNegotiation(item.loansPaid) : setEditingItemIdNegotiation(item.loansPaid.id)}}
+                                        typeButton={"warning"} 
+                                        width={"40%"} 
+                                    />
+                                    {editingItemIdNegotiation === item.loansPaid.id && (
+                                        <InputText 
+                                            editable
+                                            label="" 
+                                            placeholder="Valor"
+                                            money={true}
+                                            keyboardType="numeric"
+                                            width={150}
+                                            value={paymentValueNegotiation}
+                                            onChangeText={(text) => setPaymentValueNegotiation(text)}
                                         />
                                     )}
                                 </View>

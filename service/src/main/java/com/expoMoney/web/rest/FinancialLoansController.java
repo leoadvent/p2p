@@ -56,6 +56,15 @@ public class FinancialLoansController {
         return ResponseEntity.ok(service.loansPaid(paid));
     }
 
+    @PostMapping("/loansPaid/renegotiation")
+    @Operation(tags = {"FINANCIAL LOANS"}, summary = "Realizar pagamento de Parcela Renegociacao",
+            description = "Requisicao POST para Realizar pagamento de Parcela Renegociacao", security = {@SecurityRequirement(name = "BearerJWT")}
+    )
+    public ResponseEntity<FinancialLoansPaid> loansPaidRenegotiation(@RequestBody FinancialLoansPaid paid){
+        log.info("REQUISICAO POST PARA REALIZAR PAGAMENTO DE PARCELAS RENEGOCIACAO");
+        return ResponseEntity.ok(service.loansPaidRenegotiation(paid));
+    }
+
     @GetMapping("/dueToday/{days}")
     @Operation(tags = {"FINANCIAL LOANS"}, summary = "Buscar Clientes com o Vencimento para o Dia de Hoje",
             description = "Requisicao GET para Buscar Clientes com o Vencimento para o Dia de Hoje", security = {@SecurityRequirement(name = "BearerJWT")}

@@ -52,10 +52,13 @@ public interface FinancialLoansPaidRepository extends JpaRepository<FinancialLoa
                     ct.lastName,
                     ct.contact,
                     lp.dueDate,
+                    fl.value,
+                    (SELECT SUM(lpSum.amountPaid) FROM FinancialLoansPaid lpSum WHERE lpSum.financialLoans.id = fl.id),
                     lp
                 )
             FROM
                 FinancialLoansPaid lp
+                JOIN lp.financialLoans fl
                 JOIN lp.customer ct
             WHERE
                 lp.dueDate < CURRENT_DATE

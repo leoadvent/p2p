@@ -16,7 +16,9 @@ export interface FinancialLoansPaid{
     amountPaidFormat: string
     installmentValueFormat: string
     lateInstallment: boolean
-    debitBalance: string;
+    debitBalance: string
+    renegotiation: boolean
+    renegotiationDate: string
 }
 
 export interface FinancialLoans {

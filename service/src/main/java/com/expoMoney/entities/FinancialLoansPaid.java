@@ -47,6 +47,10 @@ public class FinancialLoansPaid {
     private Float interestDelay;
     @NotNull(message = "Campo Obrigatório")
     private Integer portion;
+    private Boolean renegotiation;
+    @JsonFormat(pattern = "dd/MM/yyyy")
+    @Column(name = "renegotiation_date")
+    private LocalDate renegotiationDate;
 
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)

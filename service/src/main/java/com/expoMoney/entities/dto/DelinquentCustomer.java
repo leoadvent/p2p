@@ -1,6 +1,7 @@
 package com.expoMoney.entities.dto;
 
 import com.expoMoney.entities.FinancialLoansPaid;
+import com.expoMoney.security.utils.StringUtils;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -21,9 +22,19 @@ public class DelinquentCustomer {
     private String contact;
     @JsonFormat(pattern = "dd/MM/yyyy")
     private LocalDate dueDate;
+    private Double value;
+    private Double valueAmountPaid;
     private FinancialLoansPaid loansPaid;
 
     public long getDaysOverdue() {
         return ChronoUnit.DAYS.between(dueDate, LocalDate.now());
+    }
+
+    public String getValueFinancialFormat(){
+        return StringUtils.formatCurrency(this.value);
+    }
+
+    public String getValueAmountPaidFormat(){
+        return StringUtils.formatCurrency(this.valueAmountPaid);
     }
 }

@@ -54,4 +54,16 @@
             </column>
         </addColumn>
     </changeSet>
+
+    <changeSet id="202504061420_5" author="Desenvolvedor Do Sistema">
+        <addColumn tableName="TB_FINANCIAL_LOANS_PAID">
+            <column name="renegotiation_date" type="DATE" />
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="202504061420_6" author="Desenvolvedor Do Sistema">
+        <addColumn tableName="TB_FINANCIAL_LOANS_PAID">
+            <column name="renegotiation" type="BOOLEAN" />
+        </addColumn>
+    </changeSet>
 </databaseChangeLog>

@@ -33,9 +33,6 @@ const FinancialLoansPaidPendingByCustumer = () => {
         try {
           const amaoutPaid = await api.post('/financial/loansPaid', paid);
           
-          console.log("------", amaoutPaid.data)
-
-          alert(JSON.stringify(amaoutPaid.data))
           // Atualiza localmente o array
           setFinancialLoansPaid(prev =>
             prev.map((loan) =>

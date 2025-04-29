@@ -28,6 +28,10 @@ export const buttonBackgroundColorDisabled  = "rgb(200, 200, 200)";
 
 export const flatListBorderColor = "rgb(110, 110, 110)";
 
+export const chartBazierbackgroundGradientTo = "rgb(3, 17, 66)";
+export const chartBazierbackgroundColor     = "rgb(27, 173, 39)";
+export const chartBazierbackgroundGradientFrom = "rgb(173, 44, 27)";
+
 
   
 

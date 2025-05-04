@@ -10,6 +10,7 @@ import { CustomerDueToday } from "@/src/types/customerDueToday";
 import { Ionicons } from "@expo/vector-icons";
 import InputText from "../inputText";
 import { FinancialLoansPaid } from "@/src/types/financialLoans";
+import Contact from "../contact";
 
 interface Props{
     days: number
@@ -91,8 +92,17 @@ const DueToday = ({days, idComponent, dueTodayActive, setDueTodayActive} : Props
                             padding: 10,
                             gap: 10
                         }}>
-                            <View style={{ display: "flex", flexDirection: "row", gap: 3 }}>
+                            <View style={{ display: "flex", justifyContent:"space-between", width:"auto", flexDirection: "row", gap: 3 }}>
                                 <TextComponent text={`${item.firstname} ${item.lastName}`} color={textColorPrimary} fontSize={16} textAlign={"auto"} />
+                                <Contact
+                                    showText={false}
+                                    phoneNumber={item.contact}
+                                    message={`👋 Olá ${item.firstname},
+
+                                            📢 Estou passando para lembrar que *a parcela ${item.paid.portion}* do *contrato ${item.paid.id.slice(0, item.paid.id.indexOf('-'))}* no valor de *${item.paid.currencyValueFormat}* *vence hoje*.
+
+                                            ⏰ Evite multa e juros pagando ainda hoje. Qualquer dúvida, estou por aqui! 😊`}
+                                />
                             </View>
                             <View style={{ display: "flex", flexDirection: "row", gap: 3, justifyContent:"space-between", alignItems:"center" }}>
                                 <Ionicons name="ribbon-outline" size={15} color={textColorWarning}/>

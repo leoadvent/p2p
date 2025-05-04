@@ -6,8 +6,9 @@ import { Ionicons } from "@expo/vector-icons";
 interface Props {
     phoneNumber: string
     message?: string
+    showText?: boolean
   }
-const Contact = ({ phoneNumber, message = "Olá!" }: Props) => {
+const Contact = ({ phoneNumber, message = "Olá!", showText = true }: Props) => {
 
     const openWhatsApp = async () => {
         const url = `https://wa.me/${phoneNumber.replace(/\D/g, "")}?text=${encodeURIComponent(message)}`;
@@ -36,7 +37,7 @@ const Contact = ({ phoneNumber, message = "Olá!" }: Props) => {
                 style={{ display:"flex", flexDirection:"row", gap:10, padding: 10, backgroundColor: "#25D366", borderRadius: 5 }}
             >
                 <Ionicons name="logo-whatsapp" size={15} color={textColorSecondary}/>
-                <TextComponent text={"WhatsApp"} color={textColorPrimary} fontSize={10} textAlign={"auto"} />
+                {showText && <TextComponent text={"WhatsApp"} color={textColorPrimary} fontSize={10} textAlign={"auto"} />}
             </TouchableOpacity>
 
             <TouchableOpacity
@@ -44,7 +45,7 @@ const Contact = ({ phoneNumber, message = "Olá!" }: Props) => {
                 style={{ display:"flex", flexDirection:"row", gap:10, padding: 10, backgroundColor: "#007AFF", borderRadius: 5 }}
             >
                 <Ionicons name="call-outline" size={15} color={textColorWarning}/>
-                <TextComponent text={"Ligar"} color={textColorPrimary} fontSize={10} textAlign={"auto"} />
+                {showText && <TextComponent text={"Ligar"} color={textColorPrimary} fontSize={10} textAlign={"auto"} />}
             </TouchableOpacity>
         </View>
       )

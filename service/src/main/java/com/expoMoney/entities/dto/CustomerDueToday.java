@@ -13,6 +13,7 @@ import java.util.UUID;
 public class CustomerDueToday {
 
     private UUID idCustomer;
+    private String contact;
     private String firstname;
     private String lastName;
     private FinancialLoansPaid paid;

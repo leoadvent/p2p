@@ -3,6 +3,7 @@ package com.expoMoney.repository;
 import com.expoMoney.entities.FinancialLoansPaid;
 import com.expoMoney.entities.dto.CustomerDueToday;
 import com.expoMoney.entities.dto.DelinquentCustomer;
+import com.expoMoney.entities.dto.FundingReceived;
 import com.expoMoney.entities.dto.InvestmentsDTO;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -79,4 +80,21 @@ public interface FinancialLoansPaidRepository extends JpaRepository<FinancialLoa
                 )
             """)
     InvestmentsDTO findByValuesInvestments();
+
+    @Query("""
+            SELECT
+                new com.expoMoney.entities.dto.FundingReceived(
+                    flp.duePayment,
+                    SUM(flp.amountPaid)
+                )
+            FROM
+                FinancialLoansPaid flp
+            WHERE
+                flp.duePayment >= :date
+            GROUP BY
+                flp.duePayment
+            ORDER BY
+                flp.duePayment
+            """)
+    List<FundingReceived> findFundingReceivedByPeriod(LocalDate date);
 }

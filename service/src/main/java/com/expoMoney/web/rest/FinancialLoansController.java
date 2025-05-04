@@ -91,4 +91,13 @@ public class FinancialLoansController {
         log.info("REQUISICAO GET PARA RECUPERAR VALORES DE INVESTIMENTOS");
         return ResponseEntity.ok(service.findInvestments());
     }
+
+    @GetMapping("/fundingReceivedByPeriod/{quantDays}")
+    @Operation(tags = {"FINANCIAL LOANS"}, summary = "Buscar Recebimento por periodo",
+            description = "Requisicao GET para Buscar Recebimento por periodo", security = {@SecurityRequirement(name = "BearerJWT")}
+    )
+    public ResponseEntity<List<FundingReceived>> findFundingReceivedByPeriod(@PathVariable("quantDays") Integer quantDays){
+        log.info("REQUISICAO GET PARA RECUPERAR RECEBIMENTOS NOS ULTIMOS {} DIAS", quantDays);
+        return ResponseEntity.ok(service.findByFundingReceivedByPeriod(quantDays));
+    }
 }

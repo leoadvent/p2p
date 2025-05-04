@@ -131,4 +131,9 @@ public class FinancialLoansService {
     public InvestmentsDTO findInvestments(){
         return loansPaidRepository.findByValuesInvestments();
     }
+
+    public List<FundingReceived> findByFundingReceivedByPeriod(Integer quantDays){
+        LocalDate date = LocalDate.now().minusDays(quantDays);
+        return loansPaidRepository.findFundingReceivedByPeriod(date);
+    }
 }

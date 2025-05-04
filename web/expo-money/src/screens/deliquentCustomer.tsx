@@ -98,8 +98,17 @@ const DelinquentCustomerScreen = () => {
                                 <View style={{ display: "flex", flexDirection: "row", alignItems:"center", justifyContent:"space-between", gap: 10 }}>
                                     <TextComponent text={`${item.firstName} ${item.lastName}`} color={textColorPrimary} fontSize={10} textAlign={"center"} />
                                     <View style={{ display: "flex", flexDirection: "row", alignItems:"center", gap: 10 }}>
-                                        <Contact phoneNumber={`${item.contact}`} message={`Olá ${item.firstName}, tudo bem? \n\n Estou entranto em contato para lembralo da parcela ${item.loansPaid.portion} refenrente ao contrato ${item.loansPaid.id.slice(0, item.loansPaid.id.indexOf('-'))} vencido em ${item.loansPaid.dueDate} `}/>
-                                    </View>
+                                    <Contact
+                                        phoneNumber={`${item.contact}`}
+                                        message={`👋 Olá ${item.firstName}, tudo bem?
+
+                                        💡 Estou entrando em contato para lembrar sobre a *parcela ${item.loansPaid.portion}* referente ao *contrato ${item.loansPaid.id.slice(0, item.loansPaid.id.indexOf('-'))}*, com vencimento em *${item.loansPaid.dueDate}*, que está em atraso há *${item.daysOverdue} dias*.
+
+                                        💰 O valor atualizado está em *${item.loansPaid.currencyValueFormat}*.
+
+                                        Se tiver qualquer dúvida, estou à disposição! 😊`}
+                                    />
+                                </View>
                                 </View>
                                 <View style={{ display: "flex", flexDirection: "row", alignItems:"center", justifyContent:"space-between", gap: 10 }}>
                                     <View style={{ display: "flex", flexDirection: "row", alignItems:"center", gap: 10 }}>

@@ -10,6 +10,7 @@ import ButtonComponent from "../components/button"
 import { FinancialLoansPaid } from "../types/financialLoans"
 import InputText from "../components/inputText"
 import { stylesGlobal } from "../constants/styles"
+import Contact from "../components/contact"
 
 const DelinquentCustomerScreen = () => {
 
@@ -97,8 +98,7 @@ const DelinquentCustomerScreen = () => {
                                 <View style={{ display: "flex", flexDirection: "row", alignItems:"center", justifyContent:"space-between", gap: 10 }}>
                                     <TextComponent text={`${item.firstName} ${item.lastName}`} color={textColorPrimary} fontSize={10} textAlign={"center"} />
                                     <View style={{ display: "flex", flexDirection: "row", alignItems:"center", gap: 10 }}>
-                                        <Ionicons name="call-outline" size={15} color={textColorWarning}/>
-                                        <TextComponent text={`${item.contact}`} color={textColorPrimary} fontSize={10} textAlign={"center"} />
+                                        <Contact phoneNumber={`${item.contact}`} message={`Olá ${item.firstName}, tudo bem? \n\n Estou entranto em contato para lembralo da parcela ${item.loansPaid.portion} refenrente ao contrato ${item.loansPaid.id.slice(0, item.loansPaid.id.indexOf('-'))} vencido em ${item.loansPaid.dueDate} `}/>
                                     </View>
                                 </View>
                                 <View style={{ display: "flex", flexDirection: "row", alignItems:"center", justifyContent:"space-between", gap: 10 }}>

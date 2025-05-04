@@ -8,6 +8,7 @@ import { FinancialLoansPendingByCustumerDTO } from "../types/financialLoansPendi
 import api from "../integration/axiosconfig"
 import { Ionicons } from "@expo/vector-icons"
 import { stylesGlobal } from "../constants/styles"
+import Contact from "../components/contact"
 
 const FinancialLoansPendingByCustumer = ({ navigation }:any) => {
 
@@ -36,8 +37,8 @@ const FinancialLoansPendingByCustumer = ({ navigation }:any) => {
                     <View style={{ gap: 10, paddingTop: 10}}>
                         <TextComponent text={`${financialPendingByCustomer.customer.firsName} ${financialPendingByCustomer.customer.lastName}`} color={textColorPrimary} fontSize={18} textAlign={"center"}/>
                         <View style={{ gap: 10, paddingTop: 10, display:"flex", flexDirection:"row", justifyContent:"center", alignItems:"center"}}>
-                            <Ionicons name="call-outline" size={15} color={textColorWarning}/>
-                            <TextComponent text={`${financialPendingByCustomer.customer.contact}`} color={textColorPrimary} fontSize={14} textAlign={"center"} />
+                           
+                            <Contact phoneNumber={`${financialPendingByCustomer.customer.contact}`} /> 
                         </View>
                         <FlatList 
                             data={financialPendingByCustomer.loansPendingDTOS}

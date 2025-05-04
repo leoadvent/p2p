@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Objects;
@@ -90,6 +91,28 @@ public class FinancialLoansService {
 
     public List<FinancialLoansPaid> findByOverdueInstallments(){
         return loansPaidRepository.findByOverdueInstallments();
+    }
+
+    public Boolean applyingAlateInstallmentFine(String realmName){
+        List<FinancialLoansPaid> loansPaidsOverDue = findByOverdueInstallments();
+        try {
+            for (FinancialLoansPaid loansPaid : loansPaidsOverDue) {
+
+                double valueLoansInterestDelay = ((loansPaid.getInstallmentValue() * loansPaid.getInterestDelay()) / 100) + loansPaid.getInstallmentValue();
+
+                Long differenceDays = ChronoUnit.DAYS.between(loansPaid.getDueDate(), LocalDate.now());
+
+                double currencyValue = valueLoansInterestDelay + (differenceDays * loansPaid.getAdditionForDaysOfDelay());
+
+                loansPaid.setCurrencyValue(currencyValue);
+
+                loansPaidRepository.save(loansPaid);
+            }
+        } catch (RuntimeException e) {
+            throw new RuntimeException(e);
+        }
+
+        return true;
     }
 
     public FinancialLoansPaid loansPaid (FinancialLoansPaid paid){

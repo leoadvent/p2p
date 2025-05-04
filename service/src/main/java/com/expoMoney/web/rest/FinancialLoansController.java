@@ -5,6 +5,7 @@ import com.expoMoney.entities.dto.*;
 import com.expoMoney.service.FinancialLoansService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -99,5 +100,14 @@ public class FinancialLoansController {
     public ResponseEntity<List<FundingReceived>> findFundingReceivedByPeriod(@PathVariable("quantDays") Integer quantDays){
         log.info("REQUISICAO GET PARA RECUPERAR RECEBIMENTOS NOS ULTIMOS {} DIAS", quantDays);
         return ResponseEntity.ok(service.findByFundingReceivedByPeriod(quantDays));
+    }
+
+    @PatchMapping("/applyingAlateInstallmentFine")
+    @Operation(tags = {"FINANCIAL LOANS"}, summary = "Aplicando multas e juros sobre parcelas atrasadas",
+            description = "Requisicao PATCH para Aplicando multas e juros sobre parcelas atrasadas", security = {@SecurityRequirement(name = "BearerJWT")}
+    )
+    public ResponseEntity<Boolean> applyingAlateInstallmentFine(HttpServletRequest request){
+        log.info("APLICANDO JUROS EM PARCELAS ATRASADAS EM {}", request.getHeader("X-Tenant-ID"));
+        return ResponseEntity.ok(service.applyingAlateInstallmentFine(request.getHeader("X-Tenant-ID")));
     }
 }

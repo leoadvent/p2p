@@ -4,6 +4,7 @@ import { backgroundPrimary } from "../constants/colorsPalette ";
 import DueToday from "../components/dueToday";
 import { useState } from "react";
 import { stylesGlobal } from "../constants/styles";
+import Investimenst from "../components/investments";
 
 const HomeScreen = () => {
 
@@ -17,7 +18,8 @@ const HomeScreen = () => {
             
               <DueToday idComponent={1} setDueTodayActive={setDueTodayActive} dueTodayActive={dueTodayActive} days={0}/>
               <DueToday idComponent={2} setDueTodayActive={setDueTodayActive} dueTodayActive={dueTodayActive} days={7}/>
-    
+
+              <Investimenst />
           </ScrollView>
         </KeyboardAvoidingView>
       </View>

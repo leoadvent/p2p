@@ -82,4 +82,13 @@ public class FinancialLoansController {
         log.info("REQUISICAO GET PARA RECUPERAR PARCELAS DE CLIENTE ATRASADAS");
         return ResponseEntity.ok(service.delinquentCustomers());
     }
+
+    @GetMapping("/investments")
+    @Operation(tags = {"FINANCIAL LOANS"}, summary = "Buscar Investimentos Realizados",
+            description = "Requisicao GET para Buscar Investimentos Realizados", security = {@SecurityRequirement(name = "BearerJWT")}
+    )
+    public ResponseEntity<InvestmentsDTO> findInvestments(){
+        log.info("REQUISICAO GET PARA RECUPERAR VALORES DE INVESTIMENTOS");
+        return ResponseEntity.ok(service.findInvestments());
+    }
 }

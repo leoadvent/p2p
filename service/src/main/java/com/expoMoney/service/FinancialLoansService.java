@@ -127,4 +127,8 @@ public class FinancialLoansService {
     public List<DelinquentCustomer> delinquentCustomers () {
         return loansPaidRepository.findByDeliquentCustomer();
     }
+
+    public InvestmentsDTO findInvestments(){
+        return loansPaidRepository.findByValuesInvestments();
+    }
 }

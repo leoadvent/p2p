@@ -14,7 +14,7 @@ const PageTest = () => {
       </View>
       <Bazier label={["jan", "fev", "mar", "abr"]} values={[10, 20, 8, 17]} yAxisLabel={"$"} yAxisSuffix="" />
       <ProgressRing labels={["Adimplente", "Inadimplente", "Ativos"]} data={[0.4, 0.6, 0.8]} hideLegend={false} />
-      <Pier object={[{name:"Investido", data: 4321.14, color:"green", legendFontColor:"green", legendFontSize: 15 }, {name:"Investido", data: 4321.14, color:"red", legendFontColor:"green", legendFontSize: 15 }]} />
+      <Pier object={[{name:"Investido", data: 4321.14, color:"green", legendFontColor:"green", legendFontSize: 15, valueFormated:"R$4321,14" }, {name:"Investido", data: 4321.14, color:"red", legendFontColor:"green", legendFontSize: 15, valueFormated:"R$4321,14" }]} />
     </BaseScreens>
   );
 }

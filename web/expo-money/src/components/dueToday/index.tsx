@@ -99,7 +99,7 @@ const DueToday = ({days, idComponent, dueTodayActive, setDueTodayActive} : Props
                                     phoneNumber={item.contact}
                                     message={`👋 Olá ${item.firstname},
 
-                                            📢 Estou passando para lembrar que *a parcela ${item.paid.portion}* do *contrato ${item.paid.id.slice(0, item.paid.id.indexOf('-'))}* no valor de *${item.paid.currencyValueFormat}* *vence hoje*.
+                                            📢 Estou passando para lembrar que *a parcela ${item.paid.portion}* do *contrato ${item.paid.id.slice(0, item.paid.id.indexOf('-'))}* no valor de *${item.paid.currencyValueFormat}* *${days === 0 ? 'vence hoje' : 'vence nos próximos dias'}*
 
                                             ⏰ Evite multa e juros pagando ainda hoje. Qualquer dúvida, estou por aqui! 😊`}
                                 />

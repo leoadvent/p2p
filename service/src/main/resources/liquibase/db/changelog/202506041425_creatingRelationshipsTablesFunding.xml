@@ -6,7 +6,7 @@
       http://www.liquibase.org/xml/ns/dbchangelog
       http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.23.xsd">
 
-    <changeSet id="202504061425_1" author="Desenvolvedor Do Sistema">
+    <changeSet id="202504061425_1" author="Desenvolvedor Do Sistema" context="realm-only">
 
         <addForeignKeyConstraint
                 baseTableName="TB_FINANCIAL_LOANS_PAID"

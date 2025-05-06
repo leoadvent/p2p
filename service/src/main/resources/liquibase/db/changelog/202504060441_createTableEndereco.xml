@@ -5,7 +5,7 @@
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
 
-    <changeSet id="202504060441_1" author="Desenvolvedor Do Sistema">
+    <changeSet id="202504060441_1" author="Desenvolvedor Do Sistema" context="realm-only">
 
         <createTable tableName="tb_endereco">
             <column name="id" type="UUID">
@@ -27,7 +27,7 @@
         </createTable>
     </changeSet>
 
-    <changeSet id="202504060441_2" author="Desenvolvedor Do Sistema">
+    <changeSet id="202504060441_2" author="Desenvolvedor Do Sistema" context="realm-only">
         <addColumn tableName="tb_endereco">
             <column name="estado" type="VARCHAR(255)"/>
         </addColumn>

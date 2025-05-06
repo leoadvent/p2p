@@ -6,7 +6,7 @@
       http://www.liquibase.org/xml/ns/dbchangelog
       http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.23.xsd">
 
-    <changeSet id="202504061421_1" author="Desenvolvedor Do Sistema">
+    <changeSet id="202504061421_1" author="Desenvolvedor Do Sistema" context="realm-only">
         <createTable tableName="TB_FINANCIAL_LOANS">
             <column name="id" type="UUID">
                 <constraints primaryKey="true" nullable="false"/>
@@ -33,7 +33,7 @@
 
     </changeSet>
 
-    <changeSet id="202504061421_2" author="Desenvolvedor Do Sistema">
+    <changeSet id="202504061421_2" author="Desenvolvedor Do Sistema" context="realm-only">
         <addColumn tableName="TB_FINANCIAL_LOANS">
             <column name="start_year" type="INT">
                 <constraints nullable="false"/>
@@ -41,9 +41,17 @@
         </addColumn>
     </changeSet>
 
-    <changeSet id="202504061421_3" author="Desenvolvedor Do Sistema">
+    <changeSet id="202504061421_3" author="Desenvolvedor Do Sistema" context="realm-only">
         <addColumn tableName="TB_FINANCIAL_LOANS">
             <column name="add_for_day_delay" type="DOUBLE PRECISION">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="202504061421_4" author="Desenvolvedor Do Sistema" context="realm-only">
+        <addColumn tableName="TB_FINANCIAL_LOANS">
+            <column name="modality_financing" type="varchar(20)" defaultValue="FINANCING">
                 <constraints nullable="false"/>
             </column>
         </addColumn>

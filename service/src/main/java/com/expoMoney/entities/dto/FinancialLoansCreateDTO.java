@@ -1,5 +1,6 @@
 package com.expoMoney.entities.dto;
 
+import com.expoMoney.enums.ModalityFinancing;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
@@ -27,4 +28,6 @@ public class FinancialLoansCreateDTO {
     private Boolean simulator;
     @NotNull(message = "Campo Obrigatório")
     private Double additionForDaysOfDelay;
+    @NotNull(message = "Campo Obrigatório")
+    private ModalityFinancing modalityFinancing;
 }

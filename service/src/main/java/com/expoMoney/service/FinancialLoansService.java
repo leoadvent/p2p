@@ -4,6 +4,7 @@ import com.expoMoney.entities.Customer;
 import com.expoMoney.entities.FinancialLoans;
 import com.expoMoney.entities.FinancialLoansPaid;
 import com.expoMoney.entities.dto.*;
+import com.expoMoney.enums.ModalityFinancing;
 import com.expoMoney.mapper.CustomerMapper;
 import com.expoMoney.mapper.FinancialLoansMapper;
 import com.expoMoney.repository.FinancialLoansPaidRepository;
@@ -54,9 +55,16 @@ public class FinancialLoansService {
 
         double interest = (totalValue * ratePercent) / 100;
         double totalWithInterest = totalValue + interest;
-        double valueInstallment = totalWithInterest / totalInstallments;
+        double valueInstallment = create.getModalityFinancing() == ModalityFinancing.FINANCING ?
+                totalWithInterest / totalInstallments
+                : interest;
 
         for(int i = 0; i < create.getCashInstallment(); i++){
+
+            if(create.getModalityFinancing() == ModalityFinancing.ONEROUS_LOAN && i == create.getCashInstallment()){
+                valueInstallment = totalWithInterest + valueInstallment;
+            }
+
             FinancialLoansPaid paid = new FinancialLoansPaid();
             paid.setPortion(i+1);
             paid.setCustomer(customer);

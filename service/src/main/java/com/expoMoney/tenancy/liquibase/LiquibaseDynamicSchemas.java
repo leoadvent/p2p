@@ -76,11 +76,14 @@ public class LiquibaseDynamicSchemas {
     }
 
     public void runLiquibaseForSchema(String schema) {
+
+        String context = schema.equals("public") ? "public-only" :"realm-only";
         try {
             SpringLiquibase liquibase = new SpringLiquibase();
             liquibase.setChangeLog(changeLogFile);
             liquibase.setDataSource(buildDataSourceForSchema(schema));
             liquibase.setDefaultSchema(schema);
+            liquibase.setContexts(context);
             liquibase.setResourceLoader(resourceLoader);
             liquibase.setShouldRun(true); // importante!
             liquibase.afterPropertiesSet(); // executa Liquibase

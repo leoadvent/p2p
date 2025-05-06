@@ -1,5 +1,6 @@
 package com.expoMoney.entities;
 
+import com.expoMoney.enums.ModalityFinancing;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -40,6 +41,9 @@ public class FinancialLoans {
     @NotNull(message = "Campo Obrigatório")
     @Column(name = "add_for_day_delay")
     private Double additionForDaysOfDelay;
+    @Column(name = "modality_financing")
+    @Enumerated(EnumType.STRING)
+    private ModalityFinancing modalityFinancing;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "financialLoans")
     @NotNull(message = "Campo Obrigatório")

@@ -2,7 +2,10 @@ package com.expoMoney.entities.dto;
 
 import com.expoMoney.entities.Customer;
 import com.expoMoney.entities.FinancialLoansPaid;
+import com.expoMoney.enums.ModalityFinancing;
 import com.expoMoney.security.utils.StringUtils;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
@@ -38,6 +41,9 @@ public class FinancialLoansDTO {
     @NotNull(message = "Campo Obrigatório")
     private Customer customer;
 
+    @Enumerated(EnumType.STRING)
+    private ModalityFinancing modalityFinancing;
+
     public String getValueFormat(){
         return StringUtils.formatCurrency(this.value);
     }
@@ -69,5 +75,9 @@ public class FinancialLoansDTO {
                 item -> item.getDueDate().isBefore(LocalDate.now())
                         && item.getAmountPaid() < item.getCurrencyValue()
                 ).toList().size();
+    }
+
+    public String getModalityFinancingFormating(){
+        return this.modalityFinancing.getDescription();
     }
 }

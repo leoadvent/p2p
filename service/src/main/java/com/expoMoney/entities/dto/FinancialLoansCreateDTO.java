@@ -30,4 +30,5 @@ public class FinancialLoansCreateDTO {
     private Double additionForDaysOfDelay;
     @NotNull(message = "Campo Obrigatório")
     private ModalityFinancing modalityFinancing;
+    private Double onerousLoanValue;
 }

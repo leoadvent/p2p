@@ -57,11 +57,11 @@ public class FinancialLoansService {
         double totalWithInterest = totalValue + interest;
         double valueInstallment = create.getModalityFinancing() == ModalityFinancing.FINANCING ?
                 totalWithInterest / totalInstallments
-                : interest;
+                : create.getOnerousLoanValue();
 
         for(int i = 0; i < create.getCashInstallment(); i++){
 
-            if(create.getModalityFinancing() == ModalityFinancing.ONEROUS_LOAN && i == create.getCashInstallment()){
+            if(create.getModalityFinancing() == ModalityFinancing.ONEROUS_LOAN && i == create.getCashInstallment() -1 ){
                 valueInstallment = totalWithInterest + valueInstallment;
             }
 

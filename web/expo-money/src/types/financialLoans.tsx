@@ -1,4 +1,6 @@
+import { Modal } from "react-native"
 import { CustomerDTO } from "./customerDTO"
+import { ModalityFinancing } from "./financialLoansCreateDTO"
 
 export interface FinancialLoansPaid{
     id: string
@@ -38,4 +40,6 @@ export interface FinancialLoans {
     valueTotalFormat: string
     loansPaids: FinancialLoansPaid[]
     totalInstallmentPending: number
+    modalityFinancing: ModalityFinancing
+    modalityFinancingFormating: string
 }

@@ -12,7 +12,7 @@ import DateTimePicker from '@react-native-community/datetimepicker'
 import { Platform } from 'react-native'
 import { useRoute } from "@react-navigation/native"
 import { FinancialLoans } from "../types/financialLoans"
-import { FinancialLoansCreateDTO } from "../types/financialLoansCreateDTO"
+import { FinancialLoansCreateDTO, ModalityFinancing } from "../types/financialLoansCreateDTO"
 import { Ionicons } from "@expo/vector-icons"
 
 
@@ -36,6 +36,9 @@ const FinancialLoansCreate = () => {
     const [additionForDaysOfDelay, setAdditionForDaysOfDelay] = useState<string>("")
     const [cashInstallment, setCashInstallment] = useState<string>("")
 
+    const [modalityFinancing, setModalityFinancing] = useState<ModalityFinancing>(ModalityFinancing.FINANCING)
+    const [onerousLoanValue, setOnerousLoanValue] = useState<string>("")
+
     const [showPicker, setShowPicker] = useState(false)
     const [startDateDue, setStartDateDue] = useState(new Date())
     
@@ -56,6 +59,8 @@ const FinancialLoansCreate = () => {
         setShowDropDow(false)
         setCustomerId("")
         setFinancialLoans({} as FinancialLoans)
+        setModalityFinancing(ModalityFinancing.FINANCING)
+        setOnerousLoanValue("")
     }
 
     function handlerFinancialLoasnCreate(simulatorParam: boolean) {
@@ -67,7 +72,9 @@ const FinancialLoansCreate = () => {
             cashInstallment: Number.parseFloat(cashInstallment),
             customerId: customerId,
             simulator: simulatorParam,
-            additionForDaysOfDelay: Number.parseFloat(additionForDaysOfDelay.replace(".","").replace(",","."))
+            additionForDaysOfDelay: Number.parseFloat(additionForDaysOfDelay.replace(".","").replace(",",".")),
+            modalityFinancing: modalityFinancing === ModalityFinancing.FINANCING ? 'FINANCING' : 'ONEROUS_LOAN',
+            onerousLoanValue:  Number.parseFloat(onerousLoanValue.replace(".","").replace(",",".")),
         }
 
         api.post('/financial', createDTO).then((response) => {
@@ -122,6 +129,10 @@ const FinancialLoansCreate = () => {
                         </View>
                     </DropDow>
 
+                    <View style={{width: width - 50}}>
+                        <ButtonComponent nameButton={`TIPO: ${modalityFinancing.toUpperCase()}`} onPress={()=> {setModalityFinancing(modalityFinancing === ModalityFinancing.FINANCING ? ModalityFinancing.ONEROUS_LOAN : ModalityFinancing.FINANCING)} } typeButton={"primary"} width={"100%"} />
+                    </View>
+
                     <View style={{ width: width, display:"flex", flexDirection:"row", gap: 20, justifyContent: "center", alignItems: "center"}}>
 
                         <InputText 
@@ -157,13 +168,27 @@ const FinancialLoansCreate = () => {
 
                         <InputText 
                             editable
-                            label="Adcional Por Dia Atraso *" 
+                            label="Adicional Por Dia Atraso *" 
                             money
                             keyboardType="numeric"
                             value={additionForDaysOfDelay}
                             width={150}
                             onChangeText={(text) => { setAdditionForDaysOfDelay(text)}}
                         />
+                    </View>
+
+                    <View style={{  width: width, display: modalityFinancing === ModalityFinancing.ONEROUS_LOAN ? "flex" : "none", flexDirection:"row", gap: 20, justifyContent: "center", alignItems: "center"}}>
+                        { modalityFinancing === ModalityFinancing.ONEROUS_LOAN &&
+                            <InputText 
+                            editable
+                            label="Valor Aluguel *" 
+                            money
+                            keyboardType="numeric"
+                            value={onerousLoanValue}
+                            width={150}
+                            onChangeText={(text) => { setOnerousLoanValue(text)}}
+                        />
+                        }
                     </View>
 
                     <View style={{ width: width, display:"flex", flexDirection:"row", gap: 20, justifyContent: "center", alignItems: "flex-end"}}>
@@ -203,7 +228,7 @@ const FinancialLoansCreate = () => {
                     
                     </View>
 
-                    <View  style={{ width: width-90, display:"flex", flexDirection:"row", gap: 20, justifyContent: "center", alignItems: "flex-end"}}>
+                    <View  style={{ width: width-50, display:"flex", flexDirection:"row", gap: 20, justifyContent: "center", alignItems: "flex-end"}}>
                     
                         <ButtonComponent 
                             nameButton={"PROSSEGUIR"} 
@@ -237,7 +262,8 @@ const FinancialLoansCreate = () => {
                         <TextComponent text="Dados do Empréstimo" color={textColorPrimary} fontSize={20} textAlign={"auto"} />
 
                         <TextComponent text={`${financialLoans.customer.firsName} ${financialLoans.customer.lastName}`} color={textColorPrimary} fontSize={16} textAlign={"auto"} />
-                        
+
+                       
                         <View style={{ display: "flex", flexDirection:"row", justifyContent:"space-between", gap:20, alignItems:"center" }}>
                             <Ionicons name="calendar-number-outline" size={15} color={textColorWarning}/>
                             <TextComponent text={`Adicional por dia de atraso: ${financialLoans.additionForDaysOfDelayFormat}`} color={textColorPrimary} fontSize={12} textAlign={"auto"} />

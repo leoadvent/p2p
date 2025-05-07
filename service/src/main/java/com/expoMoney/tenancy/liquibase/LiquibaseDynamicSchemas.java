@@ -1,13 +1,7 @@
 package com.expoMoney.tenancy.liquibase;
 
 import com.expoMoney.tenancy.multitenancy.TenantContext;
-import liquibase.Contexts;
-import liquibase.Liquibase;
-import liquibase.database.Database;
-import liquibase.database.DatabaseFactory;
-import liquibase.exception.LiquibaseException;
 import liquibase.integration.spring.SpringLiquibase;
-import liquibase.resource.ClassLoaderResourceAccessor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;

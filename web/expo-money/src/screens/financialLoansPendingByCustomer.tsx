@@ -60,6 +60,10 @@ const FinancialLoansPendingByCustumer = ({ navigation }:any) => {
                                                 gap: 10
                                         }}
                                     >
+                                        <View style={{ display: "flex", flexDirection: "row", width: '100%', justifyContent: "flex-start", gap: 20, alignItems: "center"}}>
+                                            <Ionicons name="flag-outline" size={14} color={item.totalInstallmentPending > 0 ? textColorError : textColorWarning} /> 
+                                            <TextComponent text={`${item.modalityFinancingFormating}`} color={textColorPrimary} fontSize={14} textAlign={"center"} />
+                                        </View>
                                         <View style={{ display: "flex", flexDirection: "row", width: '100%', justifyContent: "space-between", alignItems: "center"}}>
                                             <Ionicons name="ribbon-outline" size={14} color={item.totalInstallmentPending > 0 ? textColorError : textColorWarning} />
                                             <TextComponent text={`Contrato: ${item.id.slice(0, item.id.indexOf('-'))}`} color={textColorPrimary} fontSize={14} textAlign={"center"} />

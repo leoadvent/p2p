@@ -1,3 +1,8 @@
+export enum ModalityFinancing {
+    FINANCING = "Financiamento",
+    ONEROUS_LOAN = "Mútuo Oneroso",
+}
+
 export interface FinancialLoansCreateDTO {
     value: number
     rate: number
@@ -7,4 +12,6 @@ export interface FinancialLoansCreateDTO {
     customerId: string
     simulator: boolean
     additionForDaysOfDelay: number
+    modalityFinancing: ModalityFinancing | string
+    onerousLoanValue?: number
 }

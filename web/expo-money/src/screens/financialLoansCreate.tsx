@@ -64,10 +64,13 @@ const FinancialLoansCreate = () => {
     }
 
     function handlerFinancialLoasnCreate(simulatorParam: boolean) {
+
+        const valuelateInterest = modalityFinancing === ModalityFinancing.FINANCING ? lateInterest : rate;
+
         const createDTO : FinancialLoansCreateDTO = {
             value: Number.parseFloat(value.replace(".","").replace(",",".")),
-            rate: Number.parseFloat(rate.replace(".","").replace(",",".")),
-            lateInterest: Number.parseFloat(lateInterest.replace(".","").replace(",",".")),
+            rate: Number.parseFloat(rate.replace(".","").replace(",",".").replace("%","")),
+            lateInterest: Number.parseFloat(valuelateInterest.replace(".","").replace(",",".").replace("%","")),
             startDateDue: startDateDue,
             cashInstallment: Number.parseFloat(cashInstallment),
             customerId: customerId,
@@ -151,33 +154,26 @@ const FinancialLoansCreate = () => {
                             keyboardType="numeric"
                             value={rate}
                             width={150}
+                            percentage
                             onChangeText={(text) => { setRate(text)}}
                         />
 
                     </View>
 
                     <View style={{ width: width, display:"flex", flexDirection:"row", gap: 20, justifyContent: "center", alignItems: "center"}}>
-                        <InputText 
-                            editable
-                            label="Juros Atraso *" 
-                            keyboardType="numeric"
-                            value={lateInterest}
-                            width={150}
-                            onChangeText={(text) => {setLateInterest(text)}}
-                        />
+                        
+                        {modalityFinancing === ModalityFinancing.FINANCING &&
+                            <InputText 
+                                editable
+                                label="Juros Atraso *" 
+                                keyboardType="numeric"
+                                value={lateInterest}
+                                width={150}
+                                percentage
+                                onChangeText={(text) => {setLateInterest(text)}}
+                            />
+                        }
 
-                        <InputText 
-                            editable
-                            label="Adicional Por Dia Atraso *" 
-                            money
-                            keyboardType="numeric"
-                            value={additionForDaysOfDelay}
-                            width={150}
-                            onChangeText={(text) => { setAdditionForDaysOfDelay(text)}}
-                        />
-                    </View>
-
-                    <View style={{  width: width, display: modalityFinancing === ModalityFinancing.ONEROUS_LOAN ? "flex" : "none", flexDirection:"row", gap: 20, justifyContent: "center", alignItems: "center"}}>
                         { modalityFinancing === ModalityFinancing.ONEROUS_LOAN &&
                             <InputText 
                             editable
@@ -189,6 +185,16 @@ const FinancialLoansCreate = () => {
                             onChangeText={(text) => { setOnerousLoanValue(text)}}
                         />
                         }
+
+                        <InputText 
+                            editable
+                            label="Adicional Por Dia Atraso *" 
+                            money
+                            keyboardType="numeric"
+                            value={additionForDaysOfDelay}
+                            width={150}
+                            onChangeText={(text) => { setAdditionForDaysOfDelay(text)}}
+                        />
                     </View>
 
                     <View style={{ width: width, display:"flex", flexDirection:"row", gap: 20, justifyContent: "center", alignItems: "flex-end"}}>

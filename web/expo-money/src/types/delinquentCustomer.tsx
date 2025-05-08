@@ -12,4 +12,5 @@ export interface DelinquentCustomer {
     valueFinancialFormat: string
     valueAmountPaid: number
     valueAmountPaidFormat: string
+    modalityFinancingDescription: string
 }

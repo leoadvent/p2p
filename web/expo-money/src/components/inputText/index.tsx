@@ -20,11 +20,12 @@ interface Props {
     keyboardType?: KeyboardType,
     width?: number,
     money?: boolean,
+    percentage?: boolean,
     editable: boolean
     display? : "none" | "flex"
   }
 
-const InputText = ({ value, placeholder, width, label, money, onChangeText, keyboardType, isPassword, inputError, editable, display } : Props) => {
+const InputText = ({ value, placeholder, width, label, money, onChangeText, keyboardType, isPassword, inputError, editable, display, percentage } : Props) => {
 
     const formatMoney = (value: string): string => {
         // Remove caracteres que não são dígitos
@@ -39,10 +40,26 @@ const InputText = ({ value, placeholder, width, label, money, onChangeText, keyb
         return numericValue;
       };
 
+      const formatPorcentage = (value: string): string => {
+        // Remove caracteres que não são dígitos
+        let numericValue = value.replace(/[^0-9]/g, "");
+    
+        // Formata o número como porcentagem (1.234,56%)
+        numericValue = (Number(numericValue) / 100).toFixed(2).replace(".", ",");
+    
+        // Adiciona os pontos de milhar
+        numericValue = numericValue.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+    
+        return numericValue + "%";
+      }
+
     const handleChangeText = (text: string) => {
         if (money && onChangeText) {
           // Formata o valor como moeda e chama a função de atualização
           onChangeText(formatMoney(text));
+        } else if (percentage && onChangeText) {
+          // Formata o valor como porcentagem e chama a função de atualização
+          onChangeText(formatPorcentage(text));
         } else if (onChangeText) {
           // Apenas chama a função de atualização sem formatação
           onChangeText(text);

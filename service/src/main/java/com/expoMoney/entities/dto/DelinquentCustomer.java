@@ -37,4 +37,9 @@ public class DelinquentCustomer {
     public String getValueAmountPaidFormat(){
         return StringUtils.formatCurrency(this.valueAmountPaid);
     }
+
+    public String getModalityFinancingDescription(){
+        String t = this.loansPaid.getFinancialLoans().getModalityFinancing().getDescription();
+        return this.loansPaid.getFinancialLoans().getModalityFinancing().getDescription();
+    }
 }

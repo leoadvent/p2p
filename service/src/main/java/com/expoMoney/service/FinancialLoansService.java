@@ -29,12 +29,20 @@ public class FinancialLoansService {
     private final FinancialLoansRepository repository;
     private final FinancialLoansPaidRepository loansPaidRepository;
 
+    private FinancialLoans saveLoans(FinancialLoans loans){
+        return repository.save(loans);
+    }
+
     public FinancialLoansPaid saveLoansPaid(FinancialLoansPaid loansPaid){
         return loansPaidRepository.save(loansPaid);
     }
 
     private FinancialLoansPaid findLoansPaidById(UUID idLoansPaid){
         return loansPaidRepository.findById(idLoansPaid).orElseThrow(() -> new NoSuchElementException("Parcela não localizada"));
+    }
+
+    private FinancialLoans findById(UUID uuid){
+        return repository.findById(uuid).orElseThrow(() -> new NoSuchElementException("Financiamento não localizado!"));
     }
 
     public FinancialLoansDTO create (FinancialLoansCreateDTO create){
@@ -79,7 +87,7 @@ public class FinancialLoansService {
             loans.getLoansPaids().add(paid);
         }
 
-        if(!create.getSimulator()){ repository.save(loans); }
+        if(!create.getSimulator()){ saveLoans(loans); }
 
         return mapper.toDto(loans);
     }
@@ -166,5 +174,28 @@ public class FinancialLoansService {
     public List<FundingReceived> findByFundingReceivedByPeriod(Integer quantDays){
         LocalDate date = LocalDate.now().minusDays(quantDays);
         return loansPaidRepository.findFundingReceivedByPeriod(date);
+    }
+
+    public void addSingleInstallments(UUID idFinancialLoas) {
+        FinancialLoans loans = findById(idFinancialLoas);
+
+        if (loans.getModalityFinancing() != ModalityFinancing.ONEROUS_LOAN) {
+            throw new IllegalArgumentException("O Financiamento não permite a criação de parcela avulsa");
+        }
+
+        FinancialLoansPaid paid1 = loans.getLoansPaids().stream().findFirst().get();
+
+        loans.getLoansPaids().get(loans.getLoansPaids().size()).setDuePayment(null);
+        loans.getLoansPaids().get(loans.getLoansPaids().size()).setInstallmentValue(paid1.getInstallmentValue());
+        loans.getLoansPaids().get(loans.getLoansPaids().size()).setAmountPaid(Double.parseDouble("0"));
+        loans.getLoansPaids().get(loans.getLoansPaids().size()).setCurrencyValue(paid1.getCurrencyValue());
+
+        paid1.setId(null);
+        paid1.setPortion(paid1.getPortion() + 1);
+
+        loans.getLoansPaids().add(paid1);
+
+        saveLoans(loans);
+
     }
 }

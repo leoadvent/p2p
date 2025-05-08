@@ -130,6 +130,10 @@ const DelinquentCustomerScreen = () => {
                                         <TextComponent text={`${item.loansPaid.dueDate}`} color={textColorPrimary} fontSize={10} textAlign={"center"} />
                                     </View>
                                     <TextComponent text={`Atraso de ${item.daysOverdue} dias`} color={textColorPrimary} fontSize={10} textAlign={"center"} />
+                                    <View style={{ display: "flex", flexDirection: "row", alignItems:"center", justifyContent:"space-between", gap: 10 }}>
+                                        <Ionicons name="flag-outline" size={15} color={textColorError}/>
+                                        <TextComponent text={`: ${item.modalityFinancingDescription}`} color={textColorPrimary} fontSize={10} textAlign={"center"} />
+                                    </View>
                                 </View>
                                 <View style={{ display: "flex", flexDirection: "row", alignItems:"center", justifyContent:"space-between", gap: 10 }}>
                                     <View style={{ display: "flex", flexDirection: "row", alignItems:"center", gap: 10 }}>
@@ -144,7 +148,7 @@ const DelinquentCustomerScreen = () => {
                                     <TextComponent text={`Valor Pago: ${item.loansPaid.amountPaidFormat}`} color={textColorPrimary} fontSize={10} textAlign={"center"} />
                                 </View>
                                 <View style={{ display: "flex", flexDirection: "row", alignItems:"center", justifyContent:"space-between", gap: 10 }}>
-                                <   TextComponent text={`Saldo Devedor: ${item.loansPaid.debitBalance}`} color={textColorPrimary} fontSize={10} textAlign={"center"} />
+                                    <TextComponent text={`Saldo Devedor: ${item.loansPaid.debitBalance}`} color={textColorPrimary} fontSize={10} textAlign={"center"} />                                    
                                 </View>                            
                                 <View style={{ display: "flex", flexDirection: "row", alignItems:"center", justifyContent:"space-between", gap: 10 }}>
 

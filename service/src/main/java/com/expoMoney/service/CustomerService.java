@@ -38,6 +38,10 @@ public class CustomerService {
                 orElseThrow(()-> new NoSuchElementException("Cliente não localizado"));
     }
 
+    public CustomerDTO findByIdDTO(UUID idClient){
+        return mapper.toDto(findById(idClient));
+    }
+
     public Page<CustomerDTO> fildByFilter(CustomerDTO dto, Pageable pageable){
 
         Customer customer = mapper.toEntity(dto);

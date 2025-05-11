@@ -1,0 +1,35 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.3.xsd">
+
+    <changeSet id="202506181346_1" author="Desenvolvedor Do Sistema" context="realm-only">
+        <createTable tableName="TB_CUSTOMER_COMMITMENT_ITEM">
+            <column name="id" type="UUID">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name_item" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description_item" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="value_item" type="DECIMAL(18,2)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="warranty" type="BOOLEAN"/>
+            <column name="committed" type="BOOLEAN"/>
+            <column name="customer_id" type="UUID"/>
+        </createTable>
+
+        <addForeignKeyConstraint
+                baseTableName="TB_CUSTOMER_COMMITMENT_ITEM"
+                baseColumnNames="customer_id"
+                referencedTableName="TB_CUSTOMER"
+                referencedColumnNames="id"
+                constraintName="fk_customer_commitment_item_customer"/>
+    </changeSet>
+
+
+</databaseChangeLog>

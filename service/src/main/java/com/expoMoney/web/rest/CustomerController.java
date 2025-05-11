@@ -15,6 +15,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
 import java.util.List;
+import java.util.UUID;
 
 @Slf4j
 @RestController
@@ -33,6 +34,15 @@ public class CustomerController {
         dto = service.createOrUpdate(dto);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(dto.getId()).toUri();
         return ResponseEntity.created(uri).body(dto);
+    }
+
+    @GetMapping("/findById/{idCustomer}")
+    @Operation(tags = {"CUSTOMER"}, summary = "Buscar Usuário por ID",
+            description = "Requisicao GET para Buscar Usuário por ID", security = {@SecurityRequirement(name = "BearerJWT")}
+    )
+    public ResponseEntity<CustomerDTO> findById(@PathVariable("idCustomer") UUID idCustomer){
+        log.info("REQUISICAO GET PARA RECUPERA CLIENTE POR ID");
+        return ResponseEntity.ok(service.findByIdDTO(idCustomer));
     }
 
     @PostMapping("/filter")

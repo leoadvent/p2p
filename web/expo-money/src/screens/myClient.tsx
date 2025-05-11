@@ -80,6 +80,10 @@ const MyClient = ({ navigation }:any) => {
                                 <TextComponent textAlign="center" color={textColorPrimary} fontSize={16} text={item.firsName + " " + item.lastName } />
                                 <View style={{ display: "flex", flexDirection: "row", gap: 10 }}>
                                    
+                                    <TouchableOpacity onPress={() => navigation.navigate("CustomerCommitment", {customerId: item.id})}>
+                                        <Ionicons name="bag-outline" size={26} color={textColorSuccess} />
+                                    </TouchableOpacity>
+
                                     <TouchableOpacity onPress={() => navigation.navigate("CreateFinancial", {customer: item})}>
                                         <Ionicons name="cash" size={26} color={item.amountFinancialLoansOpen > 0 ? textColorError : textColorSuccess} />
                                     </TouchableOpacity>

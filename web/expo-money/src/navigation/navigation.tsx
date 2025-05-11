@@ -18,6 +18,8 @@ import FinancialLoansPendingByCustumer from '../screens/financialLoansPendingByC
 import FinancialLoansPaidPendingByCustumer from '../screens/FinancialLoansPaidPendingByCustumer';
 import CustomerDefaulting from '../screens/customerDefaulting';
 import DelinquentCustomerScreen from '../screens/deliquentCustomer';
+import CustomerCommitment from '../screens/CustomerCommitment';
+import ModalSystem from '../components/modal';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator()
@@ -35,6 +37,7 @@ type RootStackParamList = {
   CreateFinancial: {customer?: {} | undefined}
   FinanciamentoPendentePorCliente: {customerId: string}
   FinanciamentoPendenteParcelasPorCliente: {financialLoasPaid: {} }
+  CustomerCommitment: {customerId: string}
 };
 
 export type NavigationProp = NativeStackNavigationProp<RootStackParamList>;
@@ -170,6 +173,7 @@ export default function NavigationStack() {
         <Stack.Screen name="CreateFinancial" component={FinancialLoansCreate} />
         <Stack.Screen name="FinanciamentoPendentePorCliente" component={FinancialLoansPendingByCustumer} />
         <Stack.Screen name="FinanciamentoPendenteParcelasPorCliente" component={FinancialLoansPaidPendingByCustumer} />
+        <Stack.Screen name="CustomerCommitment" component={CustomerCommitment} />
       </Stack.Navigator>
     </NavigationContainer>
   );

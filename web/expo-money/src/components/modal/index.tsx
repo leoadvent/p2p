@@ -1,6 +1,5 @@
 import { View, TouchableOpacity, Dimensions, StyleSheet } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import { BlurView } from "expo-blur";
 import TextComponent from "../text/text";
 import Modal from "react-native-modal";
 import { backgroundSecondary, textColorPrimary, textColorStatusBar } from "@/src/constants/colorsPalette ";
@@ -11,11 +10,12 @@ const { width, height } = Dimensions.get("window");
 interface Props {
     title: string;
     children: React.ReactNode;
-    buttonClose: React.ReactNode;
+    buttonClose?: React.ReactNode;
     setVisible: Dispatch<SetStateAction<boolean>>;
     visible: boolean;
+    heightProp?: number;
 }
-const ModalSystem = ({title, children, buttonClose, setVisible, visible=false} : Props) => {
+const ModalSystem = ({title, children, buttonClose, setVisible, visible=false, heightProp=height} : Props) => {
 
     function handleClose() {
         setVisible(!visible);
@@ -40,7 +40,7 @@ const ModalSystem = ({title, children, buttonClose, setVisible, visible=false} :
             display: "flex",
             flexDirection: "column",
             width: width * 0.8,
-            height: height * 0.6,
+            height: heightProp * 0.6,
             backgroundColor: "rgb(36, 36, 36)",
             borderRadius: 10,
             padding: 16,

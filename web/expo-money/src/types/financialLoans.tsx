@@ -1,6 +1,7 @@
 import { Modal } from "react-native"
 import { CustomerDTO } from "./customerDTO"
 import { ModalityFinancing } from "./financialLoansCreateDTO"
+import { CustomerCommitmentItemDTO } from "./customerCommitmentItemDTO"
 
 export interface FinancialLoansPaid{
     id: string
@@ -42,4 +43,5 @@ export interface FinancialLoans {
     totalInstallmentPending: number
     modalityFinancing: ModalityFinancing
     modalityFinancingFormating: string
+    commitmentItems: CustomerCommitmentItemDTO[]
 }

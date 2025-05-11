@@ -1,6 +1,7 @@
 package com.expoMoney.service;
 
 import com.expoMoney.entities.Customer;
+import com.expoMoney.entities.CustomerCommitmentItem;
 import com.expoMoney.entities.FinancialLoans;
 import com.expoMoney.entities.FinancialLoansPaid;
 import com.expoMoney.entities.dto.*;
@@ -11,6 +12,7 @@ import com.expoMoney.repository.FinancialLoansPaidRepository;
 import com.expoMoney.repository.FinancialLoansRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
@@ -28,7 +30,9 @@ public class FinancialLoansService {
     private final CustomerService customerService;
     private final FinancialLoansRepository repository;
     private final FinancialLoansPaidRepository loansPaidRepository;
+    private final CustomerCommitmentItemService commitmentItemService;
 
+    @Transactional
     private FinancialLoans saveLoans(FinancialLoans loans){
         return repository.save(loans);
     }
@@ -88,6 +92,13 @@ public class FinancialLoansService {
         }
 
         if(!create.getSimulator()){ saveLoans(loans); }
+
+        if(loans.getId() != null){
+            for (CustomerCommitmentItem x : loans.getCommitmentItems()){
+                x.setWarranty(true);
+                commitmentItemService.save(x);
+            }
+        }
 
         return mapper.toDto(loans);
     }

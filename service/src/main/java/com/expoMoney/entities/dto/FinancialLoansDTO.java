@@ -1,6 +1,7 @@
 package com.expoMoney.entities.dto;
 
 import com.expoMoney.entities.Customer;
+import com.expoMoney.entities.CustomerCommitmentItem;
 import com.expoMoney.entities.FinancialLoansPaid;
 import com.expoMoney.enums.ModalityFinancing;
 import com.expoMoney.security.utils.StringUtils;
@@ -43,6 +44,8 @@ public class FinancialLoansDTO {
 
     @Enumerated(EnumType.STRING)
     private ModalityFinancing modalityFinancing;
+
+    private List<CustomerCommitmentItem> commitmentItems = new ArrayList<>();
 
     public String getValueFormat(){
         return StringUtils.formatCurrency(this.value);

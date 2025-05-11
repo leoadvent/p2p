@@ -14,6 +14,8 @@ import { useRoute } from "@react-navigation/native"
 import { FinancialLoans } from "../types/financialLoans"
 import { FinancialLoansCreateDTO, ModalityFinancing } from "../types/financialLoansCreateDTO"
 import { Ionicons } from "@expo/vector-icons"
+import ModalSystem from "../components/modal"
+import { CustomerCommitmentItemDTO } from "../types/customerCommitmentItemDTO"
 
 
 const FinancialLoansCreate = () => {
@@ -24,6 +26,7 @@ const FinancialLoansCreate = () => {
     const param : boolean = Object.entries(customer).length > 0 ? true : false;  
 
     const [simulator, setSimulator] = useState<boolean>(true)
+    const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
     const [customerDTO, setCustomerDTO] = useState<CustomerDTO[]>([])
     const [filter, setFilter] = useState<string>(param ? `${customer.firsName} ${customer.lastName}` : "")
     const [showDropdow, setShowDropDow] = useState<boolean>(false)
@@ -41,7 +44,12 @@ const FinancialLoansCreate = () => {
 
     const [showPicker, setShowPicker] = useState(false)
     const [startDateDue, setStartDateDue] = useState(new Date())
-    
+
+    const [customerCommitmentItemDTO, setCustomerCommitmentItemDTO] = useState<CustomerCommitmentItemDTO[]>([])
+    const [customerCommitmentItemDTOSelected, setCustomerCommitmentItemDTOSelected] = useState<CustomerCommitmentItemDTO[]>([])
+    const [valueCommitmentItem, setValueCommitmentItem] = useState<number>(0)
+
+    const [successOperation, setSuccessOperation] = useState<boolean>(false)
 
     const width = Dimensions.get("window").width
 
@@ -61,6 +69,21 @@ const FinancialLoansCreate = () => {
         setFinancialLoans({} as FinancialLoans)
         setModalityFinancing(ModalityFinancing.FINANCING)
         setOnerousLoanValue("")
+        setValueCommitmentItem(0)
+        setCustomerCommitmentItemDTOSelected([])
+        setCustomerCommitmentItemDTO([])
+        setSuccessOperation(false)
+    }
+
+    function handlerSelectCommitmentItem(item: CustomerCommitmentItemDTO) {
+        const index = customerCommitmentItemDTOSelected.findIndex((i) => i.id === item.id);
+        if (index !== -1) {
+            setCustomerCommitmentItemDTOSelected((prev) => prev.filter((_, i) => i !== index));
+            setValueCommitmentItem((prev) => Number((prev - item.valueItem).toFixed(2)));
+        } else {
+            setCustomerCommitmentItemDTOSelected((prev) => [...prev, item]);
+             setValueCommitmentItem((prev) => Number((prev + item.valueItem).toFixed(2)));
+        }
     }
 
     function handlerFinancialLoasnCreate(simulatorParam: boolean) {
@@ -78,12 +101,15 @@ const FinancialLoansCreate = () => {
             additionForDaysOfDelay: Number.parseFloat(additionForDaysOfDelay.replace(".","").replace(",",".")),
             modalityFinancing: modalityFinancing === ModalityFinancing.FINANCING ? 'FINANCING' : 'ONEROUS_LOAN',
             onerousLoanValue:  Number.parseFloat(onerousLoanValue.replace(".","").replace(",",".")),
+            commitmentItems: customerCommitmentItemDTOSelected.length > 0 ? customerCommitmentItemDTOSelected : undefined,
         }
 
         api.post('/financial', createDTO).then((response) => {
             setFinancialLoans(response.data)
+            setSuccessOperation(response.data.id != null ? true : false)
         }).catch((error) => {
             alert(JSON.stringify(error))
+            setSuccessOperation(false)
         })
   
     }
@@ -93,6 +119,14 @@ const FinancialLoansCreate = () => {
         setFilter(customer === undefined ? "" : `${customer.firsName} ${customer.lastName}`)
         setCustomerId(customer === undefined ? "" : customer.id)
     },[customer])
+
+    useEffect(() => {
+        api.get(`/customerCommitment/findByCustomer/${customerId}`).then((response) => {
+            setCustomerCommitmentItemDTO(response.data);
+           }).catch((error) => {
+            alert("Erro ao buscar itens do cliente" + JSON.stringify(error));
+           })
+    }, [customerDTO])
 
     useEffect(() => {
         if(filter.length === 0) {
@@ -110,7 +144,7 @@ const FinancialLoansCreate = () => {
     return(
         <BaseScreens title=" ">
             <>
-                <View style={{ display: Object.entries(financialLoans).length === 0 ? "flex" : "none", width: width, alignItems:"center", gap: 20, padding: 20 }}>
+                <View style={{ display: Object.entries(financialLoans).length === 0 ? "flex" : "none", width: width, alignItems:"center", gap: 15, padding: 20 }}>
                     <TextComponent text="Criando Empréstimo" color={textColorPrimary} fontSize={20} textAlign={"auto"} />
                     
                     <InputText 
@@ -234,8 +268,59 @@ const FinancialLoansCreate = () => {
                     
                     </View>
 
-                    <View  style={{ width: width-50, display:"flex", flexDirection:"row", gap: 20, justifyContent: "center", alignItems: "flex-end"}}>
-                    
+                    <View  style={{ width: width-50, display:"flex", flexDirection:"column", gap: 15, justifyContent: "center", alignItems: "flex-end"}}>
+                        
+                        <ButtonComponent nameButton={`GARANTIA ${valueCommitmentItem.toLocaleString('pt-BR', {style:"currency", currency:"BRL"})}`} onPress={()=> {setIsModalVisible(!isModalVisible)} } typeButton={"primary"} width={"100%"} />
+
+                        <ModalSystem 
+                            title="GARATIA EMPRÉSTIMO"
+                            setVisible={setIsModalVisible} 
+                            visible={isModalVisible}
+                            heightProp={700}
+                            children={
+                                <View style={{ display: "flex", flexDirection:"column", gap: 20, width: "auto", alignItems:"center", height: 330 }}>
+                                   
+                                   <TextComponent text={`Total valor Garantia: ${valueCommitmentItem.toLocaleString('pt-BR', {style:"currency", currency:"BRL"})} `} color={textColorPrimary} fontSize={10} textAlign={"auto"} />
+                                    <FlatList 
+                                        data={customerCommitmentItemDTO}
+                                        keyExtractor={(key) => key.toString()}
+                                        renderItem={({item}) => (
+                                            <TouchableOpacity onPress={() => { item.warranty == false && handlerSelectCommitmentItem(item) }} >
+                                                <View style={{ 
+                                                    display:"flex", 
+                                                    width: "100%", 
+                                                    flexDirection:"column", 
+                                                    alignContent:"flex-start", 
+                                                    justifyContent:"flex-start",
+                                                    paddingTop: 15,
+                                                    paddingInline: 20,
+                                                    paddingBottom: 5,
+                                                    borderWidth:1,
+                                                    borderRadius: 10,
+                                                    marginBottom: 20,
+                                                    gap: 10,
+                                                    borderBottomColor: flatListBorderColor,
+                                                    backgroundColor: customerCommitmentItemDTOSelected.filter((i) => i.id === item.id).length > 0 ? "rgba(132, 247, 78, 0.11)" : item.warranty ? "rgba(43, 43, 43, 0.31)":"transparent",
+                                                }}>
+                                                    <View style={{ display: "flex", flexDirection:"row", gap: 20, width: "100%", alignItems:"center"}}>
+                                                        <Ionicons name="return-up-forward-outline" size={15} color={textColorWarning}/>
+                                                        {item.warranty &&<TextComponent text="Garantia já está em uso em outro financiamento" color={textColorPrimary} fontSize={12} textAlign={"center"}/>}
+                                                        <TextComponent 
+                                                            text={`${item.nameItem}`}
+                                                            color={"rgb(255, 255, 255)"} fontSize={12} textAlign={"center"}
+                                                        />
+                                                    </View>
+                                                    <TextComponent 
+                                                        text={`${item.valueItemFormated}`}
+                                                        color={"rgb(255, 255, 255)"} fontSize={12} textAlign={"left"}
+                                                    />
+                                                </View>
+                                            </TouchableOpacity>
+                                        )}
+                                    />
+                                </View> 
+                            }/>
+                        
                         <ButtonComponent 
                             nameButton={"PROSSEGUIR"} 
                             onPress={()=> {handlerFinancialLoasnCreate(true)} } 
@@ -279,6 +364,7 @@ const FinancialLoansCreate = () => {
                             <Ionicons name="pricetag-outline" size={15} color={textColorWarning}/>
                             <TextComponent text={`Juros: ${financialLoans.rate}%`} color={textColorPrimary} fontSize={12} textAlign={"auto"} />
                             <TextComponent text={`Em Atraso: ${financialLoans.lateInterest}%`} color={textColorPrimary} fontSize={12} textAlign={"auto"} />
+                            <TextComponent text={`Garantia: ${valueCommitmentItem.toLocaleString('pt-BR', {style:"currency", currency:"BRL"})}`} color={textColorPrimary} fontSize={12} textAlign={"auto"} />
                         </View>
 
                         <View style={{ display: "flex", flexDirection:"row", justifyContent:"space-between", gap:20 }}>
@@ -325,13 +411,13 @@ const FinancialLoansCreate = () => {
                             />
                         </ScrollView>
 
-                        {simulator && 
+                        {successOperation == false && 
                             <View style={{ display: "flex", flexDirection:"row", gap:20, width: width-70, alignItems:"center"}}>
                                 <ButtonComponent nameButton="EDITAR" onPress={()=> {setFinancialLoans({} as FinancialLoans)} } typeButton={"warning"} width={"50%"} />
                                 <ButtonComponent nameButton="EMPRESTAR" onPress={()=> {setSimulator(false), handlerFinancialLoasnCreate(false)} } typeButton={"success"} width={"50%"} />
                             </View>
                         }
-                        {!simulator &&
+                        {successOperation == true &&
                             <View style={{ display: "flex", flexDirection:"row", gap:20, width: width-70, alignItems:"center"}}>
                                 <Ionicons name="ribbon-outline" size={18} color={textColorSuccess}/>
                                 <TextComponent text={`Contrato Realizado com Sucesso!`} color={textColorPrimary} fontSize={18} textAlign={"center"} />

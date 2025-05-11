@@ -14,8 +14,9 @@ interface Props {
     setVisible: Dispatch<SetStateAction<boolean>>;
     visible: boolean;
     heightProp?: number;
+    widthProp?: number;
 }
-const ModalSystem = ({title, children, buttonClose, setVisible, visible=false, heightProp=height} : Props) => {
+const ModalSystem = ({title, children, buttonClose, setVisible, visible=false, heightProp=height, widthProp=width} : Props) => {
 
     function handleClose() {
         setVisible(!visible);
@@ -39,12 +40,13 @@ const ModalSystem = ({title, children, buttonClose, setVisible, visible=false, h
             style={{
             display: "flex",
             flexDirection: "column",
-            width: width * 0.8,
+            width: widthProp * 0.8,
             height: heightProp * 0.6,
             backgroundColor: "rgb(36, 36, 36)",
             borderRadius: 10,
             padding: 16,
             alignItems: "center",
+            overflow: "hidden",
             }}
         >
             <View style={{ 
@@ -66,7 +68,7 @@ const ModalSystem = ({title, children, buttonClose, setVisible, visible=false, h
                 </TouchableOpacity>
                 </View>
             </View>
-
+                
                 {children}
 
             </View>

@@ -1,11 +1,14 @@
 package com.expoMoney.entities.dto;
 
+import com.expoMoney.entities.CustomerCommitmentItem;
 import com.expoMoney.enums.ModalityFinancing;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Getter
@@ -31,4 +34,5 @@ public class FinancialLoansCreateDTO {
     @NotNull(message = "Campo Obrigatório")
     private ModalityFinancing modalityFinancing;
     private Double onerousLoanValue;
+    private List<CustomerCommitmentItem> commitmentItems = new ArrayList<>();
 }

@@ -63,6 +63,8 @@ const FinancialLoansPendingByCustumer = ({ navigation }:any) => {
                                         <View style={{ display: "flex", flexDirection: "row", width: '100%', justifyContent: "flex-start", gap: 20, alignItems: "center"}}>
                                             <Ionicons name="flag-outline" size={14} color={item.totalInstallmentPending > 0 ? textColorError : textColorWarning} /> 
                                             <TextComponent text={`${item.modalityFinancingFormating}`} color={textColorPrimary} fontSize={14} textAlign={"center"} />
+                                            <Ionicons name="bag-outline" size={14} color={item.totalInstallmentPending > 0 ? textColorError : textColorWarning} /> 
+                                            <TextComponent text={`Tem Garantia? ${item.commitmentItems.length > 0 ? "Sim" : "Não"}`} color={textColorPrimary} fontSize={14} textAlign={"center"} />
                                         </View>
                                         <View style={{ display: "flex", flexDirection: "row", width: '100%', justifyContent: "space-between", alignItems: "center"}}>
                                             <Ionicons name="ribbon-outline" size={14} color={item.totalInstallmentPending > 0 ? textColorError : textColorWarning} />

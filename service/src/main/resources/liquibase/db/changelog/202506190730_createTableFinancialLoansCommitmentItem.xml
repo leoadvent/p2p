@@ -1,0 +1,32 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.3.xsd">
+
+    <changeSet id="202506190730_1" author="Desenvolvedor Do Sistema" context="realm-only">
+        <createTable tableName="TB_FINANCIAL_LOANS_COMMITMENT_ITEMS">
+            <column name="id_financial_loans" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="id_commitment_item" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addForeignKeyConstraint
+                baseTableName="TB_FINANCIAL_LOANS_COMMITMENT_ITEMS"
+                baseColumnNames="id_financial_loans"
+                constraintName="fk_financial_loans_commitment_loans"
+                referencedTableName="TB_FINANCIAL_LOANS"
+                referencedColumnNames="id"/>
+
+        <addForeignKeyConstraint
+                baseTableName="TB_FINANCIAL_LOANS_COMMITMENT_ITEMS"
+                baseColumnNames="id_commitment_item"
+                constraintName="fk_financial_loans_commitment_item"
+                referencedTableName="TB_CUSTOMER_COMMITMENT_ITEM"
+                referencedColumnNames="id"/>
+    </changeSet>
+
+</databaseChangeLog>

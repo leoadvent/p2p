@@ -1,3 +1,5 @@
+import { CustomerCommitmentItemDTO } from "./customerCommitmentItemDTO"
+
 export enum ModalityFinancing {
     FINANCING = "Financiamento",
     ONEROUS_LOAN = "Mútuo Oneroso",
@@ -14,4 +16,5 @@ export interface FinancialLoansCreateDTO {
     additionForDaysOfDelay: number
     modalityFinancing: ModalityFinancing | string
     onerousLoanValue?: number
+    commitmentItems?: CustomerCommitmentItemDTO[]
 }

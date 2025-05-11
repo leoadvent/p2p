@@ -1,3 +1,4 @@
+import { CustomerCommitmentItemDTO } from "./customerCommitmentItemDTO"
 import { Endereco } from "./endereco"
 import { FinancialLoans } from "./financialLoans"
 
@@ -11,4 +12,5 @@ export interface CustomerDTO {
     amountFinancialLoans: number
     amountFinancialLoansOpen: number
     amountFinancialLoansPending: number
+    commitmentItems: CustomerCommitmentItemDTO[]
 }

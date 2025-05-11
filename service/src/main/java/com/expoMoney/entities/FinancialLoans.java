@@ -49,6 +49,13 @@ public class FinancialLoans {
     @NotNull(message = "Campo Obrigatório")
     private List<FinancialLoansPaid> loansPaids = new ArrayList<>();
 
+    @OneToMany(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
+    @JoinTable(name = "TB_FINANCIAL_LOANS_COMMITMENT_ITEMS",
+            joinColumns = @JoinColumn(name = "id_financial_loans"),
+            inverseJoinColumns = @JoinColumn(name = "id_commitment_item")
+    )
+    private List<CustomerCommitmentItem> commitmentItems = new ArrayList<>();
+
     @JsonIgnore
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @NotNull(message = "Campo Obrigatório")

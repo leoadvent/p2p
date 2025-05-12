@@ -5,6 +5,7 @@ import com.expoMoney.entities.CustomerCommitmentItem;
 import com.expoMoney.entities.FinancialLoansPaid;
 import com.expoMoney.enums.ModalityFinancing;
 import com.expoMoney.security.utils.StringUtils;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.NotNull;
@@ -44,6 +45,8 @@ public class FinancialLoansDTO {
 
     @Enumerated(EnumType.STRING)
     private ModalityFinancing modalityFinancing;
+    @JsonFormat(pattern = "dd/MM/yyyy")
+    private LocalDate dateCreateFinancial;
 
     private List<CustomerCommitmentItem> commitmentItems = new ArrayList<>();
 

@@ -57,4 +57,10 @@
         </addColumn>
     </changeSet>
 
+    <changeSet id="202504061421_5" author="Desenvolvedor Do Sistema" context="realm-only">
+        <addColumn tableName="TB_FINANCIAL_LOANS">
+            <column name="date_create_financial" type="DATE" />
+        </addColumn>
+    </changeSet>
+
 </databaseChangeLog>

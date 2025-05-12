@@ -8,6 +8,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -44,6 +45,8 @@ public class FinancialLoans {
     @Column(name = "modality_financing")
     @Enumerated(EnumType.STRING)
     private ModalityFinancing modalityFinancing;
+    @Column(name = "date_create_financial")
+    private LocalDate dateCreateFinancial;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "financialLoans")
     @NotNull(message = "Campo Obrigatório")
@@ -60,4 +63,9 @@ public class FinancialLoans {
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @NotNull(message = "Campo Obrigatório")
     private Customer customer;
+
+    @PrePersist
+    private void prePersist(){
+        this.dateCreateFinancial = LocalDate.now();
+    }
 }

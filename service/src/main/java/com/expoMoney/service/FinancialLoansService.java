@@ -96,6 +96,7 @@ public class FinancialLoansService {
         if(loans.getId() != null){
             for (CustomerCommitmentItem x : loans.getCommitmentItems()){
                 x.setWarranty(true);
+                x.setCustomer(customer);
                 commitmentItemService.save(x);
             }
         }

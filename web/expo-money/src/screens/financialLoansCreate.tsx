@@ -124,7 +124,7 @@ const FinancialLoansCreate = () => {
         api.get(`/customerCommitment/findByCustomer/${customerId}`).then((response) => {
             setCustomerCommitmentItemDTO(response.data);
            }).catch((error) => {
-            alert("Erro ao buscar itens do cliente" + JSON.stringify(error));
+            customerId != "" && alert("Erro ao buscar itens do cliente: "  + JSON.stringify(error));
            })
     }, [customerDTO])
 
@@ -300,11 +300,13 @@ const FinancialLoansCreate = () => {
                                                     marginBottom: 20,
                                                     gap: 10,
                                                     borderBottomColor: flatListBorderColor,
-                                                    backgroundColor: customerCommitmentItemDTOSelected.filter((i) => i.id === item.id).length > 0 ? "rgba(132, 247, 78, 0.11)" : item.warranty ? "rgba(43, 43, 43, 0.31)":"transparent",
+                                                    backgroundColor: customerCommitmentItemDTOSelected.filter((i) => i.id === item.id).length > 0 ? "rgba(132, 247, 78, 0.11)" : item.warranty ? "rgba(255, 255, 255, 0.64)":"transparent",
                                                 }}>
+                                                    {item.warranty &&<TextComponent text="Garantia já está em uso em outro financiamento" color={textColorPrimary} fontSize={12} textAlign={"center"}/>}
+                                                    
                                                     <View style={{ display: "flex", flexDirection:"row", gap: 20, width: "100%", alignItems:"center"}}>
                                                         <Ionicons name="return-up-forward-outline" size={15} color={textColorWarning}/>
-                                                        {item.warranty &&<TextComponent text="Garantia já está em uso em outro financiamento" color={textColorPrimary} fontSize={12} textAlign={"center"}/>}
+                                                        
                                                         <TextComponent 
                                                             text={`${item.nameItem}`}
                                                             color={"rgb(255, 255, 255)"} fontSize={12} textAlign={"center"}

@@ -128,7 +128,8 @@ const FinancialLoansPaidPendingByCustumer = () => {
             alert("Parcela adicionada com sucesso: " + JSON.stringify(response.data))
             setFinancialLoansPaid(response.data)
        }).catch((error) => {
-              //alert("Erro ao adicionar parcela" + error)   
+              alert("Erro ao adicionar parcela: " + JSON.stringify(error))   
+              console.error("Erro ao adicionar parcela: " + JSON.stringify(error))
         }).finally(() => {
             setModalVisibleAdd(false)   
         })

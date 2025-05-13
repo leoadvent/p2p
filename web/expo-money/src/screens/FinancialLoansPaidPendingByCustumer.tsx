@@ -10,6 +10,7 @@ import { Ionicons } from "@expo/vector-icons"
 import ButtonComponent from "../components/button"
 import api from "../integration/axiosconfig"
 import { stylesGlobal } from "../constants/styles"
+import ModalSystem from "../components/modal"
 
 const FinancialLoansPaidPendingByCustumer = () => {
 
@@ -24,6 +25,8 @@ const FinancialLoansPaidPendingByCustumer = () => {
 
     const [editingItemId, setEditingItemId] = useState<string | null>(null);
     const [paymentValue, setPaymentValue] = useState("");
+
+    const [modalVisibleAdd, setModalVisibleAdd] = useState(false);
 
     const handlePayPress = async (item: FinancialLoansPaid) => {
         const amountPaid = parseFloat(paymentValue.replace(/\D/g, "")) / 100;
@@ -117,6 +120,20 @@ const FinancialLoansPaidPendingByCustumer = () => {
         )
 
     }
+
+    function handleAddSingleInstallments(){
+       alert("Adicionar parcela" + JSON.stringify(financialLoasPaid[0].id))
+       api.patch(`/financial/addSingleInstallments/${financialLoasPaid[0].id}`)
+       .then((response) => {
+            alert("Parcela adicionada com sucesso: " + JSON.stringify(response.data))
+            setFinancialLoansPaid(prev => [...prev, response.data])
+       }).catch((error) => {
+              //alert("Erro ao adicionar parcela" + error)   
+        }).finally(() => {
+            setModalVisibleAdd(false)   
+        })
+       // patch /financial/addSingleInstallments/{idLoansPaid}
+    }
       
         
     useEffect(() => {
@@ -130,13 +147,36 @@ const FinancialLoansPaidPendingByCustumer = () => {
             <View style={ [stylesGlobal.viewComponentBaseScree, {width: width}]}>
 
                 {Object.entries(financialLoansPaid).length > 0 && editingItemId === null &&
-                    <FlatList 
-                        keyboardShouldPersistTaps="always"
-                        extraData={editingItemId}
-                        data={[...financialLoansPaid].sort((a, b) => Number(a.portion) - Number(b.portion))}
-                        keyExtractor={(item) => item.id.toString()}
-                        renderItem={({ item }) => (item.id !== editingItemId ? renderView(item) : <View></View>)}
-                    />
+                    <>
+                        <FlatList 
+                            keyboardShouldPersistTaps="always"
+                            extraData={editingItemId}
+                            data={[...financialLoansPaid].sort((a, b) => Number(a.portion) - Number(b.portion))}
+                            keyExtractor={(item) => item.id.toString()}
+                            renderItem={({ item }) => (item.id !== editingItemId ? renderView(item) : <View></View>)}
+                        />
+
+                        <ModalSystem 
+                            buttonClose={
+                                <View style={{ display:"flex", flexDirection:"row", gap:10, width:"90%", justifyContent:"space-between", alignItems:"center"}}>
+                                    <ButtonComponent nameButton={"ADD PARCELA"} onPress={() => {setModalVisibleAdd(!modalVisibleAdd)}} typeButton={"warning"} width={"100%"} />
+                                </View>
+                            }
+                            heightProp={height - 400}
+                            title={"Adicionar Parcela"} 
+                            setVisible={setModalVisibleAdd} 
+                            visible={modalVisibleAdd} 
+                            children={
+                                <View style={{ display:"flex", flexDirection:"column", gap:50, width:"100%", justifyContent:"space-between", alignItems:"center"}}>
+                                    <TextComponent text={"Tem certeza que quer adicionar mais uma parcela?"} color={textColorPrimary} fontSize={20} textAlign={"center"}/>
+                                    <View style={{ display:"flex", flexDirection:"row", gap:10, width:"100%", justifyContent:"space-evenly", alignItems:"center"}}>
+                                        <ButtonComponent nameButton={"SIM"} onPress={() => {handleAddSingleInstallments()}} typeButton={"warning"} width={"40%"} />
+                                        <ButtonComponent nameButton={"NÃO"} onPress={() => {setModalVisibleAdd(false)}} typeButton={"success"} width={"40%"} />
+                                    </View>
+                                    
+                                </View>
+                            }/>
+                    </>
                 }
                 {editingItemId !== null &&
                     <View style={{ display: "flex", flex: 1, position:"absolute", margin: 10, marginTop: 20, flexDirection:"column", gap:10, alignItems:"center", alignContent:"center", justifyContent:"center", backgroundColor:backgroundPrimary, borderRadius:10, zIndex:2 }}>

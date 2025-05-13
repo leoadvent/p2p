@@ -111,13 +111,12 @@ public class FinancialLoansController {
         return ResponseEntity.ok(service.applyingAlateInstallmentFine(request.getHeader("X-Tenant-ID")));
     }
 
-    @PatchMapping("/addSingleInstallments/{idLoans}")
+    @PatchMapping("/addSingleInstallments/{idLoansPaid}")
     @Operation(tags = {"FINANCIAL LOANS"}, summary = "Adicionar parcelas em Financiamento Mutuo Oneroso",
             description = "Requisicao PATCH para Adicionar parcelas em Financiamento Mutuo Oneroso", security = {@SecurityRequirement(name = "BearerJWT")}
     )
-    public ResponseEntity<Void> addSingleInstallments(@PathVariable("idLoans") UUID idLoans){
+    public ResponseEntity<FinancialLoansPaid> addSingleInstallments(@PathVariable("idLoansPaid") UUID idLoansPaid){
         log.info("REQUSICAO PATCH PARA ADICIONAR PARCELAS AVULSA EM FINANCIAMENTO MUTUO ONEROSO");
-        service.addSingleInstallments(idLoans);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok(service.addSingleInstallments(idLoansPaid));
     }
 }

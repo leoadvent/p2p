@@ -188,26 +188,42 @@ public class FinancialLoansService {
         return loansPaidRepository.findFundingReceivedByPeriod(date);
     }
 
-    public void addSingleInstallments(UUID idFinancialLoas) {
-        FinancialLoans loans = findById(idFinancialLoas);
+    public FinancialLoansPaid addSingleInstallments(UUID idLoansPaid) {
 
-        if (loans.getModalityFinancing() != ModalityFinancing.ONEROUS_LOAN) {
+        FinancialLoansPaid original = loansPaidRepository.findById(idLoansPaid)
+                .orElseThrow(() -> new NoSuchElementException("Parcela não localizada"));
+
+        FinancialLoans loan = findById(original.getFinancialLoans().getId());
+
+        if (loan.getModalityFinancing() != ModalityFinancing.ONEROUS_LOAN) {
             throw new IllegalArgumentException("O Financiamento não permite a criação de parcela avulsa");
         }
 
-        FinancialLoansPaid paid1 = loans.getLoansPaids().stream().findFirst().get();
+        // Obter e atualizar a última parcela
+        FinancialLoansPaid last = loan.getLoansPaids().get(loan.getLoansPaids().size() - 1);
+        last.setDueDate(last.getDueDate().plusMonths(1));
+        last.setPortion(last.getPortion() + 1);
 
-        loans.getLoansPaids().get(loans.getLoansPaids().size()).setDuePayment(null);
-        loans.getLoansPaids().get(loans.getLoansPaids().size()).setInstallmentValue(paid1.getInstallmentValue());
-        loans.getLoansPaids().get(loans.getLoansPaids().size()).setAmountPaid(Double.parseDouble("0"));
-        loans.getLoansPaids().get(loans.getLoansPaids().size()).setCurrencyValue(paid1.getCurrencyValue());
+        // Criar nova parcela avulsa
+        FinancialLoansPaid newInstallment = new FinancialLoansPaid();
+        newInstallment.setInstallmentValue(original.getInstallmentValue());
+        newInstallment.setCurrencyValue(original.getCurrencyValue());
+        newInstallment.setDueDate(last.getDueDate().minusMonths(1));
+        newInstallment.setFinancialLoans(loan);
+        newInstallment.setRate(original.getRate());
+        newInstallment.setInterestDelay(original.getInterestDelay());
+        newInstallment.setPortion(last.getPortion()-1); // Agora sim: próximo número da sequência
+        newInstallment.setAdditionForDaysOfDelay(original.getAdditionForDaysOfDelay());
+        newInstallment.setCustomer(original.getCustomer());
+        // outros campos como status, timestamps, etc.
 
-        paid1.setId(null);
-        paid1.setPortion(paid1.getPortion() + 1);
+        loan.getLoansPaids().add(newInstallment);
 
-        loans.getLoansPaids().add(paid1);
+        saveLoans(loan);
 
-        saveLoans(loans);
-
+        return loan.getLoansPaids().get(loan.getLoansPaids().size() - 1);
     }
+
+
+
 }

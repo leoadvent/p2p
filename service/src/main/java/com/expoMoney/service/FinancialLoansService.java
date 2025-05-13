@@ -188,7 +188,7 @@ public class FinancialLoansService {
         return loansPaidRepository.findFundingReceivedByPeriod(date);
     }
 
-    public FinancialLoansPaid addSingleInstallments(UUID idLoansPaid) {
+    public List<FinancialLoansPaid> addSingleInstallments(UUID idLoansPaid) {
 
         FinancialLoansPaid original = loansPaidRepository.findById(idLoansPaid)
                 .orElseThrow(() -> new NoSuchElementException("Parcela não localizada"));
@@ -221,7 +221,7 @@ public class FinancialLoansService {
 
         saveLoans(loan);
 
-        return loan.getLoansPaids().get(loan.getLoansPaids().size() - 1);
+        return loan.getLoansPaids();
     }
 
 

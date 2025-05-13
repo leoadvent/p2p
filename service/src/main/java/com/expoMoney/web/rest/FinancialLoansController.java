@@ -115,7 +115,7 @@ public class FinancialLoansController {
     @Operation(tags = {"FINANCIAL LOANS"}, summary = "Adicionar parcelas em Financiamento Mutuo Oneroso",
             description = "Requisicao PATCH para Adicionar parcelas em Financiamento Mutuo Oneroso", security = {@SecurityRequirement(name = "BearerJWT")}
     )
-    public ResponseEntity<FinancialLoansPaid> addSingleInstallments(@PathVariable("idLoansPaid") UUID idLoansPaid){
+    public ResponseEntity<List<FinancialLoansPaid>> addSingleInstallments(@PathVariable("idLoansPaid") UUID idLoansPaid){
         log.info("REQUSICAO PATCH PARA ADICIONAR PARCELAS AVULSA EM FINANCIAMENTO MUTUO ONEROSO");
         return ResponseEntity.ok(service.addSingleInstallments(idLoansPaid));
     }

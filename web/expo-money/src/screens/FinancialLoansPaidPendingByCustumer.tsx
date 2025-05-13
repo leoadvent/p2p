@@ -126,7 +126,7 @@ const FinancialLoansPaidPendingByCustumer = () => {
        api.patch(`/financial/addSingleInstallments/${financialLoasPaid[0].id}`)
        .then((response) => {
             alert("Parcela adicionada com sucesso: " + JSON.stringify(response.data))
-            setFinancialLoansPaid(prev => [...prev, response.data])
+            setFinancialLoansPaid(response.data)
        }).catch((error) => {
               //alert("Erro ao adicionar parcela" + error)   
         }).finally(() => {

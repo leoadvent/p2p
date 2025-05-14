@@ -37,8 +37,19 @@ public class FinancialLoansService {
         return repository.save(loans);
     }
 
+    @Transactional
     public FinancialLoansPaid saveLoansPaid(FinancialLoansPaid loansPaid){
-        return loansPaidRepository.save(loansPaid);
+        loansPaid = loansPaidRepository.save(loansPaid);
+        List<FinancialLoansPaid> pending = findLoansPaidByIdLoans(loansPaid.getFinancialLoans().getId()).stream().filter(f -> f.getAmountPaid() < f.getCurrencyValue()).toList();
+        if(pending.isEmpty()){
+            List<CustomerCommitmentItem> items = loansPaid.getFinancialLoans().getCommitmentItems();
+            for(CustomerCommitmentItem x : items){
+                x.setCommitted(false);
+                x.setWarranty(false);
+                commitmentItemService.save(x);
+            }
+        }
+        return loansPaid;
     }
 
     private FinancialLoansPaid findLoansPaidById(UUID idLoansPaid){
@@ -47,6 +58,10 @@ public class FinancialLoansService {
 
     private FinancialLoans findById(UUID uuid){
         return repository.findById(uuid).orElseThrow(() -> new NoSuchElementException("Financiamento não localizado!"));
+    }
+
+    public List<FinancialLoansPaid> findLoansPaidByIdLoans(UUID idLoans){
+        return loansPaidRepository.findAllByLoans(idLoans);
     }
 
     public FinancialLoansDTO create (FinancialLoansCreateDTO create){
@@ -134,7 +149,7 @@ public class FinancialLoansService {
 
                 loansPaid.setCurrencyValue(currencyValue);
 
-                loansPaidRepository.save(loansPaid);
+                saveLoansPaid(loansPaid);
             }
         } catch (RuntimeException e) {
             throw new RuntimeException(e);
@@ -166,7 +181,7 @@ public class FinancialLoansService {
         paidAux.setRenegotiationDate(LocalDate.now());
         paidAux.setAmountPaid(paid.getAmountPaid() + paid.getAmountPaid());
         paidAux.setCurrencyValue(paid.getAmountPaid());
-        return loansPaidRepository.save(paidAux);
+        return saveLoansPaid(paidAux);
     }
 
     public List<CustomerDueToday> customerDueToday(Integer days){

@@ -98,4 +98,14 @@ public interface FinancialLoansPaidRepository extends JpaRepository<FinancialLoa
                 flp.duePayment
             """)
     List<FundingReceived> findFundingReceivedByPeriod(LocalDate date);
+
+    @Query("""
+            SELECT
+                flp
+            FROM
+                FinancialLoansPaid flp
+            WHERE
+                flp.financialLoans.id = :idLoans
+            """)
+    List<FinancialLoansPaid> findAllByLoans(UUID idLoans);
 }

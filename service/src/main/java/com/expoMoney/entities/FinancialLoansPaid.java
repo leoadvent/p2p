@@ -9,6 +9,8 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.util.UUID;
 
@@ -89,5 +91,33 @@ public class FinancialLoansPaid {
     @PrePersist
     private void prePersist(){
         this.setAmountPaid((double) 0);
+        if (this.installmentValue != null) {
+            BigDecimal value = BigDecimal.valueOf(this.installmentValue);
+            this.installmentValue = value.setScale(2, RoundingMode.HALF_UP).doubleValue();
+        }
+        if(this.currencyValue != null){
+            BigDecimal value = BigDecimal.valueOf(this.currencyValue);
+            this.currencyValue = value.setScale(2, RoundingMode.HALF_UP).doubleValue();
+        }
+        if(this.additionForDaysOfDelay != null){
+            BigDecimal value = BigDecimal.valueOf(this.additionForDaysOfDelay);
+            this.additionForDaysOfDelay = value.setScale(2, RoundingMode.HALF_UP).doubleValue();
+        }
+    }
+
+    @PreUpdate
+    private void preUpdate(){
+        if (this.installmentValue != null) {
+            BigDecimal value = BigDecimal.valueOf(this.installmentValue);
+            this.installmentValue = value.setScale(2, RoundingMode.HALF_UP).doubleValue();
+        }
+        if(this.currencyValue != null){
+            BigDecimal value = BigDecimal.valueOf(this.currencyValue);
+            this.currencyValue = value.setScale(2, RoundingMode.HALF_UP).doubleValue();
+        }
+        if(this.additionForDaysOfDelay != null){
+            BigDecimal value = BigDecimal.valueOf(this.additionForDaysOfDelay);
+            this.additionForDaysOfDelay = value.setScale(2, RoundingMode.HALF_UP).doubleValue();
+        }
     }
 }

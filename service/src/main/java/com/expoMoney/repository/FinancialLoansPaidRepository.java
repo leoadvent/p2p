@@ -76,7 +76,7 @@ public interface FinancialLoansPaidRepository extends JpaRepository<FinancialLoa
                 new com.expoMoney.entities.dto.InvestmentsDTO(
                     (SELECT SUM(fl.value) FROM FinancialLoans fl),
                     (SELECT SUM(flp.installmentValue) FROM FinancialLoansPaid flp WHERE flp.amountPaid < flp.currencyValue),
-                    (SELECT SUM(flp.installmentValue - flp.amountPaid) FROM FinancialLoansPaid flp),
+                    (SELECT SUM(flp.amountPaid - flp.installmentValue) FROM FinancialLoansPaid flp),
                     (SELECT SUM(flp.currencyValue) FROM  FinancialLoansPaid flp WHERE flp.amountPaid < flp.currencyValue AND flp.dueDate < CURRENT_DATE)
                 )
             """)

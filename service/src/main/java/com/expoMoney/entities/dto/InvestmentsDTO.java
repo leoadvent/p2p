@@ -16,19 +16,19 @@ public class InvestmentsDTO {
     private Double delayedExpectedValue;
 
     public String getFormatedInvestmentsValue(){
-        return StringUtils.formatCurrency(this.investmentsValue);
+        return StringUtils.formatCurrency(this.investmentsValue == null ? 0 : this.investmentsValue);
     }
 
     public String getFormatedTotalExpectedValue(){
-        return StringUtils.formatCurrency(this.totalExpectedValue);
+        return StringUtils.formatCurrency(this.totalExpectedValue == null ? 0 : this.totalExpectedValue);
     }
 
     public String getFormatedProfitValue(){
-        return StringUtils.formatCurrency(this.profitValue);
+        return StringUtils.formatCurrency(this.profitValue == null ? 0 : this.profitValue);
     }
 
     public String getFormatedDelayedExpectedValue(){
-        return StringUtils.formatCurrency(this.delayedExpectedValue);
+        return StringUtils.formatCurrency(this.delayedExpectedValue == null ? 0 : this.delayedExpectedValue);
     }
 
 }

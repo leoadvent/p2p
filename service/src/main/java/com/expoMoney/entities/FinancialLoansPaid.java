@@ -39,6 +39,8 @@ public class FinancialLoansPaid {
     private Double currencyValue;
     @Column(name = "amount_paid")
     private Double amountPaid;
+    @Column(name = "amount_paid_onerous")
+    private Double amountPaidOnerous;
     @NotNull(message = "Campo Obrigatório")
     @Column(name = "add_for_day_delay")
     private Double additionForDaysOfDelay;
@@ -53,6 +55,8 @@ public class FinancialLoansPaid {
     @JsonFormat(pattern = "dd/MM/yyyy")
     @Column(name = "renegotiation_date")
     private LocalDate renegotiationDate;
+    @Column(name = "value_diary")
+    private Double valueDiary;
 
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
@@ -66,6 +70,14 @@ public class FinancialLoansPaid {
 
     public String getInstallmentValueFormat(){
         return StringUtils.formatCurrency(this.installmentValue == null ? 0 : this.installmentValue);
+    }
+
+    public String getValueDiaryFormat(){
+        return StringUtils.formatCurrency(this.valueDiary != null ? this.valueDiary : 0);
+    }
+
+    public String getValuePaidOnerousFormat(){
+        return StringUtils.formatCurrency(this.amountPaidOnerous != null ? this.amountPaidOnerous : 0);
     }
 
     public String getCurrencyValueFormat(){
@@ -103,6 +115,14 @@ public class FinancialLoansPaid {
             BigDecimal value = BigDecimal.valueOf(this.additionForDaysOfDelay);
             this.additionForDaysOfDelay = value.setScale(2, RoundingMode.HALF_UP).doubleValue();
         }
+        if(this.valueDiary != null){
+            BigDecimal value = BigDecimal.valueOf(this.valueDiary);
+            this.valueDiary = value.setScale(2, RoundingMode.HALF_UP).doubleValue();
+        }
+        if(this.amountPaidOnerous != null){
+            BigDecimal value = BigDecimal.valueOf(this.amountPaidOnerous);
+            this.amountPaidOnerous = value.setScale(2, RoundingMode.HALF_UP).doubleValue();
+        }
     }
 
     @PreUpdate
@@ -118,6 +138,14 @@ public class FinancialLoansPaid {
         if(this.additionForDaysOfDelay != null){
             BigDecimal value = BigDecimal.valueOf(this.additionForDaysOfDelay);
             this.additionForDaysOfDelay = value.setScale(2, RoundingMode.HALF_UP).doubleValue();
+        }
+        if(this.valueDiary != null){
+            BigDecimal value = BigDecimal.valueOf(this.valueDiary);
+            this.valueDiary = value.setScale(2, RoundingMode.HALF_UP).doubleValue();
+        }
+        if(this.amountPaidOnerous != null){
+            BigDecimal value = BigDecimal.valueOf(this.amountPaidOnerous);
+            this.amountPaidOnerous = value.setScale(2, RoundingMode.HALF_UP).doubleValue();
         }
     }
 }

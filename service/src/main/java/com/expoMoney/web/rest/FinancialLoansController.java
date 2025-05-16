@@ -3,6 +3,7 @@ package com.expoMoney.web.rest;
 import com.expoMoney.entities.FinancialLoansPaid;
 import com.expoMoney.entities.dto.*;
 import com.expoMoney.service.FinancialLoansService;
+import com.expoMoney.service.util.CalculateUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.servlet.http.HttpServletRequest;
@@ -118,5 +119,14 @@ public class FinancialLoansController {
     public ResponseEntity<List<FinancialLoansPaid>> addSingleInstallments(@PathVariable("idLoansPaid") UUID idLoansPaid){
         log.info("REQUSICAO PATCH PARA ADICIONAR PARCELAS AVULSA EM FINANCIAMENTO MUTUO ONEROSO");
         return ResponseEntity.ok(service.addSingleInstallments(idLoansPaid));
+    }
+
+    @PostMapping("/calculateValueInstallmentDiary")
+    @Operation(tags = {"FINANCIAL LOANS"}, summary = "Adicionar parcelas em Financiamento Mutuo Oneroso",
+            description = "Requisicao PATCH para Adicionar parcelas em Financiamento Mutuo Oneroso", security = {@SecurityRequirement(name = "BearerJWT")}
+    )
+    public ResponseEntity<Double> calculateValueInstallmentDiary(@RequestBody CalculationUtilDTO obj){
+        log.info("REQUISICAO POST PARA CALCULAR VALOR PRESTACAO DIARIA");
+        return ResponseEntity.ok(CalculateUtil.calculateValueInstallmentDiary(obj.getCapital(), obj.getRate()));
     }
 }

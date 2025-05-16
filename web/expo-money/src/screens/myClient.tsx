@@ -29,7 +29,7 @@ const MyClient = ({ navigation }:any) => {
     useFocusEffect(
         React.useCallback(() => {
             // Esse código será executado sempre que a tela for focada
-            api.post("/customer/filter", customerDTOFilter).then((response) => {
+            api.post("/customer/filter?size=50", customerDTOFilter).then((response) => {
                 setTotalCustomers(response.data.totalElements)
                 setCustomersDTO(response.data.content)
             }).catch((error) => {

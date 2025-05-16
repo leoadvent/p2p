@@ -10,6 +10,7 @@ import com.expoMoney.mapper.CustomerMapper;
 import com.expoMoney.mapper.FinancialLoansMapper;
 import com.expoMoney.repository.FinancialLoansPaidRepository;
 import com.expoMoney.repository.FinancialLoansRepository;
+import com.expoMoney.service.util.CalculateUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -78,17 +79,17 @@ public class FinancialLoansService {
 
         double totalValue = create.getValue();
         double ratePercent = create.getRate();
-        int totalInstallments = create.getCashInstallment();
+        int totalInstallments = create.getModalityFinancing() == ModalityFinancing.ONEROUS_LOAN ? 1 : create.getCashInstallment();
 
         double interest = (totalValue * ratePercent) / 100;
         double totalWithInterest = totalValue + interest;
         double valueInstallment = create.getModalityFinancing() == ModalityFinancing.FINANCING ?
                 totalWithInterest / totalInstallments
-                : create.getOnerousLoanValue();
+                : CalculateUtil.calculateValueInstallmentDiary(totalValue, create.getRate());
 
-        for(int i = 0; i < create.getCashInstallment(); i++){
+        for(int i = 0; i < totalInstallments; i++){
 
-            if(create.getModalityFinancing() == ModalityFinancing.ONEROUS_LOAN && i == create.getCashInstallment() -1 ){
+            if(create.getModalityFinancing() == ModalityFinancing.ONEROUS_LOAN && i == totalInstallments -1 ){
                 valueInstallment = totalWithInterest + valueInstallment;
             }
 
@@ -103,6 +104,7 @@ public class FinancialLoansService {
             paid.setAdditionForDaysOfDelay(create.getAdditionForDaysOfDelay());
             paid.setAmountPaid((double) 0);
             paid.setCurrencyValue(valueInstallment);
+            paid.setValueDiary(create.getModalityFinancing() == ModalityFinancing.ONEROUS_LOAN ? CalculateUtil.calculateValueInstallmentDiary(totalValue, create.getRate()) : 0);
             loans.getLoansPaids().add(paid);
         }
 

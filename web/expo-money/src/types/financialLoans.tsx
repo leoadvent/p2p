@@ -22,6 +22,10 @@ export interface FinancialLoansPaid{
     debitBalance: string
     renegotiation: boolean
     renegotiationDate: string
+    valueDiaryFormat: string
+    valueDiary: number
+    amountPaidOnerous: number
+    amountPaidOnerousFormat: string
 }
 
 export interface FinancialLoans {

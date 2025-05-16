@@ -66,4 +66,18 @@
             <column name="renegotiation" type="BOOLEAN" />
         </addColumn>
     </changeSet>
+
+    <changeSet id="202504061420_7" author="Desenvolvedor Do Sistema" context="realm-only">
+        <addColumn tableName="TB_FINANCIAL_LOANS_PAID">
+            <column name="value_diary" type="DOUBLE PRECISION" />
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="202504061420_8" author="Desenvolvedor Do Sistema" context="realm-only">
+        <addColumn tableName="TB_FINANCIAL_LOANS_PAID">
+            <column name="amount_paid_onerous" type="DOUBLE PRECISION" />
+        </addColumn>
+    </changeSet>
+
+
 </databaseChangeLog>

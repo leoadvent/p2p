@@ -16,6 +16,7 @@ import { FinancialLoansCreateDTO, ModalityFinancing } from "../types/financialLo
 import { Ionicons } from "@expo/vector-icons"
 import ModalSystem from "../components/modal"
 import { CustomerCommitmentItemDTO } from "../types/customerCommitmentItemDTO"
+import { CalculationUtilDTO } from "../types/calculationUtilDTO"
 
 
 const FinancialLoansCreate = () => {
@@ -44,6 +45,8 @@ const FinancialLoansCreate = () => {
 
     const [showPicker, setShowPicker] = useState(false)
     const [startDateDue, setStartDateDue] = useState(new Date())
+    const [showPickerEndDate, setShowPickerEndDate] = useState(false)
+    const [endDateDue, setEndDateDue] = useState(new Date())
 
     const [customerCommitmentItemDTO, setCustomerCommitmentItemDTO] = useState<CustomerCommitmentItemDTO[]>([])
     const [customerCommitmentItemDTOSelected, setCustomerCommitmentItemDTOSelected] = useState<CustomerCommitmentItemDTO[]>([])
@@ -60,7 +63,9 @@ const FinancialLoansCreate = () => {
         setAdditionForDaysOfDelay("")
         setCashInstallment("")
         setShowPicker(false)
+        setShowPickerEndDate(false)
         setStartDateDue(new Date())
+        setEndDateDue(new Date())
         setSimulator(true)
         setCustomerDTO([])
         setFilter("")
@@ -121,6 +126,23 @@ const FinancialLoansCreate = () => {
     },[customer])
 
     useEffect(() => {
+        if(modalityFinancing === ModalityFinancing.ONEROUS_LOAN && value.length > 0 && rate.length > 0) {
+            const obj : CalculationUtilDTO = {
+                capital: Number.parseFloat(value.replace(".","").replace(",",".")),
+                rate: Number.parseFloat(rate.replace(".","").replace(",",".").replace("%","")),
+            }
+
+            api.post("/financial/calculateValueInstallmentDiary", obj).then((response) => {
+                //alert(response.data);
+                setOnerousLoanValue(response.data.toString())
+                setAdditionForDaysOfDelay(response.data.toString())
+                setCashInstallment("1")
+            })
+
+        }
+    }, [modalityFinancing, rate, value])
+
+    useEffect(() => {
         api.get(`/customerCommitment/findByCustomer/${customerId}`).then((response) => {
             setCustomerCommitmentItemDTO(response.data);
            }).catch((error) => {
@@ -170,7 +192,7 @@ const FinancialLoansCreate = () => {
                         <ButtonComponent nameButton={`TIPO: ${modalityFinancing.toUpperCase()}`} onPress={()=> {setModalityFinancing(modalityFinancing === ModalityFinancing.FINANCING ? ModalityFinancing.ONEROUS_LOAN : ModalityFinancing.FINANCING)} } typeButton={"primary"} width={"100%"} />
                     </View>
 
-                    <View style={{ width: width, display:"flex", flexDirection:"row", gap: 20, justifyContent: "center", alignItems: "center"}}>
+                    <View style={{ width: width, display:"flex", flexDirection:"row", flexWrap:"wrap", gap: 20, justifyContent: "center", alignItems: "center" }}>
 
                         <InputText 
                             editable
@@ -192,10 +214,6 @@ const FinancialLoansCreate = () => {
                             onChangeText={(text) => { setRate(text)}}
                         />
 
-                    </View>
-
-                    <View style={{ width: width, display:"flex", flexDirection:"row", gap: 20, justifyContent: "center", alignItems: "center"}}>
-                        
                         {modalityFinancing === ModalityFinancing.FINANCING &&
                             <InputText 
                                 editable
@@ -210,8 +228,8 @@ const FinancialLoansCreate = () => {
 
                         { modalityFinancing === ModalityFinancing.ONEROUS_LOAN &&
                             <InputText 
-                            editable
-                            label="Valor Aluguel *" 
+                            editable={false}
+                            label="Valor Diário *" 
                             money
                             keyboardType="numeric"
                             value={onerousLoanValue}
@@ -220,27 +238,28 @@ const FinancialLoansCreate = () => {
                         />
                         }
 
-                        <InputText 
-                            editable
-                            label="Adicional Por Dia Atraso *" 
-                            money
-                            keyboardType="numeric"
-                            value={additionForDaysOfDelay}
-                            width={150}
-                            onChangeText={(text) => { setAdditionForDaysOfDelay(text)}}
-                        />
-                    </View>
-
-                    <View style={{ width: width, display:"flex", flexDirection:"row", gap: 20, justifyContent: "center", alignItems: "flex-end"}}>
+                        { modalityFinancing === ModalityFinancing.FINANCING &&
+                            <>
+                                <InputText 
+                                    editable
+                                    label="Adicional Por Dia Atraso *" 
+                                    money
+                                    keyboardType="numeric"
+                                    value={additionForDaysOfDelay}
+                                    width={150}
+                                    onChangeText={(text) => { setAdditionForDaysOfDelay(text)}}
+                                />
                         
-                        <InputText 
-                            editable
-                            label="Quantidade Parcelas *" 
-                            keyboardType="numeric"
-                            value={cashInstallment}
-                            width={150}
-                            onChangeText={(text) => { setCashInstallment(text)}}
-                        />
+                                <InputText 
+                                    editable
+                                    label="Quantidade Parcelas *" 
+                                    keyboardType="numeric"
+                                    value={cashInstallment}
+                                    width={150}
+                                    onChangeText={(text) => { setCashInstallment(text)}}
+                                />
+                            </>
+                    }
 
                         <TouchableOpacity
                             onPress={() => setShowPicker(true)}
@@ -265,7 +284,30 @@ const FinancialLoansCreate = () => {
                             />
                         )}
 
-                    
+                        {modalityFinancing === ModalityFinancing.ONEROUS_LOAN && 
+                            <TouchableOpacity
+                                onPress={() => setShowPickerEndDate(true)}
+                            >
+                                <InputText 
+                                    label="Data Fim"
+                                    editable={false}
+                                    width={150}
+                                    value={endDateDue.toLocaleDateString('pt-BR')}
+                                />
+                            </TouchableOpacity>
+                        }
+
+                        {showPickerEndDate && (
+                            <DateTimePicker
+                                value={endDateDue}
+                                mode="date"
+                                display={Platform.OS === 'ios' ? 'inline' : 'default'}
+                                onChange={(event, selectedDate) => {
+                                setShowPickerEndDate(false)
+                                if (selectedDate) setEndDateDue(selectedDate)
+                                }}
+                            />
+                        )}
                     </View>
 
                     <View  style={{ width: width-50, display:"flex", flexDirection:"column", gap: 15, justifyContent: "center", alignItems: "flex-end"}}>
@@ -383,7 +425,7 @@ const FinancialLoansCreate = () => {
                                     <View style={{ 
                                         display:"flex", 
                                         width: width-80, 
-                                        flexDirection:"row", 
+                                        flexDirection:"column", 
                                         alignContent:"space-between", 
                                         justifyContent:"space-between",
                                         paddingTop: 15,
@@ -394,20 +436,27 @@ const FinancialLoansCreate = () => {
                                         marginBottom: 10,
                                         borderBottomColor: flatListBorderColor,
                                     }}>
-                                        <Ionicons name="return-up-forward-outline" size={15} color={textColorWarning}/>
-                                        <TextComponent 
-                                            text={`${item.portion}º`}
-                                            color={"rgb(255, 255, 255)"} fontSize={12} textAlign={"center"}
-                                        />
-                                        <Ionicons name="calendar" size={15} color={textColorWarning}/>
-                                        <TextComponent 
-                                            text={`${item.dueDate}`}
-                                            color={"rgb(255, 255, 255)"} fontSize={12} textAlign={"center"}
-                                        />
-                                        <Ionicons name="cash" size={15} color={textColorSuccess}/>
-                                        <TextComponent 
-                                            text={`${item.installmentValueFormat} `} 
-                                            color={"rgb(255, 255, 255)"} fontSize={12} textAlign={"center"} />
+                                        <View style={{ display: "flex", flexDirection:"row", width: "100%", justifyContent:"space-between", alignItems:"center"}}>
+                                            <Ionicons name="return-up-forward-outline" size={15} color={textColorWarning}/>
+                                            <TextComponent 
+                                                text={`${item.portion}º`}
+                                                color={"rgb(255, 255, 255)"} fontSize={12} textAlign={"center"}
+                                            />
+                                            <Ionicons name="calendar" size={15} color={textColorWarning}/>
+                                            <TextComponent 
+                                                text={`${item.dueDate}`}
+                                                color={"rgb(255, 255, 255)"} fontSize={12} textAlign={"center"}
+                                            />
+                                            <Ionicons name="cash" size={15} color={textColorSuccess}/>
+                                            <TextComponent 
+                                                text={`${item.installmentValueFormat} `} 
+                                                color={"rgb(255, 255, 255)"} fontSize={12} textAlign={"center"} />
+                                        </View>
+                                        <View style={{ display: "flex", flexDirection:"row", width: "100%", alignItems:"center"}}>
+                                        <TextComponent text={"Diária: "} color={textColorPrimary} fontSize={12} textAlign={"center"} />
+                                            {item.valueDiary != null &&
+                                                <TextComponent text={item.valueDiaryFormat} color={textColorPrimary} fontSize={12} textAlign={"auto"} />}
+                                        </View>
                                     </View>
                                 )}
                             />

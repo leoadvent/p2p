@@ -93,6 +93,7 @@ const FinancialLoansPaidPendingByCustumer = () => {
                 </View>
                 <View style={{ display:item.amountPaid === item.currencyValue ? "none": "flex", flexDirection:"row", gap:10, width:"100%", justifyContent:"space-between"}}>
                     <TextComponent text={`Saldo Devedor: ${item.debitBalance}`} color={textColorPrimary} fontSize={10} textAlign={"auto"} />
+                    {item.valueDiary > 0 && <TextComponent text={`Valor Arrecadado: ${item.amountPaidOnerousFormat}`} color={textColorPrimary} fontSize={10} textAlign={"auto"} />}
                 </View>
 
                 <View style={{ display:item.amountPaid === item.currencyValue ? "none": "flex", flexDirection:"row", gap:10, width:"100%", justifyContent:"space-between", alignItems:"flex-end"}}>

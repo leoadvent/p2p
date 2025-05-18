@@ -47,6 +47,8 @@ public class FinancialLoansDTO {
     private ModalityFinancing modalityFinancing;
     @JsonFormat(pattern = "dd/MM/yyyy")
     private LocalDate dateCreateFinancial;
+    @JsonFormat(pattern = "dd/MM/yyyy")
+    private LocalDate dateEndFinancialOnerousLoans;
 
     private List<CustomerCommitmentItem> commitmentItems = new ArrayList<>();
 

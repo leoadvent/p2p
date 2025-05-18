@@ -34,5 +34,6 @@ public class FinancialLoansCreateDTO {
     @NotNull(message = "Campo Obrigatório")
     private ModalityFinancing modalityFinancing;
     private Double onerousLoanValue;
+    private LocalDate dateEndFinancialOnerousLoans;
     private List<CustomerCommitmentItem> commitmentItems = new ArrayList<>();
 }

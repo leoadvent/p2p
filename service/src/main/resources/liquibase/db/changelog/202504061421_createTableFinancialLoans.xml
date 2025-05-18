@@ -63,4 +63,10 @@
         </addColumn>
     </changeSet>
 
+    <changeSet id="202504061421_6" author="Desenvolvedor Do Sistema" context="realm-only">
+        <addColumn tableName="TB_FINANCIAL_LOANS">
+            <column name="date_end_financial_onerous_loans" type="DATE" />
+        </addColumn>
+    </changeSet>
+
 </databaseChangeLog>

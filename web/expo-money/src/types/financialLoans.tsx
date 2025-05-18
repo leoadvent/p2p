@@ -47,5 +47,6 @@ export interface FinancialLoans {
     totalInstallmentPending: number
     modalityFinancing: ModalityFinancing
     modalityFinancingFormating: string
+    dateEndFinancialOnerousLoans: Date
     commitmentItems: CustomerCommitmentItemDTO[]
 }

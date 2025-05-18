@@ -107,6 +107,7 @@ const FinancialLoansCreate = () => {
             modalityFinancing: modalityFinancing === ModalityFinancing.FINANCING ? 'FINANCING' : 'ONEROUS_LOAN',
             onerousLoanValue:  Number.parseFloat(onerousLoanValue.replace(".","").replace(",",".")),
             commitmentItems: customerCommitmentItemDTOSelected.length > 0 ? customerCommitmentItemDTOSelected : undefined,
+            dateEndFinancialOnerousLoans: modalityFinancing === ModalityFinancing.ONEROUS_LOAN ? endDateDue : undefined
         }
 
         api.post('/financial', createDTO).then((response) => {
@@ -126,7 +127,7 @@ const FinancialLoansCreate = () => {
     },[customer])
 
     useEffect(() => {
-        if(modalityFinancing === ModalityFinancing.ONEROUS_LOAN && value.length > 0 && rate.length > 0) {
+        if(value.length > 0 && rate.length > 0) {
             const obj : CalculationUtilDTO = {
                 capital: Number.parseFloat(value.replace(".","").replace(",",".")),
                 rate: Number.parseFloat(rate.replace(".","").replace(",",".").replace("%","")),
@@ -134,8 +135,8 @@ const FinancialLoansCreate = () => {
 
             api.post("/financial/calculateValueInstallmentDiary", obj).then((response) => {
                 //alert(response.data);
-                setOnerousLoanValue(response.data.toString())
-                setAdditionForDaysOfDelay(response.data.toString())
+                setOnerousLoanValue(response.data.toString().replace(".",","))
+                setAdditionForDaysOfDelay(response.data.toString().replace(".",","))
                 setCashInstallment("1")
             })
 
@@ -399,7 +400,7 @@ const FinancialLoansCreate = () => {
                         <TextComponent text={`${financialLoans.customer.firsName} ${financialLoans.customer.lastName}`} color={textColorPrimary} fontSize={16} textAlign={"auto"} />
 
                        
-                        <View style={{ display: "flex", flexDirection:"row", justifyContent:"space-between", gap:20, alignItems:"center" }}>
+                        <View style={{ display: modalityFinancing === ModalityFinancing.FINANCING ?  "flex" : "none", flexDirection:"row", justifyContent:"space-between", gap:20, alignItems:"center" }}>
                             <Ionicons name="calendar-number-outline" size={15} color={textColorWarning}/>
                             <TextComponent text={`Adicional por dia de atraso: ${financialLoans.additionForDaysOfDelayFormat}`} color={textColorPrimary} fontSize={12} textAlign={"auto"} />
                         </View>
@@ -407,7 +408,9 @@ const FinancialLoansCreate = () => {
                         <View style={{ display: "flex", flexDirection:"row", justifyContent:"space-between", gap:20, alignItems:"center" }}>
                             <Ionicons name="pricetag-outline" size={15} color={textColorWarning}/>
                             <TextComponent text={`Juros: ${financialLoans.rate}%`} color={textColorPrimary} fontSize={12} textAlign={"auto"} />
-                            <TextComponent text={`Em Atraso: ${financialLoans.lateInterest}%`} color={textColorPrimary} fontSize={12} textAlign={"auto"} />
+                            {modalityFinancing === ModalityFinancing.FINANCING &&
+                                <TextComponent text={`Em Atraso: ${financialLoans.lateInterest}%`} color={textColorPrimary} fontSize={12} textAlign={"auto"} />
+                            }
                             <TextComponent text={`Garantia: ${valueCommitmentItem.toLocaleString('pt-BR', {style:"currency", currency:"BRL"})}`} color={textColorPrimary} fontSize={12} textAlign={"auto"} />
                         </View>
 
@@ -424,6 +427,7 @@ const FinancialLoansCreate = () => {
                                 renderItem={({item}) => (
                                     <View style={{ 
                                         display:"flex", 
+                                        gap: 10,
                                         width: width-80, 
                                         flexDirection:"column", 
                                         alignContent:"space-between", 
@@ -453,9 +457,17 @@ const FinancialLoansCreate = () => {
                                                 color={"rgb(255, 255, 255)"} fontSize={12} textAlign={"center"} />
                                         </View>
                                         <View style={{ display: "flex", flexDirection:"row", width: "100%", alignItems:"center"}}>
-                                        <TextComponent text={"Diária: "} color={textColorPrimary} fontSize={12} textAlign={"center"} />
-                                            {item.valueDiary != null &&
+                                        {modalityFinancing === ModalityFinancing.ONEROUS_LOAN &&
+                                            <View style={{ display: "flex", flexDirection:"row", gap: 20, width: "100%", alignItems:"center"}}>
+                                                <Ionicons name="alarm-outline" size={15} color={textColorWarning}/>
+                                                <TextComponent text={"Diária: "} color={textColorPrimary} fontSize={12} textAlign={"center"} />
+                                                {item.valueDiary != null &&
                                                 <TextComponent text={item.valueDiaryFormat} color={textColorPrimary} fontSize={12} textAlign={"auto"} />}
+                                                <Ionicons name="calendar-number-outline" size={15} color={textColorWarning}/>
+                                                <TextComponent text={endDateDue.toLocaleDateString('pt-BR')} color={textColorPrimary} fontSize={12} textAlign={"center"} />
+                                            </View>
+                                        }
+                                        
                                         </View>
                                     </View>
                                 )}

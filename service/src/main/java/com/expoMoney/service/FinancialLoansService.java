@@ -76,6 +76,9 @@ public class FinancialLoansService {
         loans.setStartYear(create.getStartDateDue().getYear());
         loans.setAdditionForDaysOfDelay(create.getAdditionForDaysOfDelay());
         loans.setRate(create.getRate());
+        loans.setDateEndFinancialOnerousLoans(create.getModalityFinancing() == ModalityFinancing.ONEROUS_LOAN ?
+                create.getDateEndFinancialOnerousLoans() : null);
+
 
         double totalValue = create.getValue();
         double ratePercent = create.getRate();
@@ -90,7 +93,7 @@ public class FinancialLoansService {
         for(int i = 0; i < totalInstallments; i++){
 
             if(create.getModalityFinancing() == ModalityFinancing.ONEROUS_LOAN && i == totalInstallments -1 ){
-                valueInstallment = totalWithInterest + valueInstallment;
+                valueInstallment = totalWithInterest;
             }
 
             FinancialLoansPaid paid = new FinancialLoansPaid();
@@ -105,6 +108,7 @@ public class FinancialLoansService {
             paid.setAmountPaid((double) 0);
             paid.setCurrencyValue(valueInstallment);
             paid.setValueDiary(create.getModalityFinancing() == ModalityFinancing.ONEROUS_LOAN ? CalculateUtil.calculateValueInstallmentDiary(totalValue, create.getRate()) : 0);
+            paid.setAmountPaidOnerous(create.getModalityFinancing() == ModalityFinancing.ONEROUS_LOAN ? (double) 0 : null);
             loans.getLoansPaids().add(paid);
         }
 

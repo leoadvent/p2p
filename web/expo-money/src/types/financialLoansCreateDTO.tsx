@@ -16,5 +16,6 @@ export interface FinancialLoansCreateDTO {
     additionForDaysOfDelay: number
     modalityFinancing: ModalityFinancing | string
     onerousLoanValue?: number
+    dateEndFinancialOnerousLoans?: Date
     commitmentItems?: CustomerCommitmentItemDTO[]
 }

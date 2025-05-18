@@ -47,6 +47,8 @@ public class FinancialLoans {
     private ModalityFinancing modalityFinancing;
     @Column(name = "date_create_financial")
     private LocalDate dateCreateFinancial;
+    @Column(name = "date_end_financial_onerous_loans")
+    private LocalDate dateEndFinancialOnerousLoans;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "financialLoans")
     @NotNull(message = "Campo Obrigatório")

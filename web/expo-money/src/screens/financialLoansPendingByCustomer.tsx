@@ -1,5 +1,5 @@
 import { Dimensions, FlatList, TouchableOpacity, View } from "react-native"
-import { backgroundPrimary, flatListBorderColor, textColorError, textColorPrimary, textColorSuccess, textColorWarning } from "../constants/colorsPalette "
+import { backgroundPrimary, flatListBackgroundColorpending, flatListBorderColor, textColorError, textColorPrimary, textColorSuccess, textColorWarning } from "../constants/colorsPalette "
 import BaseScreens from "./BaseScreens"
 import TextComponent from "../components/text/text"
 import { useRoute } from "@react-navigation/native"
@@ -9,6 +9,7 @@ import api from "../integration/axiosconfig"
 import { Ionicons } from "@expo/vector-icons"
 import { stylesGlobal } from "../constants/styles"
 import Contact from "../components/contact"
+import { ModalityFinancing } from "../types/financialLoansCreateDTO"
 
 const FinancialLoansPendingByCustumer = ({ navigation }:any) => {
 
@@ -53,11 +54,12 @@ const FinancialLoansPendingByCustumer = ({ navigation }:any) => {
                                                 justifyContent: "space-between",
                                                 width: width-40, 
                                                 borderWidth: 1, 
-                                                marginBottom: 10,
+                                                marginBottom: 20,
                                                 borderBottomColor: flatListBorderColor,
                                                 borderRadius: 5,
                                                 padding: 10,
-                                                gap: 10
+                                                gap: 13,
+                                                backgroundColor: item.totalInstallmentPending > 0 ? flatListBackgroundColorpending : 'transparent'
                                         }}
                                     >
                                         <View style={{ display: "flex", flexDirection: "row", width: '100%', justifyContent: "flex-start", gap: 20, alignItems: "center"}}>
@@ -71,11 +73,17 @@ const FinancialLoansPendingByCustumer = ({ navigation }:any) => {
                                             <TextComponent text={`Contrato: ${item.id.slice(0, item.id.indexOf('-'))}`} color={textColorPrimary} fontSize={14} textAlign={"center"} />
                                             <Ionicons name="pricetag-outline" size={15} color={textColorWarning}/>
                                             <TextComponent text={`${item.rate}%`} color={textColorPrimary} fontSize={14} textAlign={"center"} />
-                                            <Ionicons name="pricetag-outline" size={15} color={textColorError}/>
-                                            <TextComponent text={`${item.lateInterest}%`} color={textColorPrimary} fontSize={14} textAlign={"center"} />
-
+                                            {item.modalityFinancing.toString() === 'FINANCING' && <>
+                                                <Ionicons name="pricetag-outline" size={15} color={textColorError}/>
+                                                <TextComponent text={`${item.lateInterest}%`} color={textColorPrimary} fontSize={14} textAlign={"center"} />
+                                            </> }
+                                            {item.modalityFinancing.toString() === 'ONEROUS_LOAN' && <>
+                                                <Ionicons name="calendar-outline" size={15} color={textColorError}/>
+                                                <TextComponent text={`${item.dateEndFinancialOnerousLoans}`} color={textColorPrimary} fontSize={14} textAlign={"center"} />
+                                            </> }
+=
                                         </View>
-                                        <View style={{ display: "flex", flexDirection: "row", width: '100%', justifyContent: "space-between", alignItems: "center"}}>
+                                        <View style={{ display: item.modalityFinancing.toString() === 'FINANCING' ? "flex" : "none", flexDirection: "row", width: '100%', justifyContent: "space-between", alignItems: "center"}}>
                                             <Ionicons name="return-up-forward-outline" size={15} color={textColorWarning}/>
                                             <TextComponent text={`${item.loansPaids.length} parcelas de ${item.loansPaids[0].installmentValueFormat}`} color={textColorPrimary} fontSize={14} textAlign={"center"} />
                                             <Ionicons name="return-up-forward-outline" size={15} color={textColorError}/>
@@ -85,7 +93,7 @@ const FinancialLoansPendingByCustumer = ({ navigation }:any) => {
                                             <Ionicons name="cash" size={15} color={textColorSuccess}/>
                                             <TextComponent text={`${item.valueFormat}`} color={textColorPrimary} fontSize={14} textAlign={"center"} />
                                             <TextComponent text={`${item.valueTotalFormat}`} color={textColorPrimary} fontSize={14} textAlign={"center"} />
-                                            <Ionicons name="calendar-number" size={15} color={textColorError}/>
+                                            <Ionicons name="wallet-outline" size={15} color={textColorError}/>
                                             <TextComponent text={`${item.additionForDaysOfDelayFormat}`} color={textColorPrimary} fontSize={14} textAlign={"center"} />
                                         </View>
                                     </View>

@@ -26,7 +26,8 @@ export const buttonBackgroundColorSuccess   = "rgb(52, 199, 89)";
 export const buttonBackgroundColorError     = "rgb(240, 174, 174)";
 export const buttonBackgroundColorDisabled  = "rgb(200, 200, 200)";
 
-export const flatListBorderColor = "rgb(110, 110, 110)";
+export const flatListBorderColor            = "rgb(110, 110, 110)";
+export const flatListBackgroundColorpending = "rgba(252, 1, 1, 0.18)";
 
 export const chartBazierbackgroundGradientTo = "rgba(3, 17, 66, 0.16)";
 export const chartBazierbackgroundColor     = "rgb(27, 173, 39)";

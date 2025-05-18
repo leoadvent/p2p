@@ -1,7 +1,10 @@
 package com.expoMoney.service.util;
 
+import com.expoMoney.entities.FinancialLoansPaid;
+
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.time.LocalDate;
 
 public class CalculateUtil {
 
@@ -14,5 +17,20 @@ public class CalculateUtil {
         double value = calculateValueInstallment(capital, rate);
         BigDecimal diary = BigDecimal.valueOf(value/30);
         return diary.setScale(2, RoundingMode.HALF_UP).doubleValue();
+    }
+
+    public static void calculateValueTotalDiaryOnerousLoans(FinancialLoansPaid paid){
+
+        int d =  DateUtil.CalculateTheDifferenceInDaysBetweenTwoDates(
+                paid.getFinancialLoans().getDateCreateFinancial() != null ? paid.getFinancialLoans().getDateCreateFinancial() : LocalDate.now(),
+                LocalDate.now());
+
+        paid.setCurrencyValue(
+                (paid.getValueDiary()
+                        * DateUtil.CalculateTheDifferenceInDaysBetweenTwoDates(
+                        paid.getFinancialLoans().getDateCreateFinancial() != null ? paid.getFinancialLoans().getDateCreateFinancial() : LocalDate.now(),
+                        LocalDate.now())
+                        - paid.getAmountPaid()
+        ));
     }
 }

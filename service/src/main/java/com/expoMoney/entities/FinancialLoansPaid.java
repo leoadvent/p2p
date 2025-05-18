@@ -1,6 +1,7 @@
 package com.expoMoney.entities;
 
 import com.expoMoney.security.utils.StringUtils;
+import com.expoMoney.service.util.CalculateUtil;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
@@ -97,7 +98,14 @@ public class FinancialLoansPaid {
     }
 
     public String getDebitBalance(){
+        if(this.valueDiary != null && this.valueDiary > 0){
+            CalculateUtil.calculateValueTotalDiaryOnerousLoans(this);
+        }
         return StringUtils.formatCurrency(this.currencyValue - this.amountPaid);
+    }
+
+    public String getAmountPaidOnerousFormat(){
+        return StringUtils.formatCurrency(this.amountPaidOnerous != null ? this.amountPaidOnerous : 0);
     }
 
     @PrePersist

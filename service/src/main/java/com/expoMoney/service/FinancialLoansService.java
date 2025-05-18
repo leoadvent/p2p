@@ -11,6 +11,7 @@ import com.expoMoney.mapper.FinancialLoansMapper;
 import com.expoMoney.repository.FinancialLoansPaidRepository;
 import com.expoMoney.repository.FinancialLoansRepository;
 import com.expoMoney.service.util.CalculateUtil;
+import com.expoMoney.service.util.DateUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -101,7 +102,7 @@ public class FinancialLoansService {
             paid.setCustomer(customer);
             paid.setFinancialLoans(loans);
             paid.setRate(create.getRate());
-            paid.setDueDate(create.getStartDateDue().plusMonths(i));
+            paid.setDueDate(create.getStartDateDue().plusMonths(loans.getModalityFinancing() == ModalityFinancing.FINANCING ? i : i+1));
             paid.setInstallmentValue(valueInstallment);
             paid.setInterestDelay(create.getLateInterest());
             paid.setAdditionForDaysOfDelay(create.getAdditionForDaysOfDelay());
@@ -130,6 +131,13 @@ public class FinancialLoansService {
         Customer customer = customerService.findById(idCustumer);
         customer.setFinancialLoans(null);
         List<FinancialLoans> financialLoans = repository.paimentsPending(idCustumer);
+
+       for(FinancialLoans x:
+        financialLoans.stream().filter(f-> f.getModalityFinancing() == ModalityFinancing.ONEROUS_LOAN).toList()){
+           for(FinancialLoansPaid y: x.getLoansPaids()){
+               CalculateUtil.calculateValueTotalDiaryOnerousLoans(y);
+           }
+       }
 
         FinancialLoansPendingByCustumerDTO dto = new FinancialLoansPendingByCustumerDTO();
         dto.setCustomer(customerMapper.toDto(customer));

@@ -1,7 +1,7 @@
 import { Dimensions, FlatList, KeyboardAvoidingView, View } from "react-native"
 import BaseScreens from "./BaseScreens"
 import TextComponent from "../components/text/text"
-import { backgroundOpacity, backgroundPrimary, backgroundSolid, flatListBorderColor, textColorError, textColorPrimary, textColorSuccess, textColorWarning } from "../constants/colorsPalette "
+import { backgroundOpacity, backgroundPrimary, backgroundSolid, flatListBackgroundColorpending, flatListBorderColor, textColorError, textColorPrimary, textColorSuccess, textColorWarning } from "../constants/colorsPalette "
 import { useRoute } from "@react-navigation/native"
 import { SetStateAction, useEffect, useRef, useState } from "react"
 import { FinancialLoansPaid } from "../types/financialLoans"
@@ -68,11 +68,12 @@ const FinancialLoansPaidPendingByCustumer = () => {
                 alignItems: "center",
                 width: width-40, 
                 borderWidth: 1, 
-                marginBottom: 10,
+                marginBottom: 25,
                 borderBottomColor: flatListBorderColor,
                 borderRadius: 5,
                 padding: 10,
-                gap: 10
+                gap: 10,
+                backgroundColor: item.lateInstallment ? flatListBackgroundColorpending : 'transparent',
                 }}
             >
                
@@ -119,6 +120,8 @@ const FinancialLoansPaidPendingByCustumer = () => {
                         <TextComponent text={`Parcela ${item.portion}`} color={"rgb(255, 255, 255)"} fontSize={14} textAlign={"center"} />
                         <TextComponent text={`Pago em ${item.duePayment}`} color={"rgb(255, 255, 255)"} fontSize={14} textAlign={"center"} />
                         <TextComponent text={`Valor pago: ${item.amountPaidFormat}`} color={"rgb(255, 255, 255)"} fontSize={14} textAlign={"center"} />
+                        <TextComponent text={`Valor amountPaid: ${item.amountPaid}`} color={"rgb(255, 255, 255)"} fontSize={14} textAlign={"center"} />
+                         <TextComponent text={`Valor currencyValue: ${item.currencyValue}`} color={"rgb(255, 255, 255)"} fontSize={14} textAlign={"center"} />
                     </View>
                 </View>
             </View>

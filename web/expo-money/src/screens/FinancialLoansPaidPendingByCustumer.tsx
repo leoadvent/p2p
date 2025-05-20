@@ -73,11 +73,11 @@ const FinancialLoansPaidPendingByCustumer = () => {
                 borderRadius: 5,
                 padding: 10,
                 gap: 10,
-                backgroundColor: item.lateInstallment ? flatListBackgroundColorpending : 'transparent',
+                backgroundColor: item.lateInstallment || item.daysOverdue > 0 ? flatListBackgroundColorpending : 'transparent',
                 }}
             >
                
-                <View style={{ display:item.amountPaid === item.currencyValue ? "none": "flex", flexDirection:"row", gap:10, width:"100%", justifyContent:"space-between"}}>
+                <View style={{ display:item.amountPaid === item.currencyValue && item.amountPaid > 0 ? "none": "flex", flexDirection:"row", gap:10, width:"100%", justifyContent:"space-between"}}>
                     <Ionicons name="pricetag-outline" size={15} color={textColorWarning}/>
                     <TextComponent text={`${item.rate}%`} color={textColorPrimary} fontSize={10} textAlign={"auto"}/> 
                     <Ionicons name="pricetag-outline" size={15} color={textColorError}/>
@@ -87,7 +87,7 @@ const FinancialLoansPaidPendingByCustumer = () => {
                     <Ionicons name="calendar-number-outline" size={15} color={item.lateInstallment ? textColorError : textColorSuccess}/>
                     <TextComponent text={`${item.dueDate}`} color={textColorPrimary} fontSize={10} textAlign={"auto"} />
                 </View>
-                <View style={{ display:item.amountPaid === item.currencyValue ? "none": "flex", flexDirection:"row", gap:10, width:"100%", justifyContent:"space-between"}}>
+                <View style={{ display:item.amountPaid === item.currencyValue && item.amountPaid > 0 ? "none": "flex", flexDirection:"row", gap:10, width:"100%", justifyContent:"space-between"}}>
                     <TextComponent text={`Valor: ${item.installmentValueFormat}`} color={textColorPrimary} fontSize={10} textAlign={"auto"} />
                     <TextComponent text={`Valor Atual: ${item.currencyValueFormat}`} color={textColorPrimary} fontSize={10} textAlign={"auto"} />
                     <TextComponent text={`Valor Pago: ${item.amountPaidFormat}`} color={textColorPrimary} fontSize={10} textAlign={"auto"} />
@@ -97,7 +97,7 @@ const FinancialLoansPaidPendingByCustumer = () => {
                     {item.valueDiary > 0 && <TextComponent text={`Valor Arrecadado: ${item.amountPaidOnerousFormat}`} color={textColorPrimary} fontSize={10} textAlign={"auto"} />}
                 </View>
 
-                <View style={{ display:item.amountPaid === item.currencyValue ? "none": "flex", flexDirection:"row", gap:10, width:"100%", justifyContent:"space-between", alignItems:"flex-end"}}>
+                <View style={{ display:item.amountPaid === item.currencyValue && item.amountPaid > 0 ? "none": "flex", flexDirection:"row", gap:10, width:"100%", justifyContent:"space-between", alignItems:"flex-end"}}>
                     <ButtonComponent 
                         nameButton={editingItemId === item.id ? "CANCELAR" : "PAGAR"} 
                         onPress={() => {
@@ -114,14 +114,13 @@ const FinancialLoansPaidPendingByCustumer = () => {
                     />
                 
                 </View>
-                <View style={{ display:item.amountPaid === item.currencyValue ? "flex": "none", flexDirection:"row", padding:20, gap:10, width:"100%", justifyContent:"space-between", alignItems:"center"}}>
+                <View style={{ display:item.amountPaid === item.currencyValue && item.amountPaid > 0 ? "flex": "none", flexDirection:"row", padding:20, gap:10, width:"100%", justifyContent:"space-between", alignItems:"center"}}>
                     <Ionicons name="checkmark-done-outline" size={25} color={textColorSuccess}/>
                     <View style={{ display:"flex", flexDirection:"column", gap:10, width:"90%", justifyContent:"space-between", alignItems:"flex-start", marginLeft:20}}>
                         <TextComponent text={`Parcela ${item.portion}`} color={"rgb(255, 255, 255)"} fontSize={14} textAlign={"center"} />
                         <TextComponent text={`Pago em ${item.duePayment}`} color={"rgb(255, 255, 255)"} fontSize={14} textAlign={"center"} />
+                        {item.daysOverdue > 0 && <TextComponent text={`Vencimento ${item.dueDate}`} color={"rgb(255, 255, 255)"} fontSize={14} textAlign={"center"} /> }
                         <TextComponent text={`Valor pago: ${item.amountPaidFormat}`} color={"rgb(255, 255, 255)"} fontSize={14} textAlign={"center"} />
-                        <TextComponent text={`Valor amountPaid: ${item.amountPaid}`} color={"rgb(255, 255, 255)"} fontSize={14} textAlign={"center"} />
-                         <TextComponent text={`Valor currencyValue: ${item.currencyValue}`} color={"rgb(255, 255, 255)"} fontSize={14} textAlign={"center"} />
                     </View>
                 </View>
             </View>
@@ -164,7 +163,7 @@ const FinancialLoansPaidPendingByCustumer = () => {
                             keyExtractor={(item) => item.id.toString()}
                             renderItem={({ item }) => (item.id !== editingItemId ? renderView(item) : <View></View>)}
                         />
-
+                        {/*
                         <ModalSystem 
                             buttonClose={
                                 <View style={{ display:"flex", flexDirection:"row", gap:10, width:"90%", justifyContent:"space-between", alignItems:"center"}}>
@@ -185,6 +184,7 @@ const FinancialLoansPaidPendingByCustumer = () => {
                                     
                                 </View>
                             }/>
+                            */}
                     </>
                 }
                 {editingItemId !== null &&

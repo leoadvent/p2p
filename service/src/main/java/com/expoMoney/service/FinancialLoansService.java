@@ -43,6 +43,7 @@ public class FinancialLoansService {
     public FinancialLoansPaid saveLoansPaid(FinancialLoansPaid loansPaid){
         loansPaid = loansPaidRepository.save(loansPaid);
         List<FinancialLoansPaid> pending = findLoansPaidByIdLoans(loansPaid.getFinancialLoans().getId()).stream().filter(f -> f.getAmountPaid() < f.getCurrencyValue()).toList();
+
         if(pending.isEmpty()){
             List<CustomerCommitmentItem> items = loansPaid.getFinancialLoans().getCommitmentItems();
             for(CustomerCommitmentItem x : items){
@@ -177,9 +178,29 @@ public class FinancialLoansService {
 
         Double valuePaid = paidAux.getAmountPaid() + paid.getAmountPaid();
 
-        valuePaid = valuePaid >= paidAux.getCurrencyValue() ? paidAux.getCurrencyValue() : valuePaid;
+        if(paidAux.getFinancialLoans().getModalityFinancing() != ModalityFinancing.ONEROUS_LOAN) {
+            valuePaid = valuePaid >= paidAux.getCurrencyValue() ? paidAux.getCurrencyValue() : valuePaid;
+        }
 
         paidAux.setAmountPaid(valuePaid);
+
+        if(paidAux.getFinancialLoans().getModalityFinancing() == ModalityFinancing.ONEROUS_LOAN){
+            paidAux.setAmountPaidOnerous(paidAux.getAmountPaidOnerous() + paid.getAmountPaid());
+            paidAux.setAmountPaid(paid.getAmountPaid());
+            if(Objects.equals(paidAux.getAmountPaid(), (DateUtil.CalculateTheDifferenceInDaysBetweenTwoDates(
+                    paidAux.getFinancialLoans().getDateCreateFinancial(),
+                    LocalDate.now()
+                ) * paidAux.getValueDiary()) - paidAux.getAmountPaidOnerous()
+            )){
+                paidAux.setDueDate(LocalDate.now().plusMonths(1));
+                paidAux.setAmountPaid((double) 0);
+            }
+            if(Objects.equals(paidAux.getCurrencyValue(), paid.getAmountPaid())){
+                paidAux.setDueDate(LocalDate.now());
+                paidAux.setAmountPaid(paid.getAmountPaid());
+            }
+        }
+
         paidAux.setDuePayment(Objects.equals(paidAux.getAmountPaid(), paidAux.getCurrencyValue()) ? LocalDate.now() : null);
 
         return saveLoansPaid(paidAux);

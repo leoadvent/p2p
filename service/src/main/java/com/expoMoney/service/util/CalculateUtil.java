@@ -21,16 +21,12 @@ public class CalculateUtil {
 
     public static void calculateValueTotalDiaryOnerousLoans(FinancialLoansPaid paid){
 
-        int d =  DateUtil.CalculateTheDifferenceInDaysBetweenTwoDates(
-                paid.getFinancialLoans().getDateCreateFinancial() != null ? paid.getFinancialLoans().getDateCreateFinancial() : LocalDate.now(),
+        int d = DateUtil.CalculateTheDifferenceInDaysBetweenTwoDates(
+                paid.getFinancialLoans().getDateCreateFinancial(),
                 LocalDate.now());
 
+        double p = paid.getValueDiary() * d;
         paid.setCurrencyValue(
-                (paid.getValueDiary()
-                        * DateUtil.CalculateTheDifferenceInDaysBetweenTwoDates(
-                        paid.getFinancialLoans().getDateCreateFinancial() != null ? paid.getFinancialLoans().getDateCreateFinancial() : LocalDate.now(),
-                        LocalDate.now())
-                        - paid.getAmountPaid()
-        ));
+                (p - paid.getAmountPaidOnerous()));
     }
 }

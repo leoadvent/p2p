@@ -2,6 +2,7 @@ package com.expoMoney.entities;
 
 import com.expoMoney.security.utils.StringUtils;
 import com.expoMoney.service.util.CalculateUtil;
+import com.expoMoney.service.util.DateUtil;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
@@ -101,11 +102,19 @@ public class FinancialLoansPaid {
         if(this.valueDiary != null && this.valueDiary > 0){
             CalculateUtil.calculateValueTotalDiaryOnerousLoans(this);
         }
-        return StringUtils.formatCurrency(this.currencyValue - this.amountPaid);
+        return StringUtils.formatCurrency(this.currencyValue);
     }
 
     public String getAmountPaidOnerousFormat(){
         return StringUtils.formatCurrency(this.amountPaidOnerous != null ? this.amountPaidOnerous : 0);
+    }
+
+    public Integer getDaysOverdue() {
+        LocalDate dateNow = LocalDate.now();
+        if(this.duePayment != null){
+            dateNow = this.duePayment;
+        }
+        return DateUtil.CalculateTheDifferenceInDaysBetweenTwoDates(this.dueDate, dateNow);
     }
 
     @PrePersist

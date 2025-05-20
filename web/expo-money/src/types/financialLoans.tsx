@@ -26,6 +26,7 @@ export interface FinancialLoansPaid{
     valueDiary: number
     amountPaidOnerous: number
     amountPaidOnerousFormat: string
+    daysOverdue: number
 }
 
 export interface FinancialLoans {

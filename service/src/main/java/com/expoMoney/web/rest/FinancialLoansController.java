@@ -129,4 +129,14 @@ public class FinancialLoansController {
         log.info("REQUISICAO POST PARA CALCULAR VALOR PRESTACAO DIARIA");
         return ResponseEntity.ok(CalculateUtil.calculateValueInstallmentDiary(obj.getCapital(), obj.getRate()));
     }
+
+    @PatchMapping("/executedPledge/{idLoans}")
+    @Operation(tags = {"FINANCIAL LOANS"}, summary = "Executando a penhora",
+            description = "Requisicao PATCH para Executando a penhora", security = {@SecurityRequirement(name = "BearerJWT")}
+    )
+    public ResponseEntity<Void> executedPledge(@PathVariable("idLoans") UUID idLoans){
+        log.info("REQUISICAO PATCH PARA EXECUTAR A PENHORA DO FINANCIAMENTO");
+        service.executedPledge(idLoans);
+        return ResponseEntity.noContent().build();
+    }
 }

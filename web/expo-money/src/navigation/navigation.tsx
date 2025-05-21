@@ -36,7 +36,7 @@ type RootStackParamList = {
   NewClient: { clientEdit?: {}  | undefined;};
   CreateFinancial: {customer?: {} | undefined}
   FinanciamentoPendentePorCliente: {customerId: string}
-  FinanciamentoPendenteParcelasPorCliente: {financialLoasPaid: {} }
+  FinanciamentoPendenteParcelasPorCliente: {financialLoasPaid: {}, loansId: string}
   CustomerCommitment: {customerId: string}
 };
 

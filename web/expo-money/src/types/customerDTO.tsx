@@ -12,5 +12,6 @@ export interface CustomerDTO {
     amountFinancialLoans: number
     amountFinancialLoansOpen: number
     amountFinancialLoansPending: number
+    amountFinancialLoansExecutedPledge: number
     commitmentItems: CustomerCommitmentItemDTO[]
 }

@@ -46,7 +46,7 @@ const FinancialLoansPendingByCustumer = ({ navigation }:any) => {
                             keyExtractor={(item) => item.id.toString()}
                             renderItem={({ item }) => (
                                 <TouchableOpacity
-                                    onPress={() => { navigation.navigate("FinanciamentoPendenteParcelasPorCliente", {financialLoasPaid: item.loansPaids})}}
+                                    onPress={() => { navigation.navigate("FinanciamentoPendenteParcelasPorCliente", {financialLoasPaid: item.loansPaids, loansId: item.id})}}
                                 >
                                     <View style={{ 
                                                 display: "flex",

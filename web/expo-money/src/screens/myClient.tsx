@@ -4,7 +4,7 @@ import { CustomerDTO } from "../types/customerDTO"
 import { useEffect, useState } from "react"
 import api from "../integration/axiosconfig"
 import TextComponent from "../components/text/text"
-import { backgroundPrimary, flatListBorderColor, textColorError, textColorPrimary, textColorSuccess, textColorWarning } from "../constants/colorsPalette "
+import { backgroundPrimary, flatListBorderColor, textColorDeactivated, textColorError, textColorPrimary, textColorSuccess, textColorWarning } from "../constants/colorsPalette "
 import { Ionicons } from "@expo/vector-icons"
 import { stylesGlobal } from "../constants/styles"
 import { useFocusEffect } from '@react-navigation/native' 
@@ -133,6 +133,13 @@ const MyClient = ({ navigation }:any) => {
                                 <TextComponent textAlign="center" color={textColorPrimary} fontSize={12} text={`Financiamentos Atrasado`} />
                             </View>
                             <TextComponent textAlign="center" color={textColorPrimary} fontSize={12} text={`${Object.entries(customerEditDTO).length > 0 ? customerEditDTO.amountFinancialLoansPending.toString(): ""}`} />
+                        </View>
+                        <View style={{ display: "flex", flexDirection: "row", gap: 10 , justifyContent: "space-between"}}>
+                            <View style={{ display: "flex", flexDirection: "row", gap: 10 }}>
+                                <Ionicons name="ribbon-outline" size={26} color={textColorDeactivated} />
+                                <TextComponent textAlign="center" color={textColorPrimary} fontSize={12} text={`Garantias Executadas`} />
+                            </View>
+                            <TextComponent textAlign="center" color={textColorPrimary} fontSize={12} text={`${Object.entries(customerEditDTO).length > 0 ? customerEditDTO.amountFinancialLoansExecutedPledge : ""}`} />
                         </View>
                     </TouchableOpacity>
 

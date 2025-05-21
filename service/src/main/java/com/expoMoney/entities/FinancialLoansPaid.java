@@ -59,6 +59,8 @@ public class FinancialLoansPaid {
     private LocalDate renegotiationDate;
     @Column(name = "value_diary")
     private Double valueDiary;
+    @Column(name = "executed_pledge")
+    private Boolean executedPledge;
 
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
@@ -120,6 +122,7 @@ public class FinancialLoansPaid {
     @PrePersist
     private void prePersist(){
         this.setAmountPaid((double) 0);
+        this.executedPledge = false;
         if (this.installmentValue != null) {
             BigDecimal value = BigDecimal.valueOf(this.installmentValue);
             this.installmentValue = value.setScale(2, RoundingMode.HALF_UP).doubleValue();

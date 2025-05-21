@@ -47,4 +47,8 @@ public class CustomerDTO {
                         ))
                 .count();
     }
+
+    public Integer getAmountFinancialLoansExecutedPledge(){
+        return (int) this.financialLoans.stream().filter(FinancialLoans::getExecutedPledge).toList().size();
+    }
 }

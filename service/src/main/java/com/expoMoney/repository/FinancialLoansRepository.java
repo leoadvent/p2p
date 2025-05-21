@@ -20,6 +20,7 @@ public interface FinancialLoansRepository extends JpaRepository<FinancialLoans, 
             WHERE
                 (flp.amountPaid IS NULL OR flp.amountPaid < flp.installmentValue)
                 AND fl.customer.id = :idCustomer
+                AND fl.executedPledge = false
             """)
     List<FinancialLoans> paimentsPending(UUID idCustomer);
 }

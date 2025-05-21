@@ -79,5 +79,11 @@
         </addColumn>
     </changeSet>
 
+    <changeSet id="202504061420_9" author="Desenvolvedor Do Sistema" context="realm-only">
+        <addColumn tableName="TB_FINANCIAL_LOANS_PAID">
+            <column name="executed_pledge" type="BOOLEAN" />
+        </addColumn>
+    </changeSet>
+
 
 </databaseChangeLog>

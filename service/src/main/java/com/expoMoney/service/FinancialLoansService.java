@@ -274,6 +274,28 @@ public class FinancialLoansService {
         return loan.getLoansPaids();
     }
 
+    @Transactional
+    public void executedPledge (UUID idLoans){
+        FinancialLoans loans = findById(idLoans);
 
+        List<FinancialLoansPaid> pendents = loans.getLoansPaids().stream().filter(f-> f.getDueDate().isBefore(LocalDate.now()) && f.getAmountPaid() < f.getInstallmentValue()).toList();
+
+        if(pendents.isEmpty()){ throw new IllegalArgumentException("O Financiamento não pode ter a execução da penhora");}
+
+        loans.setExecutedPledge(true);
+        saveLoans(loans);
+
+        for(FinancialLoansPaid x : pendents){
+            x.setExecutedPledge(true);
+            saveLoansPaid(x);
+        }
+
+        List<CustomerCommitmentItem> items = loans.getCommitmentItems();
+
+        for(CustomerCommitmentItem x : items){
+            x.setCommitted(true);
+            commitmentItemService.save(x);
+        }
+    }
 
 }

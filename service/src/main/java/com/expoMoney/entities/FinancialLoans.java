@@ -49,6 +49,8 @@ public class FinancialLoans {
     private LocalDate dateCreateFinancial;
     @Column(name = "date_end_financial_onerous_loans")
     private LocalDate dateEndFinancialOnerousLoans;
+    @Column(name = "executed_pledge")
+    private Boolean executedPledge;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "financialLoans")
     @NotNull(message = "Campo Obrigatório")
@@ -69,5 +71,6 @@ public class FinancialLoans {
     @PrePersist
     private void prePersist(){
         this.dateCreateFinancial = LocalDate.now();
+        this.executedPledge = false;
     }
 }

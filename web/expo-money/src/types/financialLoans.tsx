@@ -27,6 +27,7 @@ export interface FinancialLoansPaid{
     amountPaidOnerous: number
     amountPaidOnerousFormat: string
     daysOverdue: number
+    executedPledge: boolean
 }
 
 export interface FinancialLoans {
@@ -50,4 +51,5 @@ export interface FinancialLoans {
     modalityFinancingFormating: string
     dateEndFinancialOnerousLoans: Date
     commitmentItems: CustomerCommitmentItemDTO[]
+    executedPledge: boolean
 }

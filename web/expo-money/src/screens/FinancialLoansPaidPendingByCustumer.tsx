@@ -18,7 +18,7 @@ const FinancialLoansPaidPendingByCustumer = () => {
     const height = Dimensions.get("screen").height
 
     const route = useRoute();
-    const { financialLoasPaid } : any = route.params;
+    const { financialLoasPaid, loansId } : any = route.params;
 
     const [financialLoansPaid, setFinancialLoansPaid] = useState<FinancialLoansPaid[]>([])
     const [financialLonasPaidSelected, setFinancialLonasPaidSelected] = useState<FinancialLoansPaid>({} as FinancialLoansPaid)
@@ -27,6 +27,8 @@ const FinancialLoansPaidPendingByCustumer = () => {
     const [paymentValue, setPaymentValue] = useState("");
 
     const [modalVisibleAdd, setModalVisibleAdd] = useState(false);
+
+    const [modalExecutedPledge, setModalExecutedPledge] = useState<boolean>(false);
 
     const handlePayPress = async (item: FinancialLoansPaid) => {
         const amountPaid = parseFloat(paymentValue.replace(/\D/g, "")) / 100;
@@ -128,6 +130,19 @@ const FinancialLoansPaidPendingByCustumer = () => {
 
     }
 
+    function handleExecutedPledge(){
+        alert("Executar a Garantia" + loansId)  
+        api.patch(`/financial/executedPledge/${loansId}`).then((response) => {
+            alert("Garantia executada com sucesso: " + JSON.stringify(response.data))
+            setFinancialLoansPaid(response.data)
+        }).catch((error) => {   
+            alert("Erro ao executar a garantia: " + JSON.stringify(error.mensagem))   
+            console.error("Erro ao executar a garantia: " + JSON.stringify(error))
+        }).finally(() => {
+            setModalExecutedPledge(false)   
+        })
+    }
+
     function handleAddSingleInstallments(){
        alert("Adicionar parcela" + JSON.stringify(financialLoasPaid[0].id))
        api.patch(`/financial/addSingleInstallments/${financialLoasPaid[0].id}`)
@@ -156,6 +171,24 @@ const FinancialLoansPaidPendingByCustumer = () => {
 
                 {Object.entries(financialLoansPaid).length > 0 && editingItemId === null &&
                     <>
+                        <ModalSystem 
+                            buttonClose={<TextComponent text={"Executar a Garantia"} color={textColorPrimary} fontSize={16} textAlign={"center"}/>}
+                            title={"Executar a Garantia"} 
+                            setVisible={setModalExecutedPledge} 
+                            visible={modalExecutedPledge}
+                            heightProp={450}
+                            children={
+                                <View style={{ display:"flex", flexDirection:"column", gap:50, width:"100%", justifyContent:"space-between", alignItems:"center"}}>
+                                    <TextComponent text={`Tem certeza que quer executar a Garantia?`} color={textColorPrimary} fontSize={16} textAlign={"center"}/>
+                                    <View style={{ display:"flex", flexDirection:"row", gap:10, width:"100%", justifyContent:"space-evenly", alignItems:"center"}}>
+                                        <ButtonComponent nameButton={"SIM"} onPress={() => {handleExecutedPledge()}} typeButton={"warning"} width={"40%"} />
+                                        <ButtonComponent nameButton={"NÃO"} onPress={() => {setModalExecutedPledge(false)}} typeButton={"success"} width={"40%"} />     
+                                    </View>
+                                </View>
+                            } 
+                        />
+                       
+
                         <FlatList 
                             keyboardShouldPersistTaps="always"
                             extraData={editingItemId}

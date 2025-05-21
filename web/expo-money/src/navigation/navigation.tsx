@@ -19,7 +19,6 @@ import FinancialLoansPaidPendingByCustumer from '../screens/FinancialLoansPaidPe
 import CustomerDefaulting from '../screens/customerDefaulting';
 import DelinquentCustomerScreen from '../screens/deliquentCustomer';
 import CustomerCommitment from '../screens/CustomerCommitment';
-import ModalSystem from '../components/modal';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator()
@@ -36,7 +35,7 @@ type RootStackParamList = {
   NewClient: { clientEdit?: {}  | undefined;};
   CreateFinancial: {customer?: {} | undefined}
   FinanciamentoPendentePorCliente: {customerId: string}
-  FinanciamentoPendenteParcelasPorCliente: {financialLoasPaid: {}, loansId: string}
+  FinanciamentoPendenteParcelasPorCliente: {financialLoasPaid: {}, loansId: string, commitmentItems: []}
   CustomerCommitment: {customerId: string}
 };
 

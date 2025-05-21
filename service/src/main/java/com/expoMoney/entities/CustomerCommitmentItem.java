@@ -1,5 +1,6 @@
 package com.expoMoney.entities;
 
+import com.expoMoney.security.utils.StringUtils;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
@@ -35,4 +36,8 @@ public class CustomerCommitmentItem {
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     private Customer customer;
+
+    public String getValueItemFormated(){
+        return StringUtils.formatCurrency(this.valueItem > 0 ? this.valueItem : 0);
+    }
 }

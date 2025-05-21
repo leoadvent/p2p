@@ -9,7 +9,6 @@ import api from "../integration/axiosconfig"
 import { Ionicons } from "@expo/vector-icons"
 import { stylesGlobal } from "../constants/styles"
 import Contact from "../components/contact"
-import { ModalityFinancing } from "../types/financialLoansCreateDTO"
 
 const FinancialLoansPendingByCustumer = ({ navigation }:any) => {
 
@@ -46,7 +45,7 @@ const FinancialLoansPendingByCustumer = ({ navigation }:any) => {
                             keyExtractor={(item) => item.id.toString()}
                             renderItem={({ item }) => (
                                 <TouchableOpacity
-                                    onPress={() => { navigation.navigate("FinanciamentoPendenteParcelasPorCliente", {financialLoasPaid: item.loansPaids, loansId: item.id})}}
+                                    onPress={() => { navigation.navigate("FinanciamentoPendenteParcelasPorCliente", {financialLoasPaid: item.loansPaids, loansId: item.id, commitmentItems: item.commitmentItems})}}
                                 >
                                     <View style={{ 
                                                 display: "flex",

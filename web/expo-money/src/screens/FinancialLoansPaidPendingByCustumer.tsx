@@ -18,7 +18,7 @@ const FinancialLoansPaidPendingByCustumer = () => {
     const height = Dimensions.get("screen").height
 
     const route = useRoute();
-    const { financialLoasPaid, loansId } : any = route.params;
+    const { financialLoasPaid, loansId, commitmentItems } : any = route.params;
 
     const [financialLoansPaid, setFinancialLoansPaid] = useState<FinancialLoansPaid[]>([])
     const [financialLonasPaidSelected, setFinancialLonasPaidSelected] = useState<FinancialLoansPaid>({} as FinancialLoansPaid)
@@ -176,10 +176,37 @@ const FinancialLoansPaidPendingByCustumer = () => {
                             title={"Executar a Garantia"} 
                             setVisible={setModalExecutedPledge} 
                             visible={modalExecutedPledge}
-                            heightProp={450}
+                            heightProp={650}
                             children={
-                                <View style={{ display:"flex", flexDirection:"column", gap:50, width:"100%", justifyContent:"space-between", alignItems:"center"}}>
-                                    <TextComponent text={`Tem certeza que quer executar a Garantia?`} color={textColorPrimary} fontSize={16} textAlign={"center"}/>
+                                <View style={{ display:"flex", flexDirection:"column", gap:50, width:"100%", justifyContent:"space-between", alignContent:"center", alignItems:"center"}}>
+                                    <TextComponent text={`Tem certeza que quer executar a Garantia?`} color={textColorPrimary} fontSize={14} textAlign={"center"}/>
+                                    
+                                    {commitmentItems.length > 0 && 
+                                        <FlatList
+                                            data={commitmentItems}
+                                            keyExtractor={(item) => item.id.toString()}
+                                            renderItem={({ item }) => (
+                                                <View style={{ 
+                                                        display:"flex", 
+                                                        flexDirection:"row", 
+                                                        gap:10, 
+                                                        width:"100%", 
+                                                        justifyContent:"space-between", 
+                                                        alignItems:"center",
+                                                        padding: 10,
+                                                        borderWidth: 1, 
+                                                        marginBottom: 8,
+                                                        borderBottomColor: flatListBorderColor,
+                                                        borderRadius: 5,
+                                                    }}>
+                                                    <Ionicons name="bag-outline" size={15} color={textColorWarning}/>
+                                                    <TextComponent text={`${item.nameItem.slice(0, 20)} ${item.nameItem.length > 20 ? '...' : ''}`} color={textColorPrimary} fontSize={12} textAlign={"center"}/>
+                                                    <TextComponent text={`${item.valueItemFormated}`} color={textColorPrimary} fontSize={12} textAlign={"center"}/>
+                                                </View>
+                                            )}
+                                            />
+                                    }
+                                      
                                     <View style={{ display:"flex", flexDirection:"row", gap:10, width:"100%", justifyContent:"space-evenly", alignItems:"center"}}>
                                         <ButtonComponent nameButton={"SIM"} onPress={() => {handleExecutedPledge()}} typeButton={"warning"} width={"40%"} />
                                         <ButtonComponent nameButton={"NÃO"} onPress={() => {setModalExecutedPledge(false)}} typeButton={"success"} width={"40%"} />     

@@ -1,5 +1,6 @@
 package com.expoMoney.web.rest;
 
+import com.expoMoney.entities.FinancialLoans;
 import com.expoMoney.entities.FinancialLoansPaid;
 import com.expoMoney.entities.dto.*;
 import com.expoMoney.service.FinancialLoansService;
@@ -138,5 +139,14 @@ public class FinancialLoansController {
         log.info("REQUISICAO PATCH PARA EXECUTAR A PENHORA DO FINANCIAMENTO");
         service.executedPledge(idLoans);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/findExecutedPledgeByCustomer/{idCustomer}")
+    @Operation(tags = {"FINANCIAL LOANS"}, summary = "Recuperando Lista de Fiananciamento Com Garantia Executada por Cliente",
+            description = "Requisicao GET Recuperando Lista de Fiananciamento Com Garantia Executada por Cliente", security = {@SecurityRequirement(name = "BearerJWT")}
+    )
+    public ResponseEntity<List<FinancialLoansDTO>> findExecutedPledgeByCustomer(@PathVariable("idCustomer") UUID idCustomer){
+        log.info("REQUSICAO GET PARA RECUPERAR FINANCIAMENTO COM EXECUCAO GARANTIA POR CLIENTE");
+        return ResponseEntity.ok(service.findExecutedPledgeByCustomer(idCustomer));
     }
 }

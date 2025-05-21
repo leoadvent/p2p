@@ -298,4 +298,8 @@ public class FinancialLoansService {
         }
     }
 
+    public List<FinancialLoansDTO> findExecutedPledgeByCustomer(UUID idCustomer){
+        List<FinancialLoans> list = repository.findExecutedPledgeByCustomer(idCustomer);
+        return list.stream().map(mapper::toDto).toList();
+    }
 }

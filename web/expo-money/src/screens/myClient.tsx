@@ -90,6 +90,7 @@ const MyClient = ({ navigation }:any) => {
                                     { item.amountFinancialLoans > 0 && <Ionicons name="ribbon-outline" size={8} color={textColorSuccess} />}
                                     { item.amountFinancialLoansOpen > 0 && <Ionicons name="ribbon-outline" size={8} color={textColorWarning} />}
                                     { item.amountFinancialLoansPending > 0 && <Ionicons name="ribbon-outline" size={8} color={textColorError} />}
+                                    { item.amountFinancialLoansExecutedPledge > 0 && <Ionicons name="ribbon-outline" size={8} color={textColorDeactivated} />}
                                 </View>
                                 <TextComponent textAlign="center" color={textColorPrimary} fontSize={16} text={item.firsName + " " + item.lastName } />
                                 
@@ -149,6 +150,10 @@ const MyClient = ({ navigation }:any) => {
                             <Ionicons name="bag-outline" size={26} color={textColorSuccess} />
                         </TouchableOpacity>
 
+                        <TouchableOpacity onPress={() => {setIsModalVisible(false), navigation.navigate("ExecutedPledgeByCustomer", { nameCustomer: `${customerEditDTO.firsName} ${customerEditDTO.lastName}`, idCustomer: customerEditDTO.id })}}>
+                            <Ionicons name="bag-check-outline" size={26} color={textColorDeactivated} />
+                        </TouchableOpacity>
+
                         <TouchableOpacity onPress={() => {setIsModalVisible(false), navigation.navigate("CreateFinancial", {customer: customerEditDTO})}}>
                             <Ionicons name="cash" size={26} color={customerEditDTO.amountFinancialLoansOpen > 0 ? textColorError : textColorSuccess} />
                         </TouchableOpacity>
@@ -156,6 +161,7 @@ const MyClient = ({ navigation }:any) => {
                         <TouchableOpacity onPress={() => {setIsModalVisible(false), navigation.navigate("NewClient", { clientEdit: customerEditDTO })}}>
                             <Ionicons name="pencil-sharp" size={26} color={textColorWarning} />
                         </TouchableOpacity>
+
                     </View>
                     
                 </View>

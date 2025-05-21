@@ -64,7 +64,7 @@ public class FinancialLoans {
     private List<CustomerCommitmentItem> commitmentItems = new ArrayList<>();
 
     @JsonIgnore
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @NotNull(message = "Campo Obrigatório")
     private Customer customer;
 

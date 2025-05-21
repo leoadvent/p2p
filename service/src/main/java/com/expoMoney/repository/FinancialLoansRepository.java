@@ -23,4 +23,17 @@ public interface FinancialLoansRepository extends JpaRepository<FinancialLoans, 
                 AND fl.executedPledge = false
             """)
     List<FinancialLoans> paimentsPending(UUID idCustomer);
+
+    @Query("""
+            SELECT
+                fl
+            FROM
+               FinancialLoans fl
+               JOIN fl.loansPaids flp
+               JOIN fl.customer cu
+            WHERE
+                fl.customer.id = :idCustomer
+                AND fl.executedPledge = true
+            """)
+    List<FinancialLoans> findExecutedPledgeByCustomer(UUID idCustomer);
 }

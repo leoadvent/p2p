@@ -5,12 +5,18 @@ import com.expoMoney.entities.dto.CustomerDTO;
 import com.expoMoney.mapper.CustomerMapper;
 import com.expoMoney.repository.CustomerRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.UUID;
@@ -22,12 +28,27 @@ public class CustomerService {
     private final CustomerRepository repository;
     private final CustomerMapper mapper;
 
+    @Value("${path.photo.customer}")
+    private String photoPathCustomer;
+
     private Customer save(Customer customer){
         return repository.save(customer);
     }
 
-    public CustomerDTO createOrUpdate(CustomerDTO dto){
+    public CustomerDTO createOrUpdate(CustomerDTO dto) throws IOException {
         Customer customer = dto.getId() == null ?  new Customer() : findById(dto.getId());
+        if(!dto.getPhotoFile().isEmpty()){
+            customer.setPhoto(UUID.randomUUID().toString()+".jpg");
+            dto.setPhoto(customer.getPhoto());
+
+            File dir = new File(photoPathCustomer);
+            if (!dir.exists()) {
+                dir.mkdirs();
+            }
+
+            Path path = Paths.get(photoPathCustomer + "\\"+ customer.getPhoto());
+            Files.write(path, dto.getPhotoFile().getBytes());
+        }
         customer = mapper.toEntity(dto);
         customer = save(customer);
         return mapper.toDto(customer);

@@ -14,4 +14,6 @@ export interface CustomerDTO {
     amountFinancialLoansPending: number
     amountFinancialLoansExecutedPledge: number
     commitmentItems: CustomerCommitmentItemDTO[]
+    photo: string
+    photoFile: File
 }

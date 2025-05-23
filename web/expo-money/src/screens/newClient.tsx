@@ -1,6 +1,6 @@
 import BaseScreens from "./BaseScreens";
-import { ScrollView, View } from "react-native";
-import { useEffect, useState } from "react";
+import { ScrollView, View, Image } from "react-native";
+import { SetStateAction, useEffect, useState } from "react";
 import { CustomerDTO } from "../types/customerDTO";
 import InputText from "../components/inputText";
 import ButtonComponent from "../components/button";
@@ -9,6 +9,7 @@ import TextComponent from "../components/text/text";
 import { textColorError, textColorPrimary } from "../constants/colorsPalette ";
 import { useRoute } from "@react-navigation/native";
 import { stylesGlobal } from "../constants/styles";
+import CameraSystem from "../components/camera";
 
 const NewClient = ({ navigation } : any) => {
 
@@ -18,14 +19,53 @@ const NewClient = ({ navigation } : any) => {
     const [isSuccess, setIsSuccess] = useState<boolean>(false)
     const [message, setMessage] = useState<string>("")
 
+    const [uriPhtograph, setUriPhtograph] = useState<string>("")
+    const [isCameraActive, setIsCameraActive] = useState<boolean>(false)
+
     const route = useRoute();
     const { clientEdit } : any = route.params;
     const clientCopyEdit = clientEdit
 
     function handleSaveCustomer() {
         setIsSpinner(true)
-        console.log("customerDTO CRIANDO: ", customerDTO)
-        api.post("/customer", customerDTO).then((response) => {
+
+        const formData = new FormData()
+
+        if(uriPhtograph !== ""){            
+            formData.append('photoFile', {
+                    uri: uriPhtograph,
+                    type: 'image/jpeg',  // Tipo do arquivo, ex: 'image/jpeg'
+                    name: 'minhaImagem.jpg'  // Nome da imagem
+                } as any);
+        }
+
+        if(customerDTO.id != undefined){
+            formData.append('id', customerDTO.id)
+        }
+        formData.append('firsName', customerDTO.firsName)
+        formData.append('lastName', customerDTO.lastName)
+        formData.append('contact', customerDTO.contact)
+        formData.append('photo', customerDTO.photo)
+        if(customerDTO.endereco.id != undefined){
+            formData.append('endereco.id', customerDTO.endereco.id)
+        }
+        formData.append('endereco.cep', customerDTO.endereco.cep)
+        formData.append('endereco.logradouro', customerDTO.endereco.logradouro)
+        formData.append('endereco.numero', customerDTO.endereco.numero)
+        formData.append('endereco.complemento', customerDTO.endereco.complemento)
+        formData.append('endereco.unidade', customerDTO.endereco.unidade)
+        formData.append('endereco.bairro', customerDTO.endereco.bairro)
+        formData.append('endereco.localidade', customerDTO.endereco.localidade)
+        formData.append('endereco.uf', customerDTO.endereco.uf)
+        formData.append('endereco.estado', customerDTO.endereco.estado)
+        formData.append('endereco.regiao', customerDTO.endereco.regiao.toString())
+        formData.append('endereco.ibge', customerDTO.endereco.ibge.toString())
+        formData.append('endereco.ddd', customerDTO.endereco.ddd)
+        formData.append('endereco.gia', customerDTO.endereco.gia)
+        formData.append('endereco.siaf', customerDTO.endereco.siaf)
+
+        console.log("customerDTO CRIANDO: ", formData)
+        api.post("/customer", formData, {headers: {'Content-Type': 'multipart/form-data'}}).then((response) => {
             setMessage("Cliente cadastrado com sucesso!")
             setIsSuccess(true)
             handleClearCustomer()
@@ -43,6 +83,8 @@ const NewClient = ({ navigation } : any) => {
 
     function handleClearCustomer() {
         setCustomerDTO({endereco: {cep: ""}} as CustomerDTO)
+        setUriPhtograph("")
+        setIsCameraActive(false)
     }
 
     function handleFindAdrresByCEP() {
@@ -89,9 +131,22 @@ const NewClient = ({ navigation } : any) => {
         <BaseScreens title="" >
             <View style={ [stylesGlobal.viewComponentBaseScree]}>
 
-                
-                
-                    
+                    <ButtonComponent 
+                        nameButton={"FOTO"} 
+                        onPress={() => setIsCameraActive(!isCameraActive)} typeButton={"primary"} width={"100%"} 
+                    />
+                    <CameraSystem 
+                        setUriPhtograph={setUriPhtograph} 
+                        isCameraActive={isCameraActive} 
+                        setIsCameraActive={setIsCameraActive} 
+                    />
+
+                    {uriPhtograph !== "" &&
+                        <View style={{ borderRadius: 10, overflow:"hidden", borderWidth:2, borderColor: "rgb(255,255,255)"}}>
+                            <Image source={{ uri: uriPhtograph }} style={{ width: 200, height: 200 }}/>
+                        </View>
+                    }
+
                     <ScrollView style={{ padding: 20, gap: 20 }} showsVerticalScrollIndicator={false} showsHorizontalScrollIndicator={false} contentContainerStyle={{ alignItems: "center", padding: 20 }}>
                         <InputText 
                             editable

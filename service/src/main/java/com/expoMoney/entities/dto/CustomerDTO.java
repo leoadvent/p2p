@@ -5,6 +5,7 @@ import com.expoMoney.entities.FinancialLoans;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -22,6 +23,9 @@ public class CustomerDTO {
     private String lastName;
     @NotEmpty(message = "Campo Obrigatório")
     private String contact;
+    private String photo;
+
+    private MultipartFile photoFile;
 
     private Endereco endereco;
 

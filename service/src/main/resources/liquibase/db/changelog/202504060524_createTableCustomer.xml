@@ -28,5 +28,11 @@
         </createTable>
     </changeSet>
 
+    <changeSet id="202504060524_2" author="Desenvolvedor Do Sistema" context="realm-only">
+        <addColumn tableName="tb_customer">
+            <column name="photo" type="VARCHAR(350)"/>
+        </addColumn>
+    </changeSet>
+
 
 </databaseChangeLog>

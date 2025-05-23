@@ -28,6 +28,7 @@ public class Customer {
     private String lastName;
     @NotEmpty(message = "Campo Obrigatório")
     private String contact;
+    private String photo;
 
     @OneToOne(cascade = CascadeType.ALL)
     private Endereco endereco;

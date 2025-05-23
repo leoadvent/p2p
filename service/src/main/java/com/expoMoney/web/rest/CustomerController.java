@@ -9,10 +9,12 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.io.IOException;
 import java.net.URI;
 import java.util.List;
 import java.util.UUID;
@@ -25,11 +27,11 @@ public class CustomerController {
 
     private final CustomerService service;
 
-    @PostMapping
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @Operation(tags = {"CUSTOMER"}, summary = "Criar ou Atualizar Clientes",
             description = "Requisicao POST para Criar ou Atualizar Clientes", security = {@SecurityRequirement(name = "BearerJWT")}
     )
-    public ResponseEntity<CustomerDTO> createOrUpdate(@RequestBody @Valid CustomerDTO dto){
+    public ResponseEntity<CustomerDTO> createOrUpdate(@ModelAttribute @Valid CustomerDTO dto) throws IOException {
         log.info("REQUISICAO POST PARA CRIAR OU ATUALIZAR CLIENTE");
         dto = service.createOrUpdate(dto);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(dto.getId()).toUri();

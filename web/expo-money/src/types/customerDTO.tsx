@@ -16,4 +16,5 @@ export interface CustomerDTO {
     commitmentItems: CustomerCommitmentItemDTO[]
     photo: string
     photoFile: File
+    urlPhoto: string
 }

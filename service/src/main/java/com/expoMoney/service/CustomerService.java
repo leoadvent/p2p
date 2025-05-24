@@ -37,7 +37,7 @@ public class CustomerService {
 
     public CustomerDTO createOrUpdate(CustomerDTO dto) throws IOException {
         Customer customer = dto.getId() == null ?  new Customer() : findById(dto.getId());
-        if(!dto.getPhotoFile().isEmpty()){
+        if(dto.getPhotoFile() != null){
             customer.setPhoto(UUID.randomUUID().toString()+".jpg");
             dto.setPhoto(customer.getPhoto());
 

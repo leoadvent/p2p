@@ -1,10 +1,10 @@
-import { Dimensions, FlatList, TouchableOpacity, View } from "react-native"
+import { Dimensions, FlatList, TouchableOpacity, View, Image } from "react-native"
 import BaseScreens from "./BaseScreens"
 import { CustomerDTO } from "../types/customerDTO"
 import { useEffect, useState } from "react"
 import api from "../integration/axiosconfig"
 import TextComponent from "../components/text/text"
-import { backgroundPrimary, flatListBorderColor, textColorDeactivated, textColorError, textColorPrimary, textColorSuccess, textColorWarning } from "../constants/colorsPalette "
+import { backgroundPrimary, flatListBorderColor, textColorDeactivated, textColorError, textColorPrimary, textColorSecondary, textColorSuccess, textColorWarning } from "../constants/colorsPalette "
 import { Ionicons } from "@expo/vector-icons"
 import { stylesGlobal } from "../constants/styles"
 import { useFocusEffect } from '@react-navigation/native' 
@@ -78,7 +78,7 @@ const MyClient = ({ navigation }:any) => {
                                     display: "flex",
                                     flexDirection: "row",
                                     justifyContent: "space-between",
-                                    gap: 40,
+                                    gap: 20,
                                     width: width-40, 
                                     borderWidth: 1, 
                                     marginBottom: 10,
@@ -86,17 +86,30 @@ const MyClient = ({ navigation }:any) => {
                                     borderRadius: 5,
                                     padding: 10,
                             }}>
-                                <View style={{ display: "flex", flexDirection: "column", gap: 3 }}>
-                                    { item.amountFinancialLoans > 0 && <Ionicons name="ribbon-outline" size={8} color={textColorSuccess} />}
-                                    { item.amountFinancialLoansOpen > 0 && <Ionicons name="ribbon-outline" size={8} color={textColorWarning} />}
-                                    { item.amountFinancialLoansPending > 0 && <Ionicons name="ribbon-outline" size={8} color={textColorError} />}
-                                    { item.amountFinancialLoansExecutedPledge > 0 && <Ionicons name="ribbon-outline" size={8} color={textColorDeactivated} />}
+                                <View style={{display: "flex", flexDirection:"row", gap:10}}>
+                                    <View style={{ display: "flex", flexDirection: "column", gap: 5, justifyContent:"center" }}>
+                                        { item.amountFinancialLoans > 0 && <Ionicons name="ribbon-outline" size={14} color={textColorSuccess} />}
+                                        { item.amountFinancialLoansOpen > 0 && <Ionicons name="ribbon-outline" size={14} color={textColorWarning} />}
+                                        { item.amountFinancialLoansPending > 0 && <Ionicons name="ribbon-outline" size={14} color={textColorError} />}
+                                        { item.amountFinancialLoansExecutedPledge > 0 && <Ionicons name="ribbon-outline" size={14} color={textColorDeactivated} />}
+                                    </View>
+                                    {item.urlPhoto != null &&
+                                        <Image source={{ uri: `http://192.168.166.96:8080/customer/photo/${item.urlPhoto}` }} style={{ width: 85, height: 85, borderRadius:50, borderWidth:2, borderColor:'rgb(18, 93, 179)' }}/>
+                                    }
+                                    {item.urlPhoto == null &&
+                                        <View style={{ width: 66, height: 66, borderRadius:50, borderWidth:2, backgroundColor:  item.amountFinancialLoansPending > 0 ? textColorError : textColorSecondary, borderColor:'rgb(18, 93, 179)', alignContent:"center", alignItems:"center", justifyContent:"center" }}>
+                                            <TextComponent text={`${item.firsName.charAt(0)}${item.lastName.charAt(0)}`} color={"rgb(255, 255, 255)"} fontSize={22} textAlign={"center"} />
+                                        </View>
+                                    }
                                 </View>
-                                <TextComponent textAlign="center" color={textColorPrimary} fontSize={16} text={item.firsName + " " + item.lastName } />
+                                <View style={{ display:'flex', flexDirection:'column', justifyContent:"center" }}>
+                                    <TextComponent textAlign="center" color={textColorPrimary} fontSize={18} text={item.firsName} />
+                                    <TextComponent textAlign="center" color={textColorPrimary} fontSize={10} text={item.lastName } />
+                                </View>
                                 
-                                <View style={{ display: "flex", flexDirection: "row" }}>
+                                <View style={{ display: "flex", flexDirection: "row", justifyContent:"center", alignItems:"center" }}>
                                     <TouchableOpacity onPress={() => {setIsModalVisible(false), navigation.navigate("CreateFinancial", {customer: item})}}>
-                                        <Ionicons name="cash" size={26} color={item.amountFinancialLoansOpen > 0 ? textColorError : textColorSuccess} />
+                                        <Ionicons name="cash" size={35} color={item.amountFinancialLoansOpen > 0 ? textColorError : textColorSuccess} />
                                     </TouchableOpacity>
                                 </View>
                             </View>
@@ -107,8 +120,18 @@ const MyClient = ({ navigation }:any) => {
                 />
                 
             </View>
-            <ModalSystem title={`${titleModal}`} heightProp={500} children={
-                <View style={{ display: "flex", flexDirection: "column", gap: 10, alignItems:"flex-start" }}>
+            <ModalSystem title={`${titleModal}`} heightProp={800} children={
+                <View style={{ display: "flex", flexDirection: "column", gap: 10, alignItems:"center" }}>
+                    {customerEditDTO.urlPhoto != null &&
+                        <Image 
+                            source={{ uri: `http://192.168.166.96:8080/customer/photo/${customerEditDTO.urlPhoto}` }} 
+                            style={{ width: 160, height: 160, borderRadius:80, borderWidth:2, borderColor:'rgb(18, 93, 179)' }}/>
+                    }
+                    {customerEditDTO.urlPhoto == null &&
+                        <View style={{ width: 130, height: 130, borderRadius:80, borderWidth:2, backgroundColor:  customerDTOFilter.amountFinancialLoansPending > 0 ? textColorError : textColorSecondary, borderColor:'rgb(18, 93, 179)', alignContent:"center", alignItems:"center", justifyContent:"center" }}>
+                            <TextComponent text={`${customerEditDTO.firsName.charAt(0)}${customerEditDTO.lastName.charAt(0)}`} color={"rgb(255, 255, 255)"} fontSize={30} textAlign={"center"} />
+                        </View>
+                    }
                     <TouchableOpacity style={{ 
                         gap: 4, 
                         backgroundColor: backgroundPrimary,padding: 10, borderRadius: 5 }}

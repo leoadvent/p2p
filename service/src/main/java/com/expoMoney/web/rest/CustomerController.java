@@ -7,12 +7,22 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
+import org.springframework.http.HttpHeaders;
+
+import java.net.MalformedURLException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import java.io.IOException;
 import java.net.URI;
@@ -26,6 +36,9 @@ import java.util.UUID;
 public class CustomerController {
 
     private final CustomerService service;
+
+    @Value("${path.photo.customer}")
+    private String photoCusomer;
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @Operation(tags = {"CUSTOMER"}, summary = "Criar ou Atualizar Clientes",
@@ -82,4 +95,37 @@ public class CustomerController {
         log.info("REQUISICAO GET PARA RECUPERAR CLIENTES COM PARCELA VENCENDO NO DIA DE HOJE");
         return ResponseEntity.ok(service.findByDueToday());
     }
+
+    @GetMapping("/photo/{filename}")
+    @Operation(tags = {"CUSTOMER"}, summary = "Recuperar Foto de clientes",
+            description = "Requisicao GET para Recuperar Foto", security = {@SecurityRequirement(name = "BearerJWT")}
+    )
+    public ResponseEntity<Resource> getImage(@PathVariable("filename") String filename) {
+
+        try {
+            Path filePath = Paths.get(photoCusomer).resolve(filename).normalize();
+            Resource resource = new UrlResource(filePath.toUri());
+
+            if (!resource.exists()) {
+                return ResponseEntity.notFound().build();
+            }
+
+            // Detecta o tipo do conteúdo
+            String contentType = Files.probeContentType(filePath);
+            if (contentType == null) {
+                contentType = "application/octet-stream";
+            }
+
+            return ResponseEntity.ok()
+                    .contentType(MediaType.parseMediaType(contentType))
+                    .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + resource.getFilename() + "\"")
+                    .body(resource);
+
+        } catch (MalformedURLException e) {
+                return ResponseEntity.badRequest().build();
+        } catch (Exception e) {
+                return ResponseEntity.status(500).build();
+        }
+    }
+
 }

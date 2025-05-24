@@ -31,6 +31,10 @@ public class CustomerDTO {
 
     private List<FinancialLoans> financialLoans = new ArrayList<>();
 
+    public String getUrlPhoto(){
+        return this.photo;
+    }
+
     public Integer getAmountFinancialLoans(){
         return this.financialLoans == null ? 0 : this.financialLoans.size();
     }

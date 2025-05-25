@@ -18,6 +18,9 @@ const MyClient = ({ navigation }:any) => {
     const [customerDTOFilter, setCustomerDTOFilter] = useState<CustomerDTO>({} as CustomerDTO)
     const [customersDTO, setCustomersDTO] = useState<CustomerDTO[]>([] as CustomerDTO[])
     const [totalCustomers, setTotalCustomers] = useState<number>(0)
+    const [sizeByPage, setSizeByPage] = useState<number>(10)
+    const [page, setPage] = useState<number>(0)
+    const [totalPage, setTotalPage] = useState<number>();
 
     const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
     const [titleModal, setTitleModal] = useState<string>("")
@@ -28,16 +31,16 @@ const MyClient = ({ navigation }:any) => {
 
     useFocusEffect(
         React.useCallback(() => {
-            // Esse código será executado sempre que a tela for focada
-            api.post("/customer/filter?size=50", customerDTOFilter).then((response) => {
+            api.post(`/customer/filter?page=${page}&size=${sizeByPage}&sort=firsName,asc`, customerDTOFilter).then((response) => {
                 setTotalCustomers(response.data.totalElements)
+                setTotalPage(response.data.totalPage)
                 setCustomersDTO(response.data.content)
             }).catch((error) => {
                 console.error("Erro ao buscar clientes: ", error)
             }).finally(() => {
                 console.log("Clientes: ", customersDTO)
             })
-        }, [customerDTOFilter]) // Dependência para que a busca aconteça quando o filtro mudar
+        }, [customerDTOFilter, sizeByPage])
     )
 
     function handlerOpenModal(title: string, idCustomer: string, customerEdit: CustomerDTO) {
@@ -66,10 +69,16 @@ const MyClient = ({ navigation }:any) => {
                 />
             </View>
         }>
-            <View style={ [stylesGlobal.viewComponentBaseScree, {height: 600}]}>
+            <View style={ [stylesGlobal.viewComponentBaseScree, { height:10}]}>
                 <FlatList 
-                    data={customersDTO}
+                    data={[...[...customersDTO].sort((a, b) => b.amountFinancialLoansPending - a.amountFinancialLoansPending)].sort((a, b) => b.amountFinancialLoansOpen - a.amountFinancialLoansOpen)}
                     keyExtractor={(item) => item.id.toString()}
+                    onEndReached={() => {
+                        if(sizeByPage < totalCustomers){
+                            setSizeByPage((prev) => prev + 10)
+                        }
+                    }}
+                    onEndReachedThreshold={0.5}
                     renderItem={({ item }) => (
                         <TouchableOpacity
                             onPress={() => handlerOpenModal(`${item.firsName} ${item.lastName}`, item.id, item)}
@@ -94,10 +103,10 @@ const MyClient = ({ navigation }:any) => {
                                         { item.amountFinancialLoansExecutedPledge > 0 && <Ionicons name="ribbon-outline" size={14} color={textColorDeactivated} />}
                                     </View>
                                     {item.urlPhoto != null &&
-                                        <Image source={{ uri: `http://192.168.166.96:8080/customer/photo/${item.urlPhoto}` }} style={{ width: 85, height: 85, borderRadius:50, borderWidth:2, borderColor:'rgb(18, 93, 179)' }}/>
+                                        <Image source={{ uri: `http://192.168.166.96:8080/customer/photo/${item.urlPhoto}` }} style={{ width: 85, height: 85, borderRadius:50, borderWidth:2, borderColor: item.amountFinancialLoansPending > 0 ? textColorError : textColorDeactivated }}/>
                                     }
                                     {item.urlPhoto == null &&
-                                        <View style={{ width: 66, height: 66, borderRadius:50, borderWidth:2, backgroundColor:  item.amountFinancialLoansPending > 0 ? textColorError : textColorSecondary, borderColor:'rgb(18, 93, 179)', alignContent:"center", alignItems:"center", justifyContent:"center" }}>
+                                        <View style={{ width: 85, height: 85, borderRadius:50, borderWidth:2, backgroundColor:  item.amountFinancialLoansPending > 0 ? textColorError : textColorSecondary, borderColor:'rgb(18, 93, 179)', alignContent:"center", alignItems:"center", justifyContent:"center" }}>
                                             <TextComponent text={`${item.firsName.charAt(0)}${item.lastName.charAt(0)}`} color={"rgb(255, 255, 255)"} fontSize={22} textAlign={"center"} />
                                         </View>
                                     }
@@ -113,8 +122,6 @@ const MyClient = ({ navigation }:any) => {
                                     </TouchableOpacity>
                                 </View>
                             </View>
-                            
-
                         </TouchableOpacity>
                     )}
                 />
@@ -125,9 +132,9 @@ const MyClient = ({ navigation }:any) => {
                     {customerEditDTO.urlPhoto != null &&
                         <Image 
                             source={{ uri: `http://192.168.166.96:8080/customer/photo/${customerEditDTO.urlPhoto}` }} 
-                            style={{ width: 160, height: 160, borderRadius:80, borderWidth:2, borderColor:'rgb(18, 93, 179)' }}/>
+                            style={{ width: 160, height: 160, borderRadius:80, borderWidth:2,  borderColor: customerEditDTO.amountFinancialLoansPending > 0 ? textColorError : textColorDeactivated  }}/>
                     }
-                    {customerEditDTO.urlPhoto == null &&
+                    {customerEditDTO.urlPhoto == null && customerEditDTO.firsName != undefined &&
                         <View style={{ width: 130, height: 130, borderRadius:80, borderWidth:2, backgroundColor:  customerDTOFilter.amountFinancialLoansPending > 0 ? textColorError : textColorSecondary, borderColor:'rgb(18, 93, 179)', alignContent:"center", alignItems:"center", justifyContent:"center" }}>
                             <TextComponent text={`${customerEditDTO.firsName.charAt(0)}${customerEditDTO.lastName.charAt(0)}`} color={"rgb(255, 255, 255)"} fontSize={30} textAlign={"center"} />
                         </View>

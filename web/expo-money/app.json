@@ -3,7 +3,7 @@
     "name": "expo-money",
     "slug": "expo-money",
     "version": "1.0.0",
-    "orientation": "adaptive",
+    "orientation": "portrait",
     "icon": "./assets/images/logo.png",
     "scheme": "myapp",
     "userInterfaceStyle": "automatic",
@@ -12,10 +12,16 @@
       "supportsTablet": true
     },
     "android": {
+      "usesCleartextTraffic": true,
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/logo.png",
         "backgroundColor": "#000000"
-      }
+      },
+      "permissions": [
+        "android.permission.CAMERA",
+        "android.permission.RECORD_AUDIO"
+      ],
+      "package": "com.heitorhfbr.expomoney"
     },
     "web": {
       "bundler": "metro",
@@ -44,6 +50,14 @@
     ],
     "experiments": {
       "typedRoutes": true
+    },
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "81de56bb-45c3-4230-8500-13f690372052"
+      }
     }
   }
 }

@@ -1,8 +1,8 @@
-import { Dimensions, FlatList, TouchableOpacity, View, Image } from "react-native"
+import { Dimensions, FlatList, TouchableOpacity, View, Image, ActivityIndicator  } from "react-native"
 import BaseScreens from "./BaseScreens"
 import { CustomerDTO } from "../types/customerDTO"
 import { useEffect, useState } from "react"
-import api from "../integration/axiosconfig"
+import api, { BASE_URL } from "../integration/axiosconfig"
 import TextComponent from "../components/text/text"
 import { backgroundPrimary, flatListBorderColor, textColorDeactivated, textColorError, textColorPrimary, textColorSecondary, textColorSuccess, textColorWarning } from "../constants/colorsPalette "
 import { Ionicons } from "@expo/vector-icons"
@@ -11,6 +11,7 @@ import { useFocusEffect } from '@react-navigation/native'
 import React from "react"
 import InputText from "../components/inputText"
 import ModalSystem from "../components/modal"
+import AsyncStorage from "@react-native-async-storage/async-storage"
 
 
 const MyClient = ({ navigation }:any) => {
@@ -37,8 +38,6 @@ const MyClient = ({ navigation }:any) => {
                 setCustomersDTO(response.data.content)
             }).catch((error) => {
                 console.error("Erro ao buscar clientes: ", error)
-            }).finally(() => {
-                console.log("Clientes: ", customersDTO)
             })
         }, [customerDTOFilter, sizeByPage])
     )
@@ -48,6 +47,17 @@ const MyClient = ({ navigation }:any) => {
         setIsModalVisible(!isModalVisible)
         setIdCustomerModal(idCustomer)
         setCustomerEditDTO(customerEdit)
+    }
+
+    function HandlerShowImage( urlPhoto: string, amountFinancialLoansPending: number, width: number = 80, height: number = 80) {
+        
+        const realm = AsyncStorage.getItem("realmName");
+        console.log("URL FOTO: ", `${BASE_URL}/minio/download/${realm}/${urlPhoto}`)
+        return (
+            <Image 
+                source={{ uri: `${BASE_URL}/minio/download/realm-mauricio-nassau/${urlPhoto}` }} 
+                style={{ width: width, height: height, borderRadius:80, borderWidth:2,  borderColor: amountFinancialLoansPending > 0 ? textColorError : textColorDeactivated  }}/>
+        )
     }
 
     return(
@@ -96,31 +106,24 @@ const MyClient = ({ navigation }:any) => {
                                     padding: 10,
                             }}>
                                 <View style={{display: "flex", flexDirection:"row", gap:10}}>
-                                    <View style={{ display: "flex", flexDirection: "column", gap: 5, justifyContent:"center" }}>
+                                    <View style={{ display: "flex", flexDirection: "column", gap: 5, justifyContent:"center", width:25 }}>
                                         { item.amountFinancialLoans > 0 && <Ionicons name="ribbon-outline" size={14} color={textColorSuccess} />}
                                         { item.amountFinancialLoansOpen > 0 && <Ionicons name="ribbon-outline" size={14} color={textColorWarning} />}
                                         { item.amountFinancialLoansPending > 0 && <Ionicons name="ribbon-outline" size={14} color={textColorError} />}
                                         { item.amountFinancialLoansExecutedPledge > 0 && <Ionicons name="ribbon-outline" size={14} color={textColorDeactivated} />}
                                     </View>
-                                    {item.urlPhoto != null &&
-                                        <Image source={{ uri: `http://192.168.166.96:8080/customer/photo/${item.urlPhoto}` }} style={{ width: 85, height: 85, borderRadius:50, borderWidth:2, borderColor: item.amountFinancialLoansPending > 0 ? textColorError : textColorDeactivated }}/>
-                                    }
+                                    { HandlerShowImage(item.urlPhoto, item.amountFinancialLoansPending, 80,80) }
                                     {item.urlPhoto == null &&
                                         <View style={{ width: 85, height: 85, borderRadius:50, borderWidth:2, backgroundColor:  item.amountFinancialLoansPending > 0 ? textColorError : textColorSecondary, borderColor:'rgb(18, 93, 179)', alignContent:"center", alignItems:"center", justifyContent:"center" }}>
                                             <TextComponent text={`${item.firsName.charAt(0)}${item.lastName.charAt(0)}`} color={"rgb(255, 255, 255)"} fontSize={22} textAlign={"center"} />
                                         </View>
                                     }
                                 </View>
-                                <View style={{ display:'flex', flexDirection:'column', justifyContent:"center" }}>
-                                    <TextComponent textAlign="center" color={textColorPrimary} fontSize={18} text={item.firsName} />
-                                    <TextComponent textAlign="center" color={textColorPrimary} fontSize={10} text={item.lastName } />
+                                <View style={{ display:'flex', flexDirection:'column', justifyContent:"center", marginRight: 15 }}>
+                                    <TextComponent textAlign="center" color={textColorPrimary} fontSize={24} text={item.firsName} />
+                                    <TextComponent textAlign="center" color={textColorPrimary} fontSize={12} text={item.lastName } />
                                 </View>
-                                
-                                <View style={{ display: "flex", flexDirection: "row", justifyContent:"center", alignItems:"center" }}>
-                                    <TouchableOpacity onPress={() => {setIsModalVisible(false), navigation.navigate("CreateFinancial", {customer: item})}}>
-                                        <Ionicons name="cash" size={35} color={item.amountFinancialLoansOpen > 0 ? textColorError : textColorSuccess} />
-                                    </TouchableOpacity>
-                                </View>
+                                                               
                             </View>
                         </TouchableOpacity>
                     )}
@@ -129,11 +132,8 @@ const MyClient = ({ navigation }:any) => {
             </View>
             <ModalSystem title={`${titleModal}`} heightProp={800} children={
                 <View style={{ display: "flex", flexDirection: "column", gap: 10, alignItems:"center" }}>
-                    {customerEditDTO.urlPhoto != null &&
-                        <Image 
-                            source={{ uri: `http://192.168.166.96:8080/customer/photo/${customerEditDTO.urlPhoto}` }} 
-                            style={{ width: 160, height: 160, borderRadius:80, borderWidth:2,  borderColor: customerEditDTO.amountFinancialLoansPending > 0 ? textColorError : textColorDeactivated  }}/>
-                    }
+                    { HandlerShowImage(customerEditDTO.urlPhoto, customerEditDTO.amountFinancialLoansPending, 160, 160) }
+                  
                     {customerEditDTO.urlPhoto == null && customerEditDTO.firsName != undefined &&
                         <View style={{ width: 130, height: 130, borderRadius:80, borderWidth:2, backgroundColor:  customerDTOFilter.amountFinancialLoansPending > 0 ? textColorError : textColorSecondary, borderColor:'rgb(18, 93, 179)', alignContent:"center", alignItems:"center", justifyContent:"center" }}>
                             <TextComponent text={`${customerEditDTO.firsName.charAt(0)}${customerEditDTO.lastName.charAt(0)}`} color={"rgb(255, 255, 255)"} fontSize={30} textAlign={"center"} />

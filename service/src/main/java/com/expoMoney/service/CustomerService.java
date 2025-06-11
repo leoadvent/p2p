@@ -4,6 +4,8 @@ import com.expoMoney.entities.Customer;
 import com.expoMoney.entities.dto.CustomerDTO;
 import com.expoMoney.mapper.CustomerMapper;
 import com.expoMoney.repository.CustomerRepository;
+import io.minio.errors.*;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Example;
@@ -17,6 +19,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.UUID;
@@ -27,6 +31,7 @@ public class CustomerService {
 
     private final CustomerRepository repository;
     private final CustomerMapper mapper;
+    private final MinioService minioService;
 
     @Value("${path.photo.customer}")
     private String photoPathCustomer;
@@ -35,20 +40,24 @@ public class CustomerService {
         return repository.save(customer);
     }
 
-    public CustomerDTO createOrUpdate(CustomerDTO dto) throws IOException {
+    public CustomerDTO createOrUpdate(CustomerDTO dto, HttpServletRequest request) throws IOException, ServerException, InsufficientDataException, ErrorResponseException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException {
+
+        String bucket = request.getHeader("X-Tenant-ID").replaceAll("_", "-").toLowerCase();
+
         Customer customer = dto.getId() == null ?  new Customer() : findById(dto.getId());
         if(dto.getPhotoFile() != null){
-            customer.setPhoto(UUID.randomUUID().toString()+".jpg");
-            dto.setPhoto(customer.getPhoto());
 
-            File dir = new File(photoPathCustomer);
-            if (!dir.exists()) {
-                dir.mkdirs();
+            if(customer.getPhoto() != null){
+                minioService.removeFile(bucket,customer.getPhoto());
             }
+            customer.setPhoto(UUID.randomUUID().toString()+".jpg");
 
-            Path path = Paths.get(photoPathCustomer + "\\"+ customer.getPhoto());
-            Files.write(path, dto.getPhotoFile().getBytes());
+            String photoName = minioService.uploadArquivo(dto.getPhotoFile(), bucket);
+
+            customer.setPhoto(photoName);
+            dto.setPhoto(customer.getPhoto());
         }
+
         customer = mapper.toEntity(dto);
         customer = save(customer);
         return mapper.toDto(customer);

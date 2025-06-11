@@ -53,7 +53,8 @@ public class SecurityConfig {
             "/keycloak/identityProviderLoginLinks/*",
             "/keycloak/code/sso**",
             "/endereco/viacep/*",
-            "/customer/photo/**"
+            "/customer/photo/**",
+            "/minio/**"
     };
 
     public static final String [] PUBLIC_MATCHERS_PUT = {};
@@ -95,7 +96,7 @@ public class SecurityConfig {
      * Extrai o tenant do cabeçalho "X-Tenant-ID" da requisição.
      * Você pode adaptar essa lógica para usar subdomínios ou outros métodos.
      */
-    private String extractTenantFromRequest() {
+    public String extractTenantFromRequest() {
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         String tenant = request.getHeader("X-Tenant-ID");
         if (tenant == null || tenant.isEmpty()) {

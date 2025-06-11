@@ -5,6 +5,7 @@ import com.expoMoney.repository.UserRealmRepository;
 import com.expoMoney.security.dto.*;
 import com.expoMoney.security.utils.StringUtils;
 import com.expoMoney.security.utils.TokenUtils;
+import com.expoMoney.service.MinioService;
 import com.expoMoney.service.UserRealmService;
 import com.expoMoney.tenancy.SchemaCreator;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -55,6 +56,7 @@ public class KeycloakService {
     private final ClientRealmDTORepository repository;
     private final SchemaCreator schemaCreator;
     private final UserRealmService userRealmService;
+    private final MinioService minioService;
 
     @Bean
     private Keycloak keycloakBuilder() {
@@ -122,6 +124,8 @@ public class KeycloakService {
             userRealm.setLastname(dto.getUser().getLastName());
 
             userRealmService.save(userRealm);
+
+            minioService.createBucket();
 
             return realmRepresentation;
 

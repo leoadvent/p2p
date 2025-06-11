@@ -2,8 +2,10 @@ package com.expoMoney.web.rest;
 
 import com.expoMoney.entities.dto.CustomerDTO;
 import com.expoMoney.service.CustomerService;
+import io.minio.errors.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,6 +28,8 @@ import java.nio.file.Paths;
 
 import java.io.IOException;
 import java.net.URI;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 import java.util.List;
 import java.util.UUID;
 
@@ -44,9 +48,9 @@ public class CustomerController {
     @Operation(tags = {"CUSTOMER"}, summary = "Criar ou Atualizar Clientes",
             description = "Requisicao POST para Criar ou Atualizar Clientes", security = {@SecurityRequirement(name = "BearerJWT")}
     )
-    public ResponseEntity<CustomerDTO> createOrUpdate(@ModelAttribute @Valid CustomerDTO dto) throws IOException {
+    public ResponseEntity<CustomerDTO> createOrUpdate(@ModelAttribute @Valid CustomerDTO dto, HttpServletRequest request) throws IOException, ServerException, InsufficientDataException, ErrorResponseException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException {
         log.info("REQUISICAO POST PARA CRIAR OU ATUALIZAR CLIENTE");
-        dto = service.createOrUpdate(dto);
+        dto = service.createOrUpdate(dto, request);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(dto.getId()).toUri();
         return ResponseEntity.created(uri).body(dto);
     }

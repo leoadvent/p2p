@@ -51,6 +51,10 @@ const MyClient = ({ navigation }:any) => {
 
     function HandlerShowImage( urlPhoto: string, amountFinancialLoansPending: number, width: number = 80, height: number = 80) {
         
+        if (urlPhoto == null || urlPhoto === "") {
+            return 
+        }
+
         const realm = AsyncStorage.getItem("realmName");
         console.log("URL FOTO: ", `${BASE_URL}/minio/download/${realm}/${urlPhoto}`)
         return (
@@ -115,7 +119,7 @@ const MyClient = ({ navigation }:any) => {
                                     { HandlerShowImage(item.urlPhoto, item.amountFinancialLoansPending, 80,80) }
                                     {item.urlPhoto == null &&
                                         <View style={{ width: 85, height: 85, borderRadius:50, borderWidth:2, backgroundColor:  item.amountFinancialLoansPending > 0 ? textColorError : textColorSecondary, borderColor:'rgb(18, 93, 179)', alignContent:"center", alignItems:"center", justifyContent:"center" }}>
-                                            <TextComponent text={`${item.firsName.charAt(0)}${item.lastName.charAt(0)}`} color={"rgb(255, 255, 255)"} fontSize={22} textAlign={"center"} />
+                                            <TextComponent text={`${item.firsName.charAt(0)}${item.lastName.charAt(0)}`} color={"rgb(255, 255, 255)"} fontSize={28} textAlign={"center"} fontWeight="800" />
                                         </View>
                                     }
                                 </View>
@@ -136,7 +140,7 @@ const MyClient = ({ navigation }:any) => {
                   
                     {customerEditDTO.urlPhoto == null && customerEditDTO.firsName != undefined &&
                         <View style={{ width: 130, height: 130, borderRadius:80, borderWidth:2, backgroundColor:  customerDTOFilter.amountFinancialLoansPending > 0 ? textColorError : textColorSecondary, borderColor:'rgb(18, 93, 179)', alignContent:"center", alignItems:"center", justifyContent:"center" }}>
-                            <TextComponent text={`${customerEditDTO.firsName.charAt(0)}${customerEditDTO.lastName.charAt(0)}`} color={"rgb(255, 255, 255)"} fontSize={30} textAlign={"center"} />
+                            <TextComponent text={`${customerEditDTO.firsName.charAt(0)}${customerEditDTO.lastName.charAt(0)}`} color={"rgb(255, 255, 255)"} fontSize={30} fontWeight="800" textAlign={"center"} />
                         </View>
                     }
                     <TouchableOpacity style={{ 

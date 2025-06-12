@@ -85,13 +85,22 @@ const MyClient = ({ navigation }:any) => {
         }>
             <View style={ [stylesGlobal.viewComponentBaseScree, { height:10}]}>
                 <FlatList 
-                    data={[...[...customersDTO].sort((a, b) => b.amountFinancialLoansPending - a.amountFinancialLoansPending)].sort((a, b) => b.amountFinancialLoansOpen - a.amountFinancialLoansOpen)}
-                    keyExtractor={(item) => item.id.toString()}
-                    onEndReached={() => {
-                        if(sizeByPage < totalCustomers){
-                            setSizeByPage((prev) => prev + 10)
+                     data={
+                            [...customersDTO]
+                            .sort((a, b) => {
+                                const aHasPending = a.amountFinancialLoansPending > 0 ? 1 : 0;
+                                const bHasPending = b.amountFinancialLoansPending > 0 ? 1 : 0;
+                                if (bHasPending !== aHasPending) {
+                                return bHasPending - aHasPending;
+                                }
+
+                                if (b.amountFinancialLoansPending !== a.amountFinancialLoansPending) {
+                                return b.amountFinancialLoansPending - a.amountFinancialLoansPending;
+                                }
+
+                                return a.firsName.localeCompare(b.firsName);
+                            })
                         }
-                    }}
                     onEndReachedThreshold={0.5}
                     renderItem={({ item }) => (
                         <TouchableOpacity

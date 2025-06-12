@@ -45,6 +45,7 @@ const FinancialLoansPendingByCustumer = ({ navigation }:any) => {
                                 if(financingTypeFilter === 'ALL') return true;
                                 if(financingTypeFilter === 'OPEN') { return item.totalInstallmentPending === 0  }
                                 if(financingTypeFilter === 'LATE') { return item.totalInstallmentPending > 0  }
+                                if(item.executedPledge === false) { return}
                                 return item.modalityFinancing.toString() === financingTypeFilter;
                             })}
                             keyExtractor={(item) => item.id.toString()}

@@ -82,7 +82,7 @@ public class FinancialLoansDTO {
     public Integer getTotalInstallmentPending(){
         return this.loansPaids.stream().filter(
                 item -> item.getDueDate().isBefore(LocalDate.now())
-                        && item.getAmountPaid() < item.getCurrencyValue()
+                        && item.getAmountPaid() < item.getCurrencyValue() && !item.getFinancialLoans().getExecutedPledge()
                 ).toList().size();
     }
 

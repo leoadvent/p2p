@@ -51,6 +51,8 @@ public class FinancialLoans {
     private LocalDate dateEndFinancialOnerousLoans;
     @Column(name = "executed_pledge")
     private Boolean executedPledge;
+    @Column(name = "has_a_delay")
+    private Boolean hasADelay;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "financialLoans")
     @NotNull(message = "Campo Obrigatório")

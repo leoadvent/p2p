@@ -75,4 +75,16 @@
         </addColumn>
     </changeSet>
 
+    <changeSet id="202504061421_8" author="Desenvolvedor Do Sistema" context="realm-only">
+        <addColumn tableName="TB_FINANCIAL_LOANS">
+            <column name="has_a_delay" type="BOOLEAN" />
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="202504061421_9" author="Desenvolvedor Do Sistema" context="realm-only">
+        <update tableName="TB_FINANCIAL_LOANS">
+            <column name="has_a_delay" value="false" />
+        </update>
+    </changeSet>
+
 </databaseChangeLog>

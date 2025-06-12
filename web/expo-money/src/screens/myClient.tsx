@@ -134,7 +134,7 @@ const MyClient = ({ navigation }:any) => {
                 />
                 
             </View>
-            <ModalSystem title={`${titleModal}`} heightProp={800} children={
+            <ModalSystem title={`${titleModal}`} heightProp={950} children={
                 <View style={{ display: "flex", flexDirection: "column", gap: 10, alignItems:"center" }}>
                     { HandlerShowImage(customerEditDTO.urlPhoto, customerEditDTO.amountFinancialLoansPending, 160, 160) }
                   
@@ -145,8 +145,8 @@ const MyClient = ({ navigation }:any) => {
                     }
                     <TouchableOpacity style={{ 
                         gap: 4, 
-                        backgroundColor: backgroundPrimary,padding: 10, borderRadius: 5 }}
-                        onPress={() => {setIsModalVisible(false), navigation.navigate("FinanciamentoPendentePorCliente", {customerId: idCustomerModal })}}
+                        backgroundColor: backgroundPrimary,padding: 10, borderRadius: 5, width: width - 120 }}
+                        onPress={() => {setIsModalVisible(false), navigation.navigate("FinanciamentoPendentePorCliente", {customerId: idCustomerModal, financingTypeFilter: "ALL"})}}
                     >  
                         <View style={{ display: "flex", flexDirection: "row", gap: 10, justifyContent: "space-between" }}>
                             <View style={{ display: "flex", flexDirection: "row", gap: 10 }}>
@@ -155,6 +155,13 @@ const MyClient = ({ navigation }:any) => {
                             </View>
                             <TextComponent textAlign="center" color={textColorPrimary} fontSize={12} text={`${Object.entries(customerEditDTO).length > 0 ? customerEditDTO.amountFinancialLoans.toString() : ""}`} />
                         </View>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity style={{ 
+                        gap: 4, 
+                        backgroundColor: backgroundPrimary,padding: 10, borderRadius: 5, width: width - 120 }}
+                        onPress={() => {setIsModalVisible(false), navigation.navigate("FinanciamentoPendentePorCliente", {customerId: idCustomerModal, financingTypeFilter: "OPEN"})}}
+                    >  
                         <View style={{ display: "flex", flexDirection: "row", gap: 10, justifyContent: "space-between" }}>
                             <View style={{ display: "flex", flexDirection: "row", gap: 10 }}>
                                 <Ionicons name="ribbon-outline" size={26} color={textColorWarning} />
@@ -162,6 +169,13 @@ const MyClient = ({ navigation }:any) => {
                             </View>
                             <TextComponent textAlign="center" color={textColorPrimary} fontSize={12} text={`${Object.entries(customerEditDTO).length > 0 ? customerEditDTO.amountFinancialLoansOpen.toString() : ""}`} />
                         </View>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity style={{ 
+                        gap: 4, 
+                        backgroundColor: backgroundPrimary,padding: 10, borderRadius: 5, width: width - 120 }}
+                        onPress={() => {setIsModalVisible(false), navigation.navigate("FinanciamentoPendentePorCliente", {customerId: idCustomerModal, financingTypeFilter: "LATE"})}}
+                    > 
                         <View style={{ display: "flex", flexDirection: "row", gap: 10 , justifyContent: "space-between"}}>
                             <View style={{ display: "flex", flexDirection: "row", gap: 10 }}>
                                 <Ionicons name="ribbon-outline" size={26} color={textColorError} />
@@ -169,6 +183,13 @@ const MyClient = ({ navigation }:any) => {
                             </View>
                             <TextComponent textAlign="center" color={textColorPrimary} fontSize={12} text={`${Object.entries(customerEditDTO).length > 0 ? customerEditDTO.amountFinancialLoansPending.toString(): ""}`} />
                         </View>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity style={{ 
+                        gap: 4, 
+                        backgroundColor: backgroundPrimary,padding: 10, borderRadius: 5, width: width - 120 }}
+                        onPress={() => {setIsModalVisible(false), navigation.navigate("ExecutedPledgeByCustomer", { nameCustomer: `${customerEditDTO.firsName} ${customerEditDTO.lastName}`, idCustomer: customerEditDTO.id })}}
+                    > 
                         <View style={{ display: "flex", flexDirection: "row", gap: 10 , justifyContent: "space-between"}}>
                             <View style={{ display: "flex", flexDirection: "row", gap: 10 }}>
                                 <Ionicons name="ribbon-outline" size={26} color={textColorDeactivated} />
@@ -177,16 +198,13 @@ const MyClient = ({ navigation }:any) => {
                             <TextComponent textAlign="center" color={textColorPrimary} fontSize={12} text={`${Object.entries(customerEditDTO).length > 0 ? customerEditDTO.amountFinancialLoansExecutedPledge : ""}`} />
                         </View>
                     </TouchableOpacity>
+                    
 
                     <View style={{ display: "flex", marginTop: 30, flexDirection: "row", gap: 20, justifyContent: "space-evenly", width: "90%" }}>
                                    
                         <TouchableOpacity onPress={() => {setIsModalVisible(false), navigation.navigate("CustomerCommitment", {customerId: customerEditDTO.id})}}>
                             <Ionicons name="bag-outline" size={26} color={textColorSuccess} />
-                        </TouchableOpacity>
-
-                        <TouchableOpacity onPress={() => {setIsModalVisible(false), navigation.navigate("ExecutedPledgeByCustomer", { nameCustomer: `${customerEditDTO.firsName} ${customerEditDTO.lastName}`, idCustomer: customerEditDTO.id })}}>
-                            <Ionicons name="bag-check-outline" size={26} color={textColorDeactivated} />
-                        </TouchableOpacity>
+                        </TouchableOpacity>                    
 
                         <TouchableOpacity onPress={() => {setIsModalVisible(false), navigation.navigate("CreateFinancial", {customer: customerEditDTO})}}>
                             <Ionicons name="cash" size={26} color={customerEditDTO.amountFinancialLoansOpen > 0 ? textColorError : textColorSuccess} />

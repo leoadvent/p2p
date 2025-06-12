@@ -40,17 +40,22 @@ public class CustomerDTO {
     }
 
     public Integer getAmountFinancialLoansOpen() {
-        return (int) this.financialLoans.stream()
-                .filter(loan -> loan.getLoansPaids().stream()
-                        .anyMatch(paid -> paid.getDuePayment() == null && !paid.getExecutedPledge()))
-                .count();
+        List<FinancialLoans> filter = this.financialLoans.stream()
+                .filter(loan -> !loan.getHasADelay() && loan.getLoansPaids().stream()
+                        .anyMatch(paid -> paid.getDuePayment() == null
+                                && !paid.getExecutedPledge()
+                                && paid.getDueDate().isAfter(LocalDate.now())
+                                && !paid.getFinancialLoans().getExecutedPledge())
+                ).toList();
+
+        return (int) filter.size();
     }
 
     public Integer getAmountFinancialLoansPending(){
         return (int) this.financialLoans.stream()
                 .filter(loan -> loan.getLoansPaids().stream()
                         .anyMatch(
-                                paid -> (paid.getAmountPaid() == 0 || paid.getAmountPaid() < paid.getCurrencyValue() || paid.getDueDate() == null)
+                                paid -> (paid.getAmountPaid() == 0 || paid.getAmountPaid() < paid.getCurrencyValue() && !paid.getExecutedPledge() || paid.getDueDate() == null)
                                 && paid.getDueDate().isBefore(LocalDate.now())
                         ) && !loan.getExecutedPledge())
                 .count();

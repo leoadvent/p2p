@@ -13,7 +13,7 @@ import Contact from "../components/contact"
 const FinancialLoansPendingByCustumer = ({ navigation }:any) => {
 
     const route = useRoute();
-    const { customerId } : any = route.params;
+    const { customerId, financingTypeFilter } : any = route.params;
 
     const width = Dimensions.get("window").width;
 
@@ -41,7 +41,12 @@ const FinancialLoansPendingByCustumer = ({ navigation }:any) => {
                             <Contact phoneNumber={`${financialPendingByCustomer.customer.contact}`} /> 
                         </View>
                         <FlatList 
-                            data={financialPendingByCustomer.loansPendingDTOS}
+                            data={financialPendingByCustomer.loansPendingDTOS.filter((item) => {
+                                if(financingTypeFilter === 'ALL') return true;
+                                if(financingTypeFilter === 'OPEN') { return item.totalInstallmentPending === 0  }
+                                if(financingTypeFilter === 'LATE') { return item.totalInstallmentPending > 0  }
+                                return item.modalityFinancing.toString() === financingTypeFilter;
+                            })}
                             keyExtractor={(item) => item.id.toString()}
                             renderItem={({ item }) => (
                                 <TouchableOpacity

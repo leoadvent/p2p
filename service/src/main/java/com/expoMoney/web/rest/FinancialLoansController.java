@@ -1,6 +1,5 @@
 package com.expoMoney.web.rest;
 
-import com.expoMoney.entities.FinancialLoans;
 import com.expoMoney.entities.FinancialLoansPaid;
 import com.expoMoney.entities.dto.*;
 import com.expoMoney.service.FinancialLoansService;

@@ -2,6 +2,7 @@ package com.expoMoney.service;
 
 import com.expoMoney.entities.Customer;
 import com.expoMoney.entities.dto.CustomerDTO;
+import com.expoMoney.entities.dto.CustomerFilterDTO;
 import com.expoMoney.mapper.CustomerMapper;
 import com.expoMoney.repository.CustomerRepository;
 import io.minio.errors.*;
@@ -72,21 +73,11 @@ public class CustomerService {
         return mapper.toDto(findById(idClient));
     }
 
-    public Page<CustomerDTO> fildByFilter(CustomerDTO dto, Pageable pageable){
+    public Page<CustomerFilterDTO> findByFilter(CustomerDTO dto, Pageable pageable){
 
-        Customer customer = mapper.toEntity(dto);
+        Page<CustomerFilterDTO> filterDTOS = repository.filterCustomer(pageable);
 
-        ExampleMatcher matcher = ExampleMatcher.matching()
-                .withMatcher("id", ExampleMatcher.GenericPropertyMatchers.exact())
-                .withMatcher("firsName", ExampleMatcher.GenericPropertyMatchers.contains())
-                .withIgnoreCase("firsName")
-                .withMatcher("lastName", ExampleMatcher.GenericPropertyMatchers.contains())
-                .withIgnoreCase("lastName")
-                .withMatcher("contact", ExampleMatcher.GenericPropertyMatchers.contains());
-
-        Example<Customer> example = Example.of(customer, matcher);
-        Page<Customer> pageEntity = repository.findAll(example, pageable);
-        return pageEntity.map(mapper::toDto);
+        return filterDTOS;
     }
 
     public List<CustomerDTO> findLikeByNome(String name){

@@ -87,4 +87,22 @@
         </update>
     </changeSet>
 
+    <changeSet id="202504061421_10" author="Desenvolvedor Do Sistema" context="realm-only">
+        <addColumn tableName="TB_FINANCIAL_LOANS">
+            <column name="settled" type="BOOLEAN" defaultValue="false" />
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="202504061421_11" author="Desenvolvedor Do Sistema" context="realm-only">
+        <sql>
+            UPDATE tb_financial_loans
+            SET settled = true
+            WHERE id IN (
+            SELECT DISTINCT tflp.financial_loans_id
+            FROM tb_financial_loans_paid tflp
+            WHERE tflp.install_meant_value = tflp.amount_paid
+            );
+        </sql>
+    </changeSet>
+
 </databaseChangeLog>

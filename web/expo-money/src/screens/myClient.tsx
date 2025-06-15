@@ -1,7 +1,7 @@
 import { Dimensions, FlatList, TouchableOpacity, View, Image, ActivityIndicator  } from "react-native"
 import BaseScreens from "./BaseScreens"
 import { CustomerDTO } from "../types/customerDTO"
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import api, { BASE_URL } from "../integration/axiosconfig"
 import TextComponent from "../components/text/text"
 import { backgroundPrimary, flatListBorderColor, textColorDeactivated, textColorError, textColorPrimary, textColorSecondary, textColorSuccess, textColorWarning } from "../constants/colorsPalette "
@@ -12,12 +12,13 @@ import React from "react"
 import InputText from "../components/inputText"
 import ModalSystem from "../components/modal"
 import AsyncStorage from "@react-native-async-storage/async-storage"
+import { CustomerFilterDTO } from "../types/customerFilterDTO"
 
 
 const MyClient = ({ navigation }:any) => {
 
     const [customerDTOFilter, setCustomerDTOFilter] = useState<CustomerDTO>({} as CustomerDTO)
-    const [customersDTO, setCustomersDTO] = useState<CustomerDTO[]>([] as CustomerDTO[])
+    const [customerFilterDto, setCustomerFilterDto] = useState<CustomerFilterDTO[]>([] as CustomerFilterDTO[])
     const [totalCustomers, setTotalCustomers] = useState<number>(0)
     const [sizeByPage, setSizeByPage] = useState<number>(10)
     const [page, setPage] = useState<number>(0)
@@ -26,7 +27,7 @@ const MyClient = ({ navigation }:any) => {
     const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
     const [titleModal, setTitleModal] = useState<string>("")
     const [idCustomerModal, setIdCustomerModal] = useState<string>("")
-    const [customerEditDTO, setCustomerEditDTO] = useState<CustomerDTO>({} as CustomerDTO)
+    const [customerEditDTO, setCustomerEditDTO] = useState<CustomerFilterDTO>({} as CustomerFilterDTO)
 
     const width = Dimensions.get("window").width;
 
@@ -35,14 +36,14 @@ const MyClient = ({ navigation }:any) => {
             api.post(`/customer/filter?page=${page}&size=${sizeByPage}&sort=firsName,asc`, customerDTOFilter).then((response) => {
                 setTotalCustomers(response.data.totalElements)
                 setTotalPage(response.data.totalPage)
-                setCustomersDTO(response.data.content)
+                setCustomerFilterDto(response.data.content)
             }).catch((error) => {
                 console.error("Erro ao buscar clientes: ", error)
             })
         }, [customerDTOFilter, sizeByPage])
     )
 
-    function handlerOpenModal(title: string, idCustomer: string, customerEdit: CustomerDTO) {
+    function handlerOpenModal(title: string, idCustomer: string, customerEdit: CustomerFilterDTO) {
         setTitleModal(title)
         setIsModalVisible(!isModalVisible)
         setIdCustomerModal(idCustomer)
@@ -86,7 +87,7 @@ const MyClient = ({ navigation }:any) => {
             <View style={ [stylesGlobal.viewComponentBaseScree, { height:10}]}>
                 <FlatList 
                      data={
-                            [...customersDTO]
+                            [...customerFilterDto]
                             .sort((a, b) => {
                                 const aHasPending = a.amountFinancialLoansPending > 0 ? 1 : 0;
                                 const bHasPending = b.amountFinancialLoansPending > 0 ? 1 : 0;
@@ -101,6 +102,7 @@ const MyClient = ({ navigation }:any) => {
                                 return a.firsName.localeCompare(b.firsName);
                             })
                         }
+                    onEndReached={() => {setSizeByPage(sizeByPage + 10)}}
                     onEndReachedThreshold={0.5}
                     renderItem={({ item }) => (
                         <TouchableOpacity

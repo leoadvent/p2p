@@ -1,6 +1,7 @@
 package com.expoMoney.web.rest;
 
 import com.expoMoney.entities.dto.CustomerDTO;
+import com.expoMoney.entities.dto.CustomerFilterDTO;
 import com.expoMoney.service.CustomerService;
 import io.minio.errors.*;
 import io.swagger.v3.oas.annotations.Operation;
@@ -68,9 +69,9 @@ public class CustomerController {
     @Operation(tags = {"CUSTOMER"}, summary = "Recuperar lista de clientes por Filtro",
             description = "Requisicao POST para Recuperar lista de clientes por Filtro", security = {@SecurityRequirement(name = "BearerJWT")}
     )
-    public ResponseEntity<Page<CustomerDTO>> findByFilter(@RequestBody CustomerDTO dto, Pageable pageable){
+    public ResponseEntity<Page<CustomerFilterDTO>> findByFilter(@RequestBody CustomerDTO dto, Pageable pageable){
         log.info("REQUISICAO POST PARA RECUPERAR LISTA DE CLIENTES");
-        return ResponseEntity.ok(service.fildByFilter(dto, pageable));
+        return ResponseEntity.ok(service.findByFilter(dto, pageable));
     }
 
     @PostMapping("/filterByNome")

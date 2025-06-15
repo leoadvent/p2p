@@ -43,8 +43,8 @@ const FinancialLoansPendingByCustumer = ({ navigation }:any) => {
                         <FlatList 
                             data={financialPendingByCustomer.loansPendingDTOS.filter((item) => {
                                 if(financingTypeFilter === 'ALL') return true;
-                                if(financingTypeFilter === 'OPEN') { return item.totalInstallmentPending === 0  }
-                                if(financingTypeFilter === 'LATE') { return item.totalInstallmentPending > 0  }
+                                if(financingTypeFilter === 'OPEN') { return item.hasADelay === false && item.settled === false }
+                                if(financingTypeFilter === 'LATE') { return item.hasADelay === true && item.settled === false }
                                 if(item.executedPledge === false) { return}
                                 return item.modalityFinancing.toString() === financingTypeFilter;
                             })}
@@ -64,7 +64,7 @@ const FinancialLoansPendingByCustumer = ({ navigation }:any) => {
                                                 borderRadius: 5,
                                                 padding: 10,
                                                 gap: 13,
-                                                backgroundColor: item.totalInstallmentPending > 0 ? flatListBackgroundColorpending : 'transparent'
+                                                backgroundColor: item.hasADelay  ? flatListBackgroundColorpending : 'transparent'
                                         }}
                                     >
                                         <View style={{ display: "flex", flexDirection: "row", width: '100%', justifyContent: "flex-start", gap: 20, alignItems: "center"}}>

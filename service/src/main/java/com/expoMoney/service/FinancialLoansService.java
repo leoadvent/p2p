@@ -74,6 +74,7 @@ public class FinancialLoansService {
         Customer customer = customerService.findById(create.getCustomerId());
 
         FinancialLoans loans = mapper.fromCreate(create);
+        loans.setExecutedPledge(false);
         loans.setCustomer(customer);
         loans.setDueDay(create.getStartDateDue().getDayOfMonth());
         loans.setStartMonth(create.getStartDateDue().getMonthValue());
@@ -165,7 +166,7 @@ public class FinancialLoansService {
                 double currencyValue = valueLoansInterestDelay + (differenceDays * loansPaid.getAdditionForDaysOfDelay());
 
                 loansPaid.setCurrencyValue(currencyValue);
-
+                loansPaid.getFinancialLoans().setSettled(false);
                 loansPaid.getFinancialLoans().setHasADelay(true);
                 saveLoansPaid(loansPaid);
             }

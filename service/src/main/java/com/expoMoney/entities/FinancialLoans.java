@@ -53,6 +53,7 @@ public class FinancialLoans {
     private Boolean executedPledge;
     @Column(name = "has_a_delay")
     private Boolean hasADelay;
+    private Boolean settled;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "financialLoans")
     @NotNull(message = "Campo Obrigatório")
@@ -74,5 +75,7 @@ public class FinancialLoans {
     private void prePersist(){
         this.dateCreateFinancial = LocalDate.now();
         this.executedPledge = false;
+        this.hasADelay = false;
+        this.settled = false;
     }
 }

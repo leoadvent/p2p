@@ -52,4 +52,6 @@ export interface FinancialLoans {
     dateEndFinancialOnerousLoans: Date
     commitmentItems: CustomerCommitmentItemDTO[]
     executedPledge: boolean
+    hasADelay: boolean
+    settled: boolean
 }

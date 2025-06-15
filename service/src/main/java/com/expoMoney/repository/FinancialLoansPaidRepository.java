@@ -25,7 +25,6 @@ public interface FinancialLoansPaidRepository extends JpaRepository<FinancialLoa
            WHERE
                 fp.dueDate < CURRENT_DATE
                 AND fp.amountPaid < fp.installmentValue
-                AND fl.modalityFinancing = 'FINANCING'
                 AND fl.executedPledge = false
            """)
     List<FinancialLoansPaid> findByOverdueInstallments();

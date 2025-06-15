@@ -37,6 +37,8 @@ public class FinancialLoansDTO {
     @NotNull(message = "Campo Obrigatório")
     private Double additionForDaysOfDelay;
     private Boolean executedPledge;
+    private Boolean hasADelay;
+    private Boolean settled;
 
     @NotNull(message = "Campo Obrigatório")
     private List<FinancialLoansPaid> loansPaids = new ArrayList<>();

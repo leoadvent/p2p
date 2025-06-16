@@ -104,7 +104,7 @@ public class FinancialLoansPaid {
         if(this.valueDiary != null && this.valueDiary > 0){
             CalculateUtil.calculateValueTotalDiaryOnerousLoans(this);
         }
-        return StringUtils.formatCurrency(this.currencyValue);
+        return StringUtils.formatCurrency(this.currencyValue - this.amountPaid);
     }
 
     public String getAmountPaidOnerousFormat(){

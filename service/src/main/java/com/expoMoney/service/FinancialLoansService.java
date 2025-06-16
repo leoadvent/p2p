@@ -46,6 +46,15 @@ public class FinancialLoansService {
         loansPaid = loansPaidRepository.save(loansPaid);
         List<FinancialLoansPaid> pending = findLoansPaidByIdLoans(loansPaid.getFinancialLoans().getId()).stream().filter(f -> f.getAmountPaid() < f.getCurrencyValue()).toList();
 
+        List<FinancialLoansPaid> pendingDelay = findLoansPaidByIdLoans(loansPaid.getFinancialLoans().getId()).stream().filter(
+                f -> f.getDueDate().isBefore(LocalDate.now()) && f.getDuePayment() == null && !f.getExecutedPledge()
+        ).toList();
+
+        if(pendingDelay.isEmpty()){
+            loansPaid.getFinancialLoans().setHasADelay(false);
+            loansPaid = loansPaidRepository.save(loansPaid);
+        }
+
         if(pending.isEmpty()){
             List<CustomerCommitmentItem> items = loansPaid.getFinancialLoans().getCommitmentItems();
             for(CustomerCommitmentItem x : items){
@@ -82,7 +91,7 @@ public class FinancialLoansService {
         loans.setAdditionForDaysOfDelay(create.getAdditionForDaysOfDelay());
         loans.setRate(create.getRate());
         loans.setDateEndFinancialOnerousLoans(create.getModalityFinancing() == ModalityFinancing.ONEROUS_LOAN ?
-                create.getDateEndFinancialOnerousLoans() : null);
+                create.getDateEndFinancialOnerousLoans() : create.getStartDateDue().plusMonths(create.getCashInstallment()-1));
 
 
         double totalValue = create.getValue();

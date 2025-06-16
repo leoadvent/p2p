@@ -13,6 +13,7 @@ import InputText from "../components/inputText"
 import ModalSystem from "../components/modal"
 import AsyncStorage from "@react-native-async-storage/async-storage"
 import { CustomerFilterDTO } from "../types/customerFilterDTO"
+import ShowImageCustomer from "../components/showImageCustomer"
 
 
 const MyClient = ({ navigation }:any) => {
@@ -127,7 +128,12 @@ const MyClient = ({ navigation }:any) => {
                                         { item.amountFinancialLoansPending > 0 && <Ionicons name="ribbon-outline" size={14} color={textColorError} />}
                                         { item.amountFinancialLoansExecutedPledge > 0 && <Ionicons name="ribbon-outline" size={14} color={textColorDeactivated} />}
                                     </View>
-                                    { HandlerShowImage(item.urlPhoto, item.amountFinancialLoansPending, 80,80) }
+                                    <ShowImageCustomer 
+                                        urlPhoto={item.urlPhoto} 
+                                        amountFinancialLoansPending={item.amountFinancialLoansPending} 
+                                        width={80}
+                                        height={80}
+                                    />
                                     {item.urlPhoto == null &&
                                         <View style={{ width: 85, height: 85, borderRadius:50, borderWidth:2, backgroundColor:  item.amountFinancialLoansPending > 0 ? textColorError : textColorSecondary, borderColor:'rgb(18, 93, 179)', alignContent:"center", alignItems:"center", justifyContent:"center" }}>
                                             <TextComponent text={`${item.firsName.charAt(0)}${item.lastName.charAt(0)}`} color={"rgb(255, 255, 255)"} fontSize={28} textAlign={"center"} fontWeight="800" />
@@ -135,8 +141,8 @@ const MyClient = ({ navigation }:any) => {
                                     }
                                 </View>
                                 <View style={{ display:'flex', flexDirection:'column', justifyContent:"center", marginRight: 15 }}>
-                                    <TextComponent textAlign="center" color={textColorPrimary} fontSize={24} text={item.firsName} />
-                                    <TextComponent textAlign="center" color={textColorPrimary} fontSize={12} text={item.lastName } />
+                                    <TextComponent textAlign="center" color={item.amountFinancialLoansPending > 0 ? textColorError : textColorPrimary} fontSize={24} text={item.firsName} />
+                                    <TextComponent textAlign="center" color={item.amountFinancialLoansPending > 0 ? textColorError : textColorPrimary} fontSize={12} text={item.lastName } />
                                 </View>
                                                                
                             </View>
@@ -147,8 +153,14 @@ const MyClient = ({ navigation }:any) => {
             </View>
             <ModalSystem title={`${titleModal}`} heightProp={950} children={
                 <View style={{ display: "flex", flexDirection: "column", gap: 10, alignItems:"center" }}>
-                    { HandlerShowImage(customerEditDTO.urlPhoto, customerEditDTO.amountFinancialLoansPending, 160, 160) }
-                  
+
+                    <ShowImageCustomer
+                        urlPhoto={customerEditDTO.urlPhoto}
+                        amountFinancialLoansPending={customerEditDTO.amountFinancialLoansPending}
+                        width={160}
+                        height={160}
+                    />
+                                      
                     {customerEditDTO.urlPhoto == null && customerEditDTO.firsName != undefined &&
                         <View style={{ width: 130, height: 130, borderRadius:80, borderWidth:2, backgroundColor:  customerDTOFilter.amountFinancialLoansPending > 0 ? textColorError : textColorSecondary, borderColor:'rgb(18, 93, 179)', alignContent:"center", alignItems:"center", justifyContent:"center" }}>
                             <TextComponent text={`${customerEditDTO.firsName.charAt(0)}${customerEditDTO.lastName.charAt(0)}`} color={"rgb(255, 255, 255)"} fontSize={30} fontWeight="800" textAlign={"center"} />
@@ -162,9 +174,9 @@ const MyClient = ({ navigation }:any) => {
                         <View style={{ display: "flex", flexDirection: "row", gap: 10, justifyContent: "space-between" }}>
                             <View style={{ display: "flex", flexDirection: "row", gap: 10 }}>
                                 <Ionicons name="ribbon-outline" size={26} color={textColorSuccess} />
-                                <TextComponent textAlign="center" color={textColorPrimary} fontSize={12} text={`Financiamentos Realizados`} />
+                                <TextComponent textAlign="center" color={textColorPrimary} fontSize={12} text={`Financiamentos Ativos`} />
                             </View>
-                            <TextComponent textAlign="center" color={textColorPrimary} fontSize={12} text={`${Object.entries(customerEditDTO).length > 0 ? customerEditDTO.amountFinancialLoans.toString() : ""}`} />
+                            <TextComponent textAlign="center" color={textColorPrimary} fontSize={12} text={`${Object.entries(customerEditDTO).length > 0 ? customerEditDTO.amountFinancialLoansOpen + customerEditDTO.amountFinancialLoansPending : ""}`} />
                         </View>
                     </TouchableOpacity>
 

@@ -198,15 +198,17 @@ public class FinancialLoansService {
         paidAux.setAmountPaid(valuePaid);
 
         if(paidAux.getFinancialLoans().getModalityFinancing() == ModalityFinancing.ONEROUS_LOAN){
+
             paidAux.setAmountPaidOnerous(paidAux.getAmountPaidOnerous() + paid.getAmountPaid());
             paidAux.setAmountPaid(paid.getAmountPaid());
-            if(Objects.equals(paidAux.getAmountPaid(), (DateUtil.CalculateTheDifferenceInDaysBetweenTwoDates(
+            if(paidAux.getAmountPaid() + paidAux.getAmountPaidOnerous() >= (DateUtil.CalculateTheDifferenceInDaysBetweenTwoDates(
                     paidAux.getFinancialLoans().getDateCreateFinancial(),
                     LocalDate.now()
-                ) * paidAux.getValueDiary()) - paidAux.getAmountPaidOnerous()
-            )){
+                ) * paidAux.getValueDiary())
+            ){
                 paidAux.setDueDate(LocalDate.now().plusMonths(1));
                 paidAux.setAmountPaid((double) 0);
+                paidAux.getFinancialLoans().setHasADelay(false);
             }
             if(Objects.equals(paidAux.getCurrencyValue(), paid.getAmountPaid())){
                 paidAux.setDueDate(LocalDate.now());

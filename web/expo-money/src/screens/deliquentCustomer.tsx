@@ -101,7 +101,14 @@ const DelinquentCustomerScreen = () => {
                                 gap: 10
                             }}>
                                 <View style={{ display: "flex", flexDirection: "row", alignItems:"center", justifyContent:"space-between", gap: 10 }}>
-                                    <ShowImageCustomer urlPhoto={item.urlPhoto} width={60} height={60} amountFinancialLoansPending={1} />
+                                    <ShowImageCustomer 
+                                        urlPhoto={item.urlPhoto} 
+                                        width={60} 
+                                        height={60} 
+                                        amountFinancialLoansPending={1} 
+                                        firsName={item.firstName} 
+                                        lastName={item.lastName}
+                                    />
                                     <TextComponent text={`${item.firstName} ${item.lastName}`} color={textColorPrimary} fontSize={14} textAlign={"center"} />
                                 </View>
                                 <View style={{ display: "flex", flexDirection: "row", alignItems:"center", justifyContent:"space-between", gap: 10 }}>

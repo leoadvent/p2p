@@ -131,14 +131,12 @@ const MyClient = ({ navigation }:any) => {
                                     <ShowImageCustomer 
                                         urlPhoto={item.urlPhoto} 
                                         amountFinancialLoansPending={item.amountFinancialLoansPending} 
+                                        firsName={item.firsName}
+                                        lastName={item.lastName}
                                         width={80}
                                         height={80}
                                     />
-                                    {item.urlPhoto == null &&
-                                        <View style={{ width: 85, height: 85, borderRadius:50, borderWidth:2, backgroundColor:  item.amountFinancialLoansPending > 0 ? textColorError : textColorSecondary, borderColor:'rgb(18, 93, 179)', alignContent:"center", alignItems:"center", justifyContent:"center" }}>
-                                            <TextComponent text={`${item.firsName.charAt(0)}${item.lastName.charAt(0)}`} color={"rgb(255, 255, 255)"} fontSize={28} textAlign={"center"} fontWeight="800" />
-                                        </View>
-                                    }
+                                    
                                 </View>
                                 <View style={{ display:'flex', flexDirection:'column', justifyContent:"center", marginRight: 15 }}>
                                     <TextComponent textAlign="center" color={item.amountFinancialLoansPending > 0 ? textColorError : textColorPrimary} fontSize={24} text={item.firsName} />
@@ -157,15 +155,13 @@ const MyClient = ({ navigation }:any) => {
                     <ShowImageCustomer
                         urlPhoto={customerEditDTO.urlPhoto}
                         amountFinancialLoansPending={customerEditDTO.amountFinancialLoansPending}
+                        firsName={customerEditDTO.firsName}
+                        lastName={customerEditDTO.lastName}
                         width={160}
                         height={160}
                     />
                                       
-                    {customerEditDTO.urlPhoto == null && customerEditDTO.firsName != undefined &&
-                        <View style={{ width: 130, height: 130, borderRadius:80, borderWidth:2, backgroundColor:  customerDTOFilter.amountFinancialLoansPending > 0 ? textColorError : textColorSecondary, borderColor:'rgb(18, 93, 179)', alignContent:"center", alignItems:"center", justifyContent:"center" }}>
-                            <TextComponent text={`${customerEditDTO.firsName.charAt(0)}${customerEditDTO.lastName.charAt(0)}`} color={"rgb(255, 255, 255)"} fontSize={30} fontWeight="800" textAlign={"center"} />
-                        </View>
-                    }
+                  
                     <TouchableOpacity style={{ 
                         gap: 4, 
                         backgroundColor: backgroundPrimary,padding: 10, borderRadius: 5, width: width - 120 }}

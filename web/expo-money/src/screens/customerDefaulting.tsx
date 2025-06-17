@@ -54,7 +54,14 @@ const CustomerDefaulting = ({ navigation }:any) => {
                                     <View style={{ display: "flex", justifyContent:"center", alignItems:"center", width:30 }}>
                                         <Ionicons name="ribbon-outline" size={30} color={textColorError} />
                                     </View>
-                                    <ShowImageCustomer urlPhoto={item.urlPhoto} width={60} height={60} amountFinancialLoansPending={0} />
+                                    <ShowImageCustomer 
+                                        urlPhoto={item.urlPhoto} 
+                                        width={60} 
+                                        height={60} 
+                                        amountFinancialLoansPending={0} 
+                                        firsName={item.lastName}
+                                        lastName={item.lastName}
+                                    />
                                     <TextComponent text={`${item.firsName} ${item.lastName}`} color={textColorPrimary} fontSize={16} textAlign={"center"} />
                                 </View>
                             </TouchableOpacity>

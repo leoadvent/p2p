@@ -1,12 +1,15 @@
 import { Dimensions, FlatList, TouchableOpacity, View } from "react-native"
 import BaseScreens from "./BaseScreens"
 import TextComponent from "../components/text/text"
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { CustomerDTO } from "../types/customerDTO"
 import api from "../integration/axiosconfig"
 import { flatListBorderColor, textColorError, textColorPrimary, textColorSuccess, textColorWarning } from "../constants/colorsPalette "
 import { Ionicons } from "@expo/vector-icons"
 import { stylesGlobal } from "../constants/styles"
+import ShowImageCustomer from "../components/showImageCustomer"
+import { useFocusEffect } from '@react-navigation/native' 
+import React from "react"
 
 const CustomerDefaulting = ({ navigation }:any) => {
 
@@ -14,13 +17,17 @@ const CustomerDefaulting = ({ navigation }:any) => {
 
     const width = Dimensions.get("window").width;
 
-    useEffect(() => {
-        api.get('/customer/defaulting').then((response) => {
-            setCustomerDefaulting(response.data)
-        }).catch((error) => {
-            alert(error)
-        })
-    },[])
+
+    useFocusEffect(
+        React.useCallback(() => {
+             api.get('/customer/defaulting').then((response) => {
+                setCustomerDefaulting(response.data)
+            }).catch((error) => {
+                alert(error)
+            })
+        }, [])
+    )
+
     return(
         <BaseScreens title=" ">
              <View style={ stylesGlobal.viewComponentBaseScree}>
@@ -31,7 +38,7 @@ const CustomerDefaulting = ({ navigation }:any) => {
                         keyExtractor={(item) => item.id}
                         renderItem={({ item }) => (
                             <TouchableOpacity
-                                onPress={() => navigation.navigate("FinanciamentoPendentePorCliente", {customerId: item.id })}
+                                onPress={() => navigation.navigate("FinanciamentoPendentePorCliente", {customerId: item.id, financingTypeFilter: "LATE" })}
                             >
                                 <View style={{ 
                                     display: "flex",
@@ -44,11 +51,10 @@ const CustomerDefaulting = ({ navigation }:any) => {
                                     borderRadius: 5,
                                     padding: 10,
                                 }}>
-                                    <View style={{ display: "flex", flexDirection: "row", alignItems:"center", justifyContent: "space-between", gap: 10 }}>
-                                        <Ionicons name="ribbon-outline" size={14} color={textColorError} />
-                                        <TextComponent text={`${item.amountFinancialLoansPending}`} color={textColorPrimary} fontSize={16} textAlign={"center"} />
+                                    <View style={{ display: "flex", justifyContent:"center", alignItems:"center", width:30 }}>
+                                        <Ionicons name="ribbon-outline" size={30} color={textColorError} />
                                     </View>
-                                    
+                                    <ShowImageCustomer urlPhoto={item.urlPhoto} width={60} height={60} amountFinancialLoansPending={0} />
                                     <TextComponent text={`${item.firsName} ${item.lastName}`} color={textColorPrimary} fontSize={16} textAlign={"center"} />
                                 </View>
                             </TouchableOpacity>

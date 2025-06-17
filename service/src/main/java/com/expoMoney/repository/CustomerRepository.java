@@ -28,6 +28,8 @@ public interface CustomerRepository extends JpaRepository<Customer, UUID> {
     WHERE
         lp.amountPaid < lp.currencyValue
         AND lp.dueDate < CURRENT_DATE
+        AND fl.settled = false
+        AND fl.executedPledge = false
     """)
     List<Customer> findByDefaulting();
 

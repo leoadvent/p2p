@@ -85,7 +85,7 @@ public class FinancialLoansPaid {
     }
 
     public String getCurrencyValueFormat(){
-        return StringUtils.formatCurrency(this.currencyValue);
+        return StringUtils.formatCurrency(this.currencyValue > 0 ? this.currencyValue : 0);
     }
 
     public String getAdditionForDaysOfDelayFormat(){
@@ -104,7 +104,8 @@ public class FinancialLoansPaid {
         if(this.valueDiary != null && this.valueDiary > 0){
             CalculateUtil.calculateValueTotalDiaryOnerousLoans(this);
         }
-        return StringUtils.formatCurrency(this.currencyValue - this.amountPaid);
+        double debit = this.currencyValue - this.amountPaid;
+        return StringUtils.formatCurrency(debit > 0 ? debit : 0);
     }
 
     public String getAmountPaidOnerousFormat(){

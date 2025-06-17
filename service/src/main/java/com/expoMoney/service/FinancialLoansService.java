@@ -214,6 +214,11 @@ public class FinancialLoansService {
                 paidAux.setDueDate(LocalDate.now());
                 paidAux.setAmountPaid(paid.getAmountPaid());
             }
+            if(paid.getAmountPaid() >= paidAux.getInstallmentValue()){
+                paidAux.getFinancialLoans().setSettled(true);
+                paidAux.getFinancialLoans().setHasADelay(false);
+                paidAux.setDuePayment(LocalDate.now());
+            }
         }
 
         paidAux.setDuePayment(Objects.equals(paidAux.getAmountPaid(), paidAux.getCurrencyValue()) ? LocalDate.now() : null);

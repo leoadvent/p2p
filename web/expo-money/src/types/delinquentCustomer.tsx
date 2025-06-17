@@ -5,6 +5,7 @@ export interface DelinquentCustomer {
     firstName: string,
     lastName: string,
     contact: string
+    urlPhoto: string
     dueDate: string
     loansPaid: FinancialLoansPaid
     daysOverdue: number

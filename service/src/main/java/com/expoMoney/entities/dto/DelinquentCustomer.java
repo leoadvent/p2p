@@ -20,6 +20,7 @@ public class DelinquentCustomer {
     private String firstName;
     private String lastName;
     private String contact;
+    private String urlPhoto;
     @JsonFormat(pattern = "dd/MM/yyyy")
     private LocalDate dueDate;
     private Double value;

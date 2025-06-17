@@ -11,6 +11,9 @@ import { FinancialLoansPaid } from "../types/financialLoans"
 import InputText from "../components/inputText"
 import { stylesGlobal } from "../constants/styles"
 import Contact from "../components/contact"
+import { useFocusEffect } from "@react-navigation/native"
+import React from "react"
+import ShowImageCustomer from "../components/showImageCustomer"
 
 const DelinquentCustomerScreen = () => {
 
@@ -64,13 +67,15 @@ const DelinquentCustomerScreen = () => {
         }
       };
 
-    useEffect(() => {
-        api.get("/financial/deliquentCustomer").then((response) => {
-            setDeliquentCustomers(response.data)
-        }).catch((error) => {
-            alert(error)
-        })
-    }, [refresh])
+    useFocusEffect(
+        React.useCallback(() => {
+            api.get("/financial/deliquentCustomer").then((response) => {
+                setDeliquentCustomers(response.data)
+            }).catch((error) => {
+                alert(error)
+            })
+        }, [refresh])
+    )
 
     const width = Dimensions.get("window").width;
      
@@ -96,19 +101,23 @@ const DelinquentCustomerScreen = () => {
                                 gap: 10
                             }}>
                                 <View style={{ display: "flex", flexDirection: "row", alignItems:"center", justifyContent:"space-between", gap: 10 }}>
-                                    <TextComponent text={`${item.firstName} ${item.lastName}`} color={textColorPrimary} fontSize={10} textAlign={"center"} />
-                                    <View style={{ display: "flex", flexDirection: "row", alignItems:"center", gap: 10 }}>
-                                    <Contact
-                                        phoneNumber={`${item.contact}`}
-                                        message={`👋 Olá ${item.firstName}, tudo bem?
-
-                                        💡 Estou entrando em contato para lembrar sobre a *parcela ${item.loansPaid.portion}* referente ao *contrato ${item.loansPaid.id.slice(0, item.loansPaid.id.indexOf('-'))}*, com vencimento em *${item.loansPaid.dueDate}*, que está em atraso há *${item.daysOverdue} dias*.
-
-                                        💰 O valor atualizado está em *${item.loansPaid.currencyValueFormat}*.
-
-                                        Se tiver qualquer dúvida, estou à disposição! 😊`}
-                                    />
+                                    <ShowImageCustomer urlPhoto={item.urlPhoto} width={60} height={60} amountFinancialLoansPending={1} />
+                                    <TextComponent text={`${item.firstName} ${item.lastName}`} color={textColorPrimary} fontSize={14} textAlign={"center"} />
                                 </View>
+                                <View style={{ display: "flex", flexDirection: "row", alignItems:"center", justifyContent:"space-between", gap: 10 }}>
+                                    
+                                    <View style={{ display: "flex", flexDirection: "row", alignItems:"center", gap: 10 }}>
+                                        <Contact
+                                            phoneNumber={`${item.contact}`}
+                                            message={`👋 Olá ${item.firstName}, tudo bem?
+
+                                            💡 Estou entrando em contato para lembrar sobre a *parcela ${item.loansPaid.portion}* referente ao *contrato ${item.loansPaid.id.slice(0, item.loansPaid.id.indexOf('-'))}*, com vencimento em *${item.loansPaid.dueDate}*, que está em atraso há *${item.daysOverdue} dias*.
+
+                                            💰 O valor atualizado está em *${item.loansPaid.currencyValueFormat}*.
+
+                                            Se tiver qualquer dúvida, estou à disposição! 😊`}
+                                        />
+                                    </View>
                                 </View>
                                 <View style={{ display: "flex", flexDirection: "row", alignItems:"center", justifyContent:"space-between", gap: 10 }}>
                                     <View style={{ display: "flex", flexDirection: "row", alignItems:"center", gap: 10 }}>

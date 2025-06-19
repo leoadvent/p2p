@@ -4,7 +4,7 @@ import { textColorError, textColorPrimary, textColorSecondary, textColorSuccess 
 interface Props {
     text: string
     color: typeof textColorPrimary | typeof textColorSecondary | typeof textColorError | typeof textColorSuccess
-    fontSize: 10 | 12 | 14 | 16 | 18 | 20 | 22 | 24 | 26 | 28 | 30
+    fontSize: 7 | 10 | 12 | 14 | 16 | 18 | 20 | 22 | 24 | 26 | 28 | 30
     fontWeight?: "100" | "200" | "300" | "400" | "500" | "600" | "700" | "800" | "900"
     textAlign: "left" | "right" | "center" | "justify" | "auto"
     key?: string

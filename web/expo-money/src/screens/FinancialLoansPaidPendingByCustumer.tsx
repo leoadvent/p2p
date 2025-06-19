@@ -1,7 +1,7 @@
 import { Dimensions, FlatList, KeyboardAvoidingView, View } from "react-native"
 import BaseScreens from "./BaseScreens"
 import TextComponent from "../components/text/text"
-import { backgroundOpacity, backgroundPrimary, backgroundSolid, flatListBackgroundColorpending, flatListBorderColor, textColorError, textColorPrimary, textColorSuccess, textColorWarning } from "../constants/colorsPalette "
+import { backgroundOpacity, backgroundPrimary, backgroundSolid, borderCollor, flatListBackgroundColorpending, flatListBorderColor, textColorError, textColorPrimary, textColorSuccess, textColorWarning } from "../constants/colorsPalette "
 import { useRoute } from "@react-navigation/native"
 import { SetStateAction, useEffect, useRef, useState } from "react"
 import { FinancialLoansPaid } from "../types/financialLoans"
@@ -11,6 +11,7 @@ import ButtonComponent from "../components/button"
 import api from "../integration/axiosconfig"
 import { stylesGlobal } from "../constants/styles"
 import ModalSystem from "../components/modal"
+import BalloonPayment from "../components/ballonPayment"
 
 const FinancialLoansPaidPendingByCustumer = () => {
 
@@ -92,15 +93,57 @@ const FinancialLoansPaidPendingByCustumer = () => {
                     <TextComponent text={`${item.dueDate}`} color={textColorPrimary} fontSize={10} textAlign={"auto"} />
                 </View>
                 <View style={{ display:item.amountPaid === item.currencyValue && item.amountPaid > 0 ? "none": "flex", flexDirection:"row", gap:10, width:"100%", justifyContent:"space-between"}}>
-                    <TextComponent text={`Valor: ${item.installmentValueFormat}`} color={textColorPrimary} fontSize={10} textAlign={"auto"} />
-                    {item.currencyValue > 0 && <TextComponent text={`Valor Atual: ${item.currencyValueFormat}`} color={textColorPrimary} fontSize={10} textAlign={"auto"} /> }
-                    {item.currencyValue > 0 && <TextComponent text={`Valor Pago: ${item.amountPaidFormat}`} color={textColorPrimary} fontSize={10} textAlign={"auto"} /> }
-                    {item.currencyValue === 0 && <TextComponent text={`Pagamento em Dia`} color={textColorPrimary} fontSize={10} textAlign={"auto"} /> }
+                   
+                   <BalloonPayment>
+                            <TextComponent text={`Valor`} color={textColorPrimary} fontSize={7} textAlign={"auto"} />
+                            <TextComponent text={`${item.installmentValueFormat}`} color={textColorPrimary} fontSize={12} textAlign={"auto"} />
+                    </BalloonPayment>
+                    
+                    {item.currencyValue > 0 && 
+                        <BalloonPayment>
+                            <TextComponent text={`Valor Atual`} color={textColorPrimary} fontSize={7} textAlign={"auto"} /> 
+                            <TextComponent text={`${item.currencyValueFormat}`} color={textColorPrimary} fontSize={12} textAlign={"auto"} /> 
+                        </BalloonPayment>
+                    }
+                     {item.dayLastPaymentOnerous > 0 && 
+                        <BalloonPayment>
+                            <TextComponent text={`Dias Corridos`} color={textColorPrimary} fontSize={7} textAlign={"auto"} />
+                            <TextComponent text={`${item.dayLastPaymentOnerous}`} color={textColorPrimary} fontSize={12} textAlign={"auto"} />
+                        </BalloonPayment>
+                    }
+                    {item.currencyValue === 0 &&
+                        <BalloonPayment>
+                           <TextComponent text={`Pagamento em Dia`} color={textColorPrimary} fontSize={12} textAlign={"auto"} /> 
+                        </BalloonPayment>
+                     }
                 </View>
-                <View style={{ display:item.amountPaidOnerous === 0 ? "none": "flex", flexDirection:"row", gap:10, width:"100%", justifyContent:"space-between"}}>
-                    {item.currencyValue > 0 && <TextComponent text={`Saldo Devedor: ${item.debitBalance}`} color={textColorPrimary} fontSize={10} textAlign={"auto"} />}
-                    {item.valueDiary > 0 && <TextComponent text={`Valor Arrecadado: ${item.amountPaidOnerousFormat}`} color={textColorPrimary} fontSize={10} textAlign={"auto"} />}
-                    {item.amortizedValue > 0 && <TextComponent text={`Amortizado: ${item.amortizedValueFormat}`} color={textColorPrimary} fontSize={10} textAlign={"auto"} /> }
+                <View style={{ display:item.amountPaid === item.currencyValue && item.amountPaid > 0 ? "none": "flex", flexDirection:"row", gap:10, width:"100%", justifyContent:"space-between"}}>
+                    {item.currencyValue > 0 && 
+                        <BalloonPayment>
+                            <TextComponent text={`Saldo Devedor`} color={textColorPrimary} fontSize={7} textAlign={"auto"} />
+                            <TextComponent text={`${item.debitBalance}`} color={textColorPrimary} fontSize={12} textAlign={"auto"} />
+                        </BalloonPayment>
+                    }
+                    {item.currencyValue > 0 && 
+                        <BalloonPayment>
+                            <TextComponent text={`Valor Pago`} color={textColorPrimary} fontSize={7} textAlign={"auto"} /> 
+                            <TextComponent text={`${item.amountPaidFormat}`} color={textColorPrimary} fontSize={12} textAlign={"auto"} /> 
+                        </BalloonPayment>
+                    }
+
+
+                    {item.valueDiary > 0 && 
+                        <BalloonPayment>
+                            <TextComponent text={`Arrecadado`} color={textColorPrimary} fontSize={7} textAlign={"auto"} />
+                            <TextComponent text={`${item.amountPaidOnerousFormat}`} color={textColorPrimary} fontSize={12} textAlign={"auto"} />
+                        </BalloonPayment>    
+                    }
+                    {item.amortizedValue > 0 && 
+                        <BalloonPayment>    
+                            <TextComponent text={`Amortizado`} color={textColorPrimary} fontSize={7} textAlign={"auto"} /> 
+                            <TextComponent text={`${item.amortizedValueFormat}`} color={textColorPrimary} fontSize={12} textAlign={"auto"} /> 
+                        </BalloonPayment>
+                    }
                 </View>
 
                 <View style={{ display:item.amountPaid === item.currencyValue && item.amountPaid > 0 ? "none": "flex", flexDirection:"row", gap:10, width:"100%", justifyContent:"space-between", alignItems:"flex-end"}}>

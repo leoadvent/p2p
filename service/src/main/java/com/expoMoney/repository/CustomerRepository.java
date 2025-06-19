@@ -65,6 +65,8 @@ public interface CustomerRepository extends JpaRepository<Customer, UUID> {
     WHERE
         (:#{#filter.firsName} IS NULL or LOWER(c.firsName) like %:#{#filter.firsName}%)
         AND (:#{#filter.lastName} IS NULL or LOWER(c.lastName) like %:#{#filter.lastName}%)
+    ORDER BY
+        c.firsName
     """)
     Page<CustomerFilterDTO> filterCustomer(Pageable pageable, @Param("filter") CustomerDTO filter);
 }

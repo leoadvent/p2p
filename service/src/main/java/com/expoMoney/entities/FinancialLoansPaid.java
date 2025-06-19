@@ -61,6 +61,8 @@ public class FinancialLoansPaid {
     private Double valueDiary;
     @Column(name = "executed_pledge")
     private Boolean executedPledge;
+    @Column(name = "last_payment_onerous")
+    private LocalDate lastPaymentOnerous;
 
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
@@ -127,6 +129,13 @@ public class FinancialLoansPaid {
         return DateUtil.CalculateTheDifferenceInDaysBetweenTwoDates(this.dueDate, dateNow);
     }
 
+    public Integer getDayLastPaymentOnerous(){
+        if(this.lastPaymentOnerous == null){
+            return null;
+        }
+        return DateUtil.CalculateTheDifferenceInDaysBetweenTwoDates(this.lastPaymentOnerous, LocalDate.now());
+    }
+
     @PrePersist
     private void prePersist(){
         this.setAmountPaid((double) 0);
@@ -155,6 +164,9 @@ public class FinancialLoansPaid {
 
     @PreUpdate
     private void preUpdate(){
+
+        lastPaymentOnerous = LocalDate.now();
+
         if (this.installmentValue != null) {
             BigDecimal value = BigDecimal.valueOf(this.installmentValue);
             this.installmentValue = value.setScale(2, RoundingMode.HALF_UP).doubleValue();

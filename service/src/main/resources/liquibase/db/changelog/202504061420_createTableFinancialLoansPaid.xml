@@ -85,5 +85,11 @@
         </addColumn>
     </changeSet>
 
+    <changeSet id="202504061420_10" author="Desenvolvedor Do Sistema" context="realm-only">
+        <addColumn tableName="TB_FINANCIAL_LOANS_PAID">
+            <column name="last_payment_onerous" type="DATE" />
+        </addColumn>
+    </changeSet>
+
 
 </databaseChangeLog>

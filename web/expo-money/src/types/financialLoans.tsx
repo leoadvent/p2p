@@ -30,6 +30,7 @@ export interface FinancialLoansPaid{
     executedPledge: boolean
     amortizedValue: number
     amortizedValueFormat: string
+    dayLastPaymentOnerous: number
 }
 
 export interface FinancialLoans {

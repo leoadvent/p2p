@@ -75,11 +75,14 @@ public class CustomerService {
 
     public Page<CustomerFilterDTO> findByFilter(CustomerDTO dto, Pageable pageable){
 
-        String[] split = dto.getFirsName().split(" ");
-        dto.setFirsName(split[0].toLowerCase());
 
-        if(split.length > 1){
-            dto.setLastName(split[1].toLowerCase());
+        if(dto.getFirsName() != null) {
+            String[] split = dto.getFirsName().split(" ");
+            dto.setFirsName(split[0].toLowerCase());
+
+            if (split.length > 1) {
+                dto.setLastName(split[1].toLowerCase());
+            }
         }
 
         Page<CustomerFilterDTO> filterDTOS = repository.filterCustomer(pageable, dto);

@@ -88,6 +88,13 @@ public class FinancialLoansPaid {
         return StringUtils.formatCurrency(this.currencyValue > 0 ? this.currencyValue : 0);
     }
 
+    public Double getAmortizedValue(){
+        return Math.abs(this.currencyValue < 0 ? this.currencyValue : 0);
+    }
+    public String getAmortizedValueFormat(){
+        return StringUtils.formatCurrency(Math.abs(this.currencyValue < 0 ? this.currencyValue : 0));
+    }
+
     public String getAdditionForDaysOfDelayFormat(){
         return StringUtils.formatCurrency(this.additionForDaysOfDelay);
     }

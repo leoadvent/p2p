@@ -1,6 +1,7 @@
 package com.expoMoney.repository;
 
 import com.expoMoney.entities.Customer;
+import com.expoMoney.entities.dto.CustomerDTO;
 import com.expoMoney.entities.dto.CustomerFilterDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -61,6 +62,9 @@ public interface CustomerRepository extends JpaRepository<Customer, UUID> {
     )
     FROM
         Customer c
+    WHERE
+        (:#{#filter.firsName} IS NULL or LOWER(c.firsName) like %:#{#filter.firsName}%)
+        AND (:#{#filter.lastName} IS NULL or LOWER(c.lastName) like %:#{#filter.lastName}%)
     """)
-    Page<CustomerFilterDTO> filterCustomer(Pageable pageable);
+    Page<CustomerFilterDTO> filterCustomer(Pageable pageable, @Param("filter") CustomerDTO filter);
 }

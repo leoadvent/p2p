@@ -1,6 +1,6 @@
 import { Alert, Linking, TouchableOpacity, View } from "react-native";
 import TextComponent from "../text/text";
-import { textColorPrimary, textColorSecondary, textColorWarning } from "@/src/constants/colorsPalette ";
+import { buttonBackgroundColorCall, buttonBackgroundColorWhatssapp, textColorPrimary, textColorSecondary, textColorWarning } from "@/src/constants/colorsPalette ";
 import { Ionicons } from "@expo/vector-icons";
 
 interface Props {
@@ -34,7 +34,7 @@ const Contact = ({ phoneNumber, message = "Olá!", showText = true }: Props) => 
         <View style={{ flexDirection: "row", gap: 10 }}>
             <TouchableOpacity
                 onPress={openWhatsApp}
-                style={{ display:"flex", flexDirection:"row", gap:10, padding: 10, backgroundColor: "#25D366", borderRadius: 5 }}
+                style={{ display:"flex", flexDirection:"row", gap:10, padding: 10, backgroundColor: buttonBackgroundColorWhatssapp, borderRadius: 5 }}
             >
                 <Ionicons name="logo-whatsapp" size={15} color={textColorSecondary}/>
                 {showText && <TextComponent text={"WhatsApp"} color={textColorPrimary} fontSize={10} textAlign={"auto"} />}
@@ -42,7 +42,7 @@ const Contact = ({ phoneNumber, message = "Olá!", showText = true }: Props) => 
 
             <TouchableOpacity
                 onPress={makeCall}
-                style={{ display:"flex", flexDirection:"row", gap:10, padding: 10, backgroundColor: "#007AFF", borderRadius: 5 }}
+                style={{ display:"flex", flexDirection:"row", gap:10, padding: 10, backgroundColor: buttonBackgroundColorCall, borderRadius: 5 }}
             >
                 <Ionicons name="call-outline" size={15} color={textColorWarning}/>
                 {showText && <TextComponent text={"Ligar"} color={textColorPrimary} fontSize={10} textAlign={"auto"} />}

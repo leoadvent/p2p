@@ -5,8 +5,8 @@ import lombok.Getter;
 @Getter
 public enum ModalityFinancing {
 
-    FINANCING(1, "Financiamento"),
-    ONEROUS_LOAN(2, "Mútuo Oneroso");
+    FINANCING(1, "Parcelado"),
+    ONEROUS_LOAN(2, "Carência de Capital");
 
     private final int cod;
     private final String description;

@@ -149,7 +149,7 @@ const MyClient = ({ navigation }:any) => {
                 />
                 
             </View>
-            <ModalSystem title={`${titleModal}`} heightProp={950} children={
+            <ModalSystem title={`${titleModal}`} heightProp={850} children={
                 <View style={{ display: "flex", flexDirection: "column", gap: 10, alignItems:"center" }}>
 
                     <ShowImageCustomer
@@ -170,12 +170,13 @@ const MyClient = ({ navigation }:any) => {
                         <View style={{ display: "flex", flexDirection: "row", gap: 10, justifyContent: "space-between" }}>
                             <View style={{ display: "flex", flexDirection: "row", gap: 10 }}>
                                 <Ionicons name="ribbon-outline" size={26} color={textColorSuccess} />
-                                <TextComponent textAlign="center" color={textColorPrimary} fontSize={12} text={`Financiamentos Ativos`} />
+                                <TextComponent textAlign="center" color={textColorPrimary} fontSize={12} text={`Emprétismo Ativos`} />
                             </View>
                             <TextComponent textAlign="center" color={textColorPrimary} fontSize={12} text={`${Object.entries(customerEditDTO).length > 0 ? customerEditDTO.amountFinancialLoansOpen + customerEditDTO.amountFinancialLoansPending : ""}`} />
                         </View>
                     </TouchableOpacity>
 
+                    {/*
                     <TouchableOpacity style={{ 
                         gap: 4, 
                         backgroundColor: backgroundPrimary,padding: 10, borderRadius: 5, width: width - 120 }}
@@ -184,12 +185,12 @@ const MyClient = ({ navigation }:any) => {
                         <View style={{ display: "flex", flexDirection: "row", gap: 10, justifyContent: "space-between" }}>
                             <View style={{ display: "flex", flexDirection: "row", gap: 10 }}>
                                 <Ionicons name="ribbon-outline" size={26} color={textColorWarning} />
-                                <TextComponent textAlign="center" color={textColorPrimary} fontSize={12} text={`Financiamentos Aberto`} />
+                                <TextComponent textAlign="center" color={textColorPrimary} fontSize={12} text={`Emprétismo Aberto`} />
                             </View>
                             <TextComponent textAlign="center" color={textColorPrimary} fontSize={12} text={`${Object.entries(customerEditDTO).length > 0 ? customerEditDTO.amountFinancialLoansOpen.toString() : ""}`} />
                         </View>
                     </TouchableOpacity>
-
+                     */}
                     <TouchableOpacity style={{ 
                         gap: 4, 
                         backgroundColor: backgroundPrimary,padding: 10, borderRadius: 5, width: width - 120 }}
@@ -198,7 +199,7 @@ const MyClient = ({ navigation }:any) => {
                         <View style={{ display: "flex", flexDirection: "row", gap: 10 , justifyContent: "space-between"}}>
                             <View style={{ display: "flex", flexDirection: "row", gap: 10 }}>
                                 <Ionicons name="ribbon-outline" size={26} color={textColorError} />
-                                <TextComponent textAlign="center" color={textColorPrimary} fontSize={12} text={`Financiamentos Atrasado`} />
+                                <TextComponent textAlign="center" color={textColorPrimary} fontSize={12} text={`Emprétismo Atrasado`} />
                             </View>
                             <TextComponent textAlign="center" color={textColorPrimary} fontSize={12} text={`${Object.entries(customerEditDTO).length > 0 ? customerEditDTO.amountFinancialLoansPending.toString(): ""}`} />
                         </View>

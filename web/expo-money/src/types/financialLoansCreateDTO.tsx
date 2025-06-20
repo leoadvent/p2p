@@ -1,8 +1,8 @@
 import { CustomerCommitmentItemDTO } from "./customerCommitmentItemDTO"
 
 export enum ModalityFinancing {
-    FINANCING = "Financiamento",
-    ONEROUS_LOAN = "Mútuo Oneroso",
+    FINANCING = "PARCELADO",
+    ONEROUS_LOAN = "CARÊNCIA DE CAPITAL",
 }
 
 export interface FinancialLoansCreateDTO {

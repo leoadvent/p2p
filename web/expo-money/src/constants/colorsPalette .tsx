@@ -20,12 +20,14 @@ export const inputTextColor         = "rgb(52, 53, 51)";
 export const inputBorderColor       = "rgb(37, 36, 36)";
 export const inputBorderColorErro   = "rgb(240, 174, 174)";
 
-export const buttonBackgroundColorPrimary   = "rgb(0, 122, 255)";
+export const buttonBackgroundColorPrimary   = "rgb(9, 69, 134)";
 export const buttonBackgroundColorSecondary = "rgb(255, 255, 255)";
 export const buttonBackgroundColorWarning   = "rgb(221, 188, 1)";
 export const buttonBackgroundColorSuccess   = "rgb(52, 199, 89)";
 export const buttonBackgroundColorError     = "rgb(240, 174, 174)";
 export const buttonBackgroundColorDisabled  = "rgb(200, 200, 200)";
+export const buttonBackgroundColorWhatssapp = "rgb(9, 107, 33)";
+export const buttonBackgroundColorCall      = "rgb(32, 34, 138)";
 
 export const flatListBorderColor            = "rgb(110, 110, 110)";
 export const flatListBackgroundColorpending = "rgba(252, 1, 1, 0.18)";

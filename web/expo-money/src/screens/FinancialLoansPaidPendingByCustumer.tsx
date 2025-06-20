@@ -81,34 +81,35 @@ const FinancialLoansPaidPendingByCustumer = () => {
             >
                
                 <View style={{ display:item.amountPaid === item.currencyValue && item.amountPaid > 0 ? "none": "flex", flexDirection:"row", gap:10, width:"100%", justifyContent:"space-between"}}>
-                    <Ionicons name="pricetag-outline" size={15} color={textColorWarning}/>
-                    <TextComponent text={`${item.rate}%`} color={textColorPrimary} fontSize={10} textAlign={"auto"}/> 
-                    <View style={{ display: item.rate === item.interestDelay ? "none":"flex", flexDirection:"row", gap:5, alignItems:"center"}}>
-                        <Ionicons name="pricetag-outline" size={15} color={textColorError}/>
-                        <TextComponent text={`${item.interestDelay}%`} color={textColorPrimary} fontSize={10} textAlign={"auto"}/> 
+                    <View style={{display:"flex", flexDirection:"row", gap:10, alignItems:"center"}}>
+                        <TextComponent text={`%`} color={textColorWarning} fontSize={30} textAlign={"auto"}/> 
+                        <TextComponent text={`${item.rate}`} color={textColorPrimary} fontSize={20} textAlign={"auto"}/> 
                     </View>
-                    <Ionicons name="calendar-clear-outline" size={15} color={textColorError}/>
-                    <TextComponent text={`${item.additionForDaysOfDelayFormat}`} color={textColorPrimary} fontSize={10} textAlign={"auto"}/> 
-                    <Ionicons name="calendar-number-outline" size={15} color={item.lateInstallment ? textColorError : textColorSuccess}/>
-                    <TextComponent text={`${item.dueDate}`} color={textColorPrimary} fontSize={10} textAlign={"auto"} />
+                    <View style={{display:"flex", flexDirection:"row", gap:10, alignItems:"center"}}>
+                        <Ionicons name="calendar-number" size={20} color={textColorWarning}/>
+                        <TextComponent text={`${item.additionForDaysOfDelayFormat}`} color={textColorPrimary} fontSize={24} textAlign={"auto"}/> 
+                    </View>
                 </View>
-                <View style={{ display:item.amountPaid === item.currencyValue && item.amountPaid > 0 ? "none": "flex", flexDirection:"row", gap:10, width:"100%", justifyContent:"space-between"}}>
+                <View style={{ display:item.amountPaid === item.currencyValue && item.amountPaid > 0 ? "none": "flex", flexDirection:"row", flexWrap:"wrap", gap:10, width:"100%", justifyContent:"center"}}>
+                    <TextComponent text={`Vencimento: ${item.dueDate}`} color={textColorPrimary} fontSize={20} textAlign={"center"} />
+                </View>
+                <View style={{ display:item.amountPaid === item.currencyValue && item.amountPaid > 0 ? "none": "flex", flexDirection:"row", flexWrap:"wrap", gap:10, width:"100%", justifyContent:"space-between"}}>
                    
                    <BalloonPayment>
-                            <TextComponent text={`Valor`} color={textColorPrimary} fontSize={7} textAlign={"auto"} />
+                            <TextComponent text={`Valor`} color={textColorPrimary} fontSize={12} textAlign={"auto"} />
                             <TextComponent text={`${item.installmentValueFormat}`} color={textColorPrimary} fontSize={12} textAlign={"auto"} />
                     </BalloonPayment>
                     
                     {item.currencyValue > 0 && 
                         <BalloonPayment>
-                            <TextComponent text={`Valor Atual`} color={textColorPrimary} fontSize={7} textAlign={"auto"} /> 
-                            <TextComponent text={`${item.currencyValueFormat}`} color={textColorPrimary} fontSize={12} textAlign={"auto"} /> 
+                            <TextComponent text={`Valor Atual`} color={textColorPrimary} fontSize={12} textAlign={"auto"} /> 
+                            <TextComponent text={`${item.currencyValueFormat}`} color={textColorPrimary} fontSize={16} textAlign={"auto"} /> 
                         </BalloonPayment>
                     }
                      {item.dayLastPaymentOnerous > 0 && 
                         <BalloonPayment>
-                            <TextComponent text={`Dias Corridos`} color={textColorPrimary} fontSize={7} textAlign={"auto"} />
-                            <TextComponent text={`${item.dayLastPaymentOnerous}`} color={textColorPrimary} fontSize={12} textAlign={"auto"} />
+                            <TextComponent text={`Dias Corridos`} color={textColorPrimary} fontSize={12} textAlign={"auto"} />
+                            <TextComponent text={`${item.dayLastPaymentOnerous}`} color={textColorPrimary} fontSize={16} textAlign={"auto"} />
                         </BalloonPayment>
                     }
                     {item.currencyValue === 0 &&
@@ -120,21 +121,19 @@ const FinancialLoansPaidPendingByCustumer = () => {
                 <View style={{ display:item.amountPaid === item.currencyValue && item.amountPaid > 0 ? "none": "flex", flexDirection:"row", gap:10, width:"100%", justifyContent:"space-between"}}>
                     {item.currencyValue > 0 && 
                         <BalloonPayment>
-                            <TextComponent text={`Saldo Devedor`} color={textColorPrimary} fontSize={7} textAlign={"auto"} />
+                            <TextComponent text={`Devedor`} color={textColorPrimary} fontSize={12} textAlign={"auto"} />
                             <TextComponent text={`${item.debitBalance}`} color={textColorPrimary} fontSize={12} textAlign={"auto"} />
                         </BalloonPayment>
                     }
                     {item.currencyValue > 0 && 
                         <BalloonPayment>
-                            <TextComponent text={`Valor Pago`} color={textColorPrimary} fontSize={7} textAlign={"auto"} /> 
+                            <TextComponent text={`Valor Pago`} color={textColorPrimary} fontSize={12} textAlign={"auto"} /> 
                             <TextComponent text={`${item.amountPaidFormat}`} color={textColorPrimary} fontSize={12} textAlign={"auto"} /> 
                         </BalloonPayment>
                     }
-
-
                     {item.valueDiary > 0 && 
                         <BalloonPayment>
-                            <TextComponent text={`Arrecadado`} color={textColorPrimary} fontSize={7} textAlign={"auto"} />
+                            <TextComponent text={`Arrecadado`} color={textColorPrimary} fontSize={12} textAlign={"auto"} />
                             <TextComponent text={`${item.amountPaidOnerousFormat}`} color={textColorPrimary} fontSize={12} textAlign={"auto"} />
                         </BalloonPayment>    
                     }

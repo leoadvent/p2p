@@ -10,6 +10,7 @@ import { Ionicons } from "@expo/vector-icons"
 import { stylesGlobal } from "../constants/styles"
 import Contact from "../components/contact"
 import { ModalityFinancing } from "../types/financialLoansCreateDTO"
+import BalloonPayment from "../components/ballonPayment"
 
 const FinancialLoansPendingByCustumer = ({ navigation }:any) => {
 
@@ -68,46 +69,93 @@ const FinancialLoansPendingByCustumer = ({ navigation }:any) => {
                                                 backgroundColor: item.hasADelay  ? flatListBackgroundColorpending : 'transparent'
                                         }}
                                     >
-                                        <View style={{ display: "flex", flexDirection: "row", width: '100%', justifyContent: "space-between", alignItems: "center"}}>
-                                            <Ionicons name="ribbon-outline" size={14} color={item.totalInstallmentPending > 0 ? textColorError : textColorWarning} />
-                                            <TextComponent text={`Contrato: ${item.id.slice(0, item.id.indexOf('-'))}`} color={textColorPrimary} fontSize={14} textAlign={"center"} />
-                                            <Ionicons name="pricetag-outline" size={15} color={textColorWarning}/>
-                                            <TextComponent text={`${item.rate}%`} color={textColorPrimary} fontSize={14} textAlign={"center"} />
-                                            {item.modalityFinancing.toString() === 'FINANCING' && <>
-                                                <Ionicons name="pricetag-outline" size={15} color={textColorError}/>
-                                                <TextComponent text={`${item.lateInterest}%`} color={textColorPrimary} fontSize={14} textAlign={"center"} />
-                                            </> }
-                                            {item.modalityFinancing.toString() === 'ONEROUS_LOAN' && <>
-                                                <Ionicons name="calendar-outline" size={15} color={textColorError}/>
-                                                <TextComponent text={`${item.dateEndFinancialOnerousLoans}`} color={textColorPrimary} fontSize={14} textAlign={"center"} />
-                                            </> }
+                                        <View style={{ display: "flex", flexDirection: "row", gap:10, width: '100%', justifyContent: "space-between", alignItems: "center"}}>
+                                            <BalloonPayment>    
+                                                <View style={{ display: "flex", flexDirection: "row", gap: 5, alignItems: "center"}}>                                   
+                                                    <Ionicons name="ribbon-outline" size={14} color={item.totalInstallmentPending > 0 ? textColorError : textColorWarning} />
+                                                    <TextComponent text={`Contrato`} color={textColorPrimary} fontSize={20} textAlign={"center"} />
+                                                </View>
+                                                <TextComponent text={`${item.id.slice(0, item.id.indexOf('-'))}`} color={textColorPrimary} fontSize={20} textAlign={"center"} />
+                                            </BalloonPayment>
+                                            <BalloonPayment> 
+                                                <TextComponent text={`%`} color={textColorWarning} fontSize={20} textAlign={"auto"}/> 
+                                                <TextComponent text={`${item.rate}%`} color={textColorPrimary} fontSize={20} textAlign={"center"} />
+                                            </BalloonPayment>
+                                           
                                         </View>
-                                        <View style={{ display: "flex", flexDirection: "row", width: '100%', justifyContent: "flex-start", gap: 20, alignItems: "center"}}>
-                                            <Ionicons name="flag-outline" size={14} color={item.totalInstallmentPending > 0 ? textColorError : textColorWarning} /> 
-                                            <TextComponent text={`${item.modalityFinancingFormating}`} color={textColorPrimary} fontSize={14} textAlign={"center"} />
-                                            <Ionicons name="bag-outline" size={14} color={item.totalInstallmentPending > 0 ? textColorError : textColorWarning} /> 
-                                            <TextComponent text={`Tem Garantia? ${item.commitmentItems.length > 0 ? "Sim" : "Não"}`} color={textColorPrimary} fontSize={14} textAlign={"center"} />
+                                        {/*
+                                        <View>
+                                             <BalloonPayment> 
+                                                {item.modalityFinancing.toString() === 'FINANCING' && <>
+                                                    <Ionicons name="pricetag-outline" size={15} color={textColorError}/>
+                                                    <TextComponent text={`${item.lateInterest}%`} color={textColorPrimary} fontSize={14} textAlign={"center"} />
+                                                </> }
+                                                {item.modalityFinancing.toString() === 'ONEROUS_LOAN' && <>
+                                                    <Ionicons name="calendar-outline" size={15} color={textColorError}/>
+                                                    <TextComponent text={`${item.dateEndFinancialOnerousLoans}`} color={textColorPrimary} fontSize={14} textAlign={"center"} />
+                                                </> }
+                                            </BalloonPayment>
+                                        </View>
+                                        */}
+                                        <View style={{ display: "flex", flexDirection: "row", width: '100%', justifyContent: "flex-start", gap: 10, alignItems: "center"}}>
+                                            <BalloonPayment>
+                                                <Ionicons name="flag-outline" size={20} color={item.totalInstallmentPending > 0 ? textColorError : textColorWarning} /> 
+                                                <TextComponent text={`${item.modalityFinancingFormating}`} color={textColorPrimary} fontSize={20} textAlign={"center"} />
+                                            </BalloonPayment>
+                                            <BalloonPayment>
+                                                <View style={{ display: "flex", flexDirection: "row", gap: 5, alignItems: "center"}}>
+                                                    <Ionicons name="bag-outline" size={20} color={item.totalInstallmentPending > 0 ? textColorError : textColorWarning} /> 
+                                                    <TextComponent text={`Tem Garantia?`} color={textColorPrimary} fontSize={16} textAlign={"center"} />
+                                                </View>
+                                                <TextComponent text={`${item.commitmentItems.length > 0 ? "Sim" : "Não"}`} color={textColorPrimary} fontSize={20} textAlign={"center"} />
+                                            </BalloonPayment>
                                         </View>
 
-                                        <View style={{ display: "flex", flexDirection: "row", width: '100%', justifyContent: "flex-start", gap: 20, alignItems: "center"}}>
-                                            <Ionicons name="calendar-outline" size={14} color={item.totalInstallmentPending > 0 ? textColorError : textColorWarning} />
-                                            <TextComponent text={`Início: ${item.startMonth}/${item.startYear}`} color={textColorPrimary} fontSize={14} textAlign={"center"} />
-                                            <Ionicons name="calendar-outline" size={14} color={item.totalInstallmentPending > 0 ? textColorError : textColorWarning} />
-                                            <TextComponent text={`Fim: ${item.dateEndFinancialOnerousLoans}`} color={textColorPrimary} fontSize={14} textAlign={"center"} />
+                                        <View style={{ display: item.modalityFinancing.toString() === 'FINANCING' ? "flex" : "none", flexDirection: "row", width: '100%', gap: 10, justifyContent: "space-between", alignItems: "center"}}>
+                                            <BalloonPayment>
+                                                <View style={{ display: "flex", flexDirection: "row", gap: 5, alignItems: "center"}}>
+                                                    <Ionicons name="return-up-forward-outline" size={20} color={textColorWarning}/>
+                                                    <TextComponent text={`${item.loansPaids.length} parcelas`} color={textColorPrimary} fontSize={18} textAlign={"center"} />
+                                                </View>
+                                                <TextComponent text={`${item.loansPaids[0].installmentValueFormat}`} color={textColorPrimary} fontSize={18} textAlign={"center"} />
+                                            </BalloonPayment>
+                                            <BalloonPayment>
+                                                <View style={{ display: "flex", flexDirection: "row", gap: 5, alignItems: "center"}}>
+                                                    <Ionicons name="return-up-forward-outline" size={18} color={textColorError}/>
+                                                    <TextComponent text={`Atraso`} color={textColorPrimary} fontSize={18} textAlign={"center"} />
+                                                </View>
+                                                <TextComponent text={`${item.totalInstallmentPending}`} color={textColorPrimary} fontSize={18} textAlign={"center"} />
+                                            </BalloonPayment>
                                         </View>
 
-                                        <View style={{ display: item.modalityFinancingFormating === "Mútuo Oneroso" ? "flex" : "none", flexDirection: "row", width: '100%', justifyContent: "flex-start", gap: 20, alignItems: "center"}}>
-                                            <Ionicons name="wallet-outline" size={14} color={item.totalInstallmentPending > 0 ? textColorError : textColorWarning} />
-                                            <TextComponent text={`Diária: ${item.additionForDaysOfDelayFormat}`} color={textColorPrimary} fontSize={14} textAlign={"center"} />
+                                        <View style={{ display: "flex", flexDirection: "row", width: '100%'}}>
+                                            <BalloonPayment>
+                                                <View style={{ display: "flex", flexDirection: "row",  width: '100%', justifyContent:"space-around", gap: 5, alignItems: "center"}}>
+                                                    <View style={{ display: "flex", flexDirection: "column", gap: 5, alignItems: "center"}}>
+                                                        <View style={{ display: "flex", flexDirection: "row", gap: 5, alignItems: "center"}}>
+                                                            <Ionicons name="calendar-outline" size={18} color={item.totalInstallmentPending > 0 ? textColorError : textColorWarning} />
+                                                            <TextComponent text={`Início`} color={textColorPrimary} fontSize={18} textAlign={"center"} />
+                                                        </View>
+                                                        <TextComponent text={`${item.startMonth}/${item.startYear}`} color={textColorPrimary} fontSize={18} textAlign={"center"} />
+                                                    </View>
+                                                    <View style={{ display: "flex", flexDirection: "column", gap: 5, alignItems: "center"}}>
+                                                        <View style={{ display: "flex", flexDirection: "row", gap: 5, alignItems: "center"}}>
+                                                            <Ionicons name="calendar-outline" size={18} color={item.totalInstallmentPending > 0 ? textColorError : textColorWarning} />
+                                                            <TextComponent text={`Fim`} color={textColorPrimary} fontSize={18} textAlign={"center"} />
+                                                        </View>
+                                                        <TextComponent text={`${item.dateEndFinancialOnerousLoans}`} color={textColorPrimary} fontSize={18} textAlign={"center"} />
+                                                    </View>
+                                                    <View style={{ display: item.modalityFinancingFormating === "Carência de Capital" ? "flex" : "none", flexDirection: "column", alignItems: "center"}}>
+                                                        <View style={{ display: "flex", flexDirection: "row", gap: 5, alignItems: "center"}}>
+                                                            <Ionicons name="wallet-outline" size={14} color={item.totalInstallmentPending > 0 ? textColorError : textColorWarning} />
+                                                            <TextComponent text={`Diária`} color={textColorPrimary} fontSize={14} textAlign={"center"} />
+                                                        </View>
+                                                        <TextComponent text={`${item.additionForDaysOfDelayFormat}`} color={textColorPrimary} fontSize={14} textAlign={"center"} />
+                                                    </View>
+                                                </View>
+                                            </BalloonPayment>
                                         </View>
-                                        
-                                        <View style={{ display: item.modalityFinancing.toString() === 'FINANCING' ? "flex" : "none", flexDirection: "row", width: '100%', justifyContent: "space-between", alignItems: "center"}}>
-                                            <Ionicons name="return-up-forward-outline" size={15} color={textColorWarning}/>
-                                            <TextComponent text={`${item.loansPaids.length} parcelas de ${item.loansPaids[0].installmentValueFormat}`} color={textColorPrimary} fontSize={14} textAlign={"center"} />
-                                            <Ionicons name="return-up-forward-outline" size={15} color={textColorError}/>
-                                            <TextComponent text={`Atraso: ${item.totalInstallmentPending}`} color={textColorPrimary} fontSize={14} textAlign={"center"} />
-                                        </View>
-                                        
+
                                     </View>
                                 </TouchableOpacity>
                             )}

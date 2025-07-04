@@ -66,5 +66,26 @@ export function useCustomerDataBase() {
         }
     }
 
-    return {create}
+    async function buscarPorNome(nome:string) {
+        try {
+            let firstName = `%${nome}%`;
+            let lastName = `%${nome}%`;
+
+            const response = dataBase.getAllAsync<CUSTOMER>(`
+                SELECT 
+                    * 
+                FROM 
+                    CUSTOMER c
+                    LEFT JOIN ENDERECO e ON c.endereco_id = e.id
+                WHERE firstName LIKE '%${firstName}%' OR lastName LIKE '%${lastName}%'`);
+
+                console.log("buscarPorNome - response", response);
+                return response;
+        }catch (error) {
+            console.error("Error:", error);
+            throw error;
+        }
+    }
+
+    return {create, buscarPorNome}
 }

@@ -64,6 +64,8 @@ const FormularioCustomer = () => {
                 editable={true} 
                 onChangeText={(text) => setCustomer({...customer, contact: text})} 
                 value={customer.contact} 
+                phone={true}
+                keyboardType="phone-pad"
             />
 
              <InputText 
@@ -71,6 +73,8 @@ const FormularioCustomer = () => {
                 placeholder="Digite o CEP"
                 width={300}  
                 editable={true} 
+                cep={true}
+                keyboardType="numeric"
                 onChangeText={(text) => setCustomer({
                     ...customer,
                     endereco: {...customer.endereco, cep: text}

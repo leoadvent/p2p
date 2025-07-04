@@ -9,7 +9,7 @@ interface Props {
     isSpinner?: boolean
     isDisabled?: boolean
     typeButton: "primary" | "secondary" | "warning" | "success" | "error"
-    width: "100%" | "50%" | "25%" | "30%" | "40%"
+    width: number | "auto"
 }
 
 const ButtonComponent = ({ nameButton, onPress, typeButton, isDisabled, isSpinner, width } : Props ) => {
@@ -58,7 +58,7 @@ const ButtonComponent = ({ nameButton, onPress, typeButton, isDisabled, isSpinne
                     flexDirection: "row",
                     justifyContent: "center",
                     alignItems: "center",
-                    width: "100%",
+                    width: width,
                     height: 45,
                     gap: 10,
                     backgroundColor: isDisabled ? buttonBackgroundColorDisabled : backgroundButton,
@@ -69,7 +69,13 @@ const ButtonComponent = ({ nameButton, onPress, typeButton, isDisabled, isSpinne
                 }}    
             >
                 <ActivityIndicator style={{ display: isSpinner ? "flex": "none" }}/>
-                <TextComponent fontSize={14} text={nameButton} fontWeight="700" textAlign="center" color={colorTextBlack ? textColorSecondary : textColorPrimary}/>
+                <TextComponent 
+                    fontSize={14} 
+                    text={nameButton} 
+                    fontWeight="700" 
+                    textAlign="center" 
+                    color={colorTextBlack ? textColorSecondary : textColorPrimary}
+                />
             </TouchableOpacity>
         </View>
     )

@@ -118,8 +118,17 @@ const FormularioCustomer = () => {
                 value={customer.endereco?.numero ?? ""} 
             />
 
-            <ButtonComponent nameButton={"SALVAR"} onPress={handlerSave} typeButton={"success"} width={"100%"} />
-            <ButtonComponent nameButton={"LIMPAR"} onPress={handlerClear} typeButton={"warning"} width={"100%"} />
+            <View style={{ 
+                display: "flex", 
+                flexDirection: "row", 
+                flexWrap:"wrap", 
+                gap: 10, 
+                marginTop: 20 ,
+                justifyContent: "center"
+            }}>
+                <ButtonComponent nameButton={"SALVAR"} onPress={handlerSave} typeButton={"success"} width={300} />
+                <ButtonComponent nameButton={"LIMPAR"} onPress={handlerClear} typeButton={"warning"} width={300} />
+            </View>
         </View>
         
     )

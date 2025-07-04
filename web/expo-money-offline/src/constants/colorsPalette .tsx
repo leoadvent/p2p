@@ -7,7 +7,7 @@ export const backgroundOpacity        = "rgba(255, 255, 255, 0.07)";
 export const backgroundOpacityBallon  = "rgba(255, 255, 255, 0.03)";
 export const backgroundSolid          = "rgb(119, 117, 117)";
 
-export const textColorPrimary       = "rgb(75, 75, 75)";
+export const textColorPrimary       = "rgb(247, 238, 238)";
 export const textColorSecondary     = "rgb(36, 36, 36)";
 export const textColorError         = "rgb(167, 4, 4)";
 export const textColorStatusBar     = "rgb(255, 255, 255)";

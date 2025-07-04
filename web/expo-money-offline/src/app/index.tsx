@@ -1,3 +1,4 @@
+import FormularioCustomer from "@/components/formularioCustomer";
 import { Text, View } from "react-native";
 
 export default function Index() {
@@ -10,6 +11,7 @@ export default function Index() {
       }}
     >
       <Text>Expo Money OFF LINE.</Text>
+      <FormularioCustomer />
     </View>
   );
 }

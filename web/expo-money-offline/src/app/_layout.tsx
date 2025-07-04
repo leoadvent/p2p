@@ -1,12 +1,12 @@
 import { initializeDataBase } from "@/database/initializeDataBase";
-import { Stack } from "expo-router";
+import { Slot } from "expo-router";
 import { SQLiteProvider } from "expo-sqlite";
 
-export default function RootLayout() {
+export default function Layout() {
 
   return (
     <SQLiteProvider databaseName="expo-money-offline.db" onInit={initializeDataBase}>
-      <Stack />
+      <Slot />
     </SQLiteProvider>
 );
 }

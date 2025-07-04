@@ -13,8 +13,8 @@ export async function initializeDataBase(dataBase: SQLiteDatabase) {
             localidade TEXT NULL,
             estado TEXT NULL,
             uf TEXT NULL,
-            regiao TEXT NULL,
-        );
+            regiao TEXT NULL
+        )
         `)
 
     await dataBase.execAsync(`
@@ -22,11 +22,11 @@ export async function initializeDataBase(dataBase: SQLiteDatabase) {
             id TEXT PRIMARY KEY,
             firstName TEXT NOT NULL,
             lastName TEXT NOT NULL UNIQUE,
-            contact TEXT NOT NULL UNIQUE,
-            photo TEXT NOT NULL,
+            contact TEXT NULL UNIQUE,
+            photo TEXT NULL,
             endereco_id TEXT,
             FOREIGN KEY (endereco_id) REFERENCES ENDERECO(id)
-        );
+        )
         `)
 
 }

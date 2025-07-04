@@ -1,4 +1,4 @@
-import { borderCollor, textColorError, textColorPrimary } from "@/constants/colorsPalette ";
+import { borderCollor, textColorError, textColorPlaceholder, textColorPrimary } from "@/constants/colorsPalette ";
 import { stylesGlobal } from "@/constants/styles";
 import { KeyboardType, TextInput, View } from "react-native";
 import TextComponent from "../text/text";
@@ -71,7 +71,7 @@ const InputText = ({ value, placeholder, width, label, money, onChangeText, keyb
                 editable={editable}
                 value={value} 
                 placeholder={placeholder}
-                placeholderTextColor="#000000"
+                placeholderTextColor={textColorPlaceholder}
                 onChangeText={handleChangeText}
                 style={
                   [stylesGlobal.inputText, 

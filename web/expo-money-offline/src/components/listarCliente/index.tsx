@@ -1,3 +1,4 @@
+import { textColorPrimary } from "@/constants/colorsPalette ";
 import { useCustomerDataBase } from "@/database/useCustomerDataBase";
 import { CUSTOMER } from "@/types/customer";
 import { useEffect, useState } from "react";
@@ -22,15 +23,15 @@ const ListarCliente = () => {
 
     return (
         <View>
-            <TextComponent text={"LISTAR CLIENTES"} color={"rgb(75, 75, 75)"} fontSize={7} textAlign={"left"} />
+            <TextComponent text={"LISTAR CLIENTES"} color={textColorPrimary} fontSize={7} textAlign={"left"} />
 
             <FlatList 
                 data={customers} 
                 keyExtractor={(item) => item.id}
                 renderItem={({ item }) => (
                     <View style={{ padding: 10, borderBottomWidth: 1, borderBottomColor: '#ccc' }}>
-                        <TextComponent text={`${item.firstName} ${item.lastName}`} fontSize={10} color={"rgb(75, 75, 75)"} textAlign={"auto"} />
-                        <TextComponent text={`Contato: ${item.contact}`} fontSize={10} color={"rgb(75, 75, 75)"} textAlign={"auto"} />
+                        <TextComponent text={`${item.firstName} ${item.lastName}`} fontSize={10} color={textColorPrimary} textAlign={"auto"} />
+                        <TextComponent text={`Contato: ${item.contact}`} fontSize={10} color={textColorPrimary} textAlign={"auto"} />
                     </View>
                 )}
             />

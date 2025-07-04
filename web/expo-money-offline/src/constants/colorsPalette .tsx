@@ -11,6 +11,7 @@ export const textColorPrimary       = "rgb(247, 238, 238)";
 export const textColorSecondary     = "rgb(36, 36, 36)";
 export const textColorError         = "rgb(167, 4, 4)";
 export const textColorStatusBar     = "rgb(255, 255, 255)";
+export const textColorPlaceholder   = "rgba(5, 5, 5, 0.4)";
 export const textColorSuccess       = "rgb(21, 201, 66)";
 export const textColorWarning       = "rgb(236, 202, 4)";
 export const textColorDeactivated   = "rgb(194, 193, 191)";

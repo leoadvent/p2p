@@ -37,10 +37,11 @@ const FormularioCustomer = () => {
     }
 
     return (
-        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', gap: 8 }}>
             <Text>Formulario Customer</Text>
             <InputText 
                 label={"Nome"} 
+                placeholder="Digite o nome"
                 width={300}  
                 editable={true} 
                 onChangeText={(text) => setCustomer({...customer, firstName: text})} 
@@ -49,6 +50,7 @@ const FormularioCustomer = () => {
 
             <InputText 
                 label={"Sobrenome"} 
+                placeholder="Digite o sobrenome"
                 width={300}  
                 editable={true} 
                 onChangeText={(text) => setCustomer({...customer, lastName: text})} 
@@ -57,6 +59,7 @@ const FormularioCustomer = () => {
 
             <InputText 
                 label={"Contato"} 
+                placeholder="Digite o contato"
                 width={300}  
                 editable={true} 
                 onChangeText={(text) => setCustomer({...customer, contact: text})} 
@@ -65,6 +68,7 @@ const FormularioCustomer = () => {
 
              <InputText 
                 label={"CEP"} 
+                placeholder="Digite o CEP"
                 width={300}  
                 editable={true} 
                 onChangeText={(text) => setCustomer({
@@ -76,6 +80,7 @@ const FormularioCustomer = () => {
 
             <InputText 
                 label={"LOGRADOURO"} 
+                placeholder="Digite o logradouro"
                 width={300}  
                 editable={true} 
                 onChangeText={(text) => setCustomer({
@@ -87,6 +92,7 @@ const FormularioCustomer = () => {
 
             <InputText 
                 label={"BAIRRO"} 
+                placeholder="Digite o bairro"
                 width={300}  
                 editable={true} 
                 onChangeText={(text) => setCustomer({
@@ -98,6 +104,7 @@ const FormularioCustomer = () => {
 
             <InputText 
                 label={"MUNICIPIO"} 
+                placeholder="Digite o município"
                 width={300}  
                 editable={true} 
                 onChangeText={(text) => setCustomer({
@@ -109,6 +116,7 @@ const FormularioCustomer = () => {
 
             <InputText 
                 label={"NUMERO"} 
+                placeholder="Digite o número"
                 width={300}  
                 editable={true} 
                 onChangeText={(text) => setCustomer({

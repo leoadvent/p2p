@@ -33,7 +33,7 @@ const BaseScreens = ( { children, title, backgroundColor, rolbackStack, children
             backgroundColor: backgroundColor ? backgroundColor : backgroundPrimary,
         }}  
     >
-        <StatusBar barStyle="light-content" backgroundColor={statusBarColorPrimary} />
+        <StatusBar barStyle="light-content" backgroundColor={statusBarColorPrimary} translucent={false}/>
         
         <View style={
             [ styles(title.length === 0 && !rolbackStack ? false : true, showChildrenParan ? true : false).title,

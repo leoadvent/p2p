@@ -127,9 +127,6 @@ export function useCustomerDataBase() {
 
     async function updateCliente(cliente: CUSTOMER) {
         
-        const rs = await dataBase.getAllAsync("SELECT * FROM CUSTOMER");
-        console.log("Cliente encontrado:", rs);
-
         const sql = `
             UPDATE CUSTOMER 
             SET firstName = $firstName, lastName = $lastName, contact = $contact, photo = $photo
@@ -145,7 +142,6 @@ export function useCustomerDataBase() {
                 $photo: cliente.photo,
                 $id: cliente.id
             });
-            console.log("Resultado da atualização:", JSON.stringify(result));
             return result;
         } catch (error) {
             console.error("Error ao atualizar cliente:", error);

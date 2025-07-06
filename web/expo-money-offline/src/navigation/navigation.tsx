@@ -2,15 +2,22 @@ import { Ionicons } from '@expo/vector-icons';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { NavigationContainer } from "@react-navigation/native";
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { createNativeStackNavigator, NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { iconDrawerColor, statusBarColorPrimary, tabNavigatorColor, textColorPrimary } from '../constants/colorsPalette ';
 import ClienteCrierEditar from '../screens/ClienteCrierEditar';
 import Clientes from "../screens/Clientes";
 import Home from '../screens/Home';
+import { CUSTOMER } from '../types/customer';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator()
 const DrawerClient = createDrawerNavigator()
+
+type RootStackParamList = {
+  CriarEditarClientes: { clientEdit?: CUSTOMER  | undefined;};
+}
+
+export type NavigationProp = NativeStackNavigationProp<RootStackParamList>;
 
 function MyDrawerNavigatorCliente() {
 
@@ -38,9 +45,11 @@ function MyDrawerNavigatorCliente() {
         }}
     >
          <DrawerClient.Screen 
-            name="Criar / Editar Clientes" 
+            name="CriarEditarClientes" 
             component={ClienteCrierEditar} 
+            initialParams={{ clientEdit: {} as CUSTOMER }}
             options={{
+                title: "Criar / Editar Clientes",
                 drawerIcon: ({ color }) => (
                     <Ionicons name="person-add-sharp" size={sizeIcon} color={colorIcon} />
                 ),

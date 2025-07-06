@@ -1,14 +1,16 @@
 import { useCustomerDataBase } from "@/database/useCustomerDataBase";
 import apiEndereco from "@/src/integration/apiEndereco";
 import { CUSTOMER } from "@/types/customer";
-import { useEffect, useState } from "react";
+import { useFocusEffect, useRoute } from "@react-navigation/native";
+import React, { useEffect, useState } from "react";
 import { Text, View } from "react-native";
 import ButtonComponent from "../button";
 import InputText from "../input";
 import ModalSystem from "../modal";
 import TextComponent from "../text/text";
 
-const FormularioCustomer = () => {
+
+const FormularioCustomer = ({ navigation }: any) => {
 
     const [customer, setCustomer] = useState<CUSTOMER>( {endereco: {id:''}} as CUSTOMER);
     const [modal, setModal] = useState<boolean>(false);
@@ -16,6 +18,40 @@ const FormularioCustomer = () => {
     const [tituliModal, setTituloModal] = useState<string>("");
 
     const customerDataBase = useCustomerDataBase();
+
+    const route = useRoute();
+    const { clientEdit }: any = route.params ?? {}
+
+    useFocusEffect(
+        React.useCallback(() => {
+            if (clientEdit && Object.keys(clientEdit).length > 0) {
+                setCustomer({
+                    ...clientEdit,
+                    id: clientEdit.id ?? '',
+                    firstName: clientEdit.firstName ?? '',
+                    lastName: clientEdit.lastName ?? '',
+                    contact: clientEdit.contact ?? '',
+                    photo: clientEdit.photo ?? '',
+                    endereco_id: clientEdit.endereco_id ?? '',                    
+                    endereco: {
+                        id: clientEdit.endereco?.id ?? '',
+                        cep: clientEdit.endereco?.cep ?? '',
+                        logradouro: clientEdit.endereco?.logradouro ?? '',
+                        bairro: clientEdit.endereco?.bairro ?? '',
+                        localidade: clientEdit.endereco?.localidade ?? '',
+                        uf: clientEdit.endereco?.uf ?? '',
+                        estado: clientEdit.endereco?.estado ?? '',
+                        numero: clientEdit.endereco?.numero ?? '',
+                        complemento: clientEdit.endereco?.complemento ?? ''
+
+                    }
+                } as CUSTOMER);
+                //navigation.setParams({ clientEdit: {} });
+            } else {
+                setCustomer({ endereco: { cep: "" } } as CUSTOMER);
+            }
+        }, [clientEdit])
+    );
 
     function handlerClear(){
         setCustomer({endereco: {id:''}} as CUSTOMER);
@@ -49,23 +85,65 @@ const FormularioCustomer = () => {
             return;
         }
 
-       customerDataBase.create(customer)
-            .then((result) => {
-                if(result.insertedId){
+        if(clientEdit && Object.keys(clientEdit).length > 0 && clientEdit.id){
+            setCustomer(clientEdit)
+            const edit: CUSTOMER = {
+                id: customer.id,
+                firstName: customer.firstName,
+                lastName: customer.lastName,
+                contact: customer.contact,
+                photo: customer.photo,
+                endereco: {
+                    ...customer.endereco,
+                    cep: customer.endereco.cep,
+                    logradouro: customer.endereco.logradouro,
+                    bairro: customer.endereco.bairro,
+                    localidade: customer.endereco.localidade,
+                    uf: customer.endereco.uf,
+                    estado: customer.endereco.estado,
+                    numero: customer.endereco.numero,
+                    complemento: customer.endereco.complemento
+                }
+            };  
+            customerDataBase.updateCliente(edit).then((result) => {
+                if(result){  
                     setModal(true);
                     setTituloModal("SUCESSO");
-                    setMensagemModal("Cliente salvo com sucesso!");
+                    setMensagemModal("Cliente atualizado com sucesso!");
                     handlerClear();
-                }else{
-                    setModal(true);
+                } else {
+                    setModal(true); 
                     setTituloModal("ERRO");
-                    setMensagemModal("Erro ao salvar cliente.");
+                    setMensagemModal("Erro ao atualizar cliente.");
                 }
             })
             .catch((error) => {
-                console.error("Erro ao salvar cliente:", error);
-                alert("Erro ao salvar cliente.");
+                console.error("Erro ao atualizar cliente:", error);
+                setModal(true);
+                setTituloModal("ERRO");
+                setMensagemModal("Erro ao atualizar cliente.");
             });
+            return;
+        } else {
+
+            customerDataBase.create(customer)
+                .then((result) => {
+                    if(result.insertedId){
+                        setModal(true);
+                        setTituloModal("SUCESSO");
+                        setMensagemModal("Cliente salvo com sucesso!");
+                        handlerClear();
+                    }else{
+                        setModal(true);
+                        setTituloModal("ERRO");
+                        setMensagemModal("Erro ao salvar cliente.");
+                    }
+                })
+                .catch((error) => {
+                    console.error("Erro ao salvar cliente:", error);
+                    alert("Erro ao salvar cliente.");
+                });
+            }
     }
 
     return (

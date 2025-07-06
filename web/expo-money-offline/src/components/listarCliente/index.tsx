@@ -1,16 +1,24 @@
-import { flatListBorderColor, textColorPrimary } from "@/constants/colorsPalette ";
+import { flatListBorderColor, textColorPrimary, textColorWarning } from "@/constants/colorsPalette ";
 import { useCustomerDataBase } from "@/database/useCustomerDataBase";
+import { NavigationProp } from "@/src/navigation/navigation";
 import { CUSTOMER } from "@/types/customer";
-import { useFocusEffect } from '@react-navigation/native';
+import { Ionicons } from "@expo/vector-icons";
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import React, { useState } from "react";
-import { Dimensions, FlatList, View } from "react-native";
+import { Dimensions, FlatList, TouchableOpacity, View } from "react-native";
 import ShowImageCliente from "../imageAvatar";
+import ModalSystem from "../modal";
 import TextComponent from "../text/text";
 
 const ListarCliente = () => {
 
+    const navigation = useNavigation<NavigationProp>();
+
     const [customers, setCustomers] = useState<CUSTOMER[]>([]);
+    const [customerView, setCustomerView] = useState<CUSTOMER>({} as CUSTOMER);
     const [nomeFiltro, setNomeFiltro] = useState<string>("");
+
+    const [modalVisible, setModalVisible] = useState<boolean>(false);
     
     const customerDataBase = useCustomerDataBase();
 
@@ -26,7 +34,6 @@ const ListarCliente = () => {
         }, [])
     )
 
-    console.log("ListarCliente - customers", customers);
 
     return (
         <View>
@@ -36,32 +43,53 @@ const ListarCliente = () => {
                 data={customers} 
                 keyExtractor={(item) => item.id}
                 renderItem={({ item }) => (
-                    <View style={{ 
-                                    display: "flex",
-                                    flexDirection: "row",
-                                    justifyContent: "space-between",
-                                    alignItems: "center",
-                                    gap: 20,
-                                    width: width-40, 
-                                    borderWidth: 1, 
-                                    marginBottom: 10,
-                                    borderBottomColor: flatListBorderColor,
-                                    borderRadius: 5,
-                                    padding: 10,
-                            }}>
-                        <ShowImageCliente 
-                            width={60}
-                            height={60}
-                            urlPhoto={item.photo} 
-                            amountFinancialLoansPending={0} 
-                            firsName={item.firstName} 
-                            lastName={item.lastName} 
-                        />
-                        <TextComponent text={`${item.firstName} ${item.lastName}`} fontSize={18} color={textColorPrimary} textAlign={"auto"} />
-                        <TextComponent text={`Contato: ${item.contact}`} fontSize={10} color={textColorPrimary} textAlign={"auto"} />
-                    </View>
+                    <TouchableOpacity onPress={() => {setCustomerView(item); setModalVisible(true)}} >
+                        <View style={{ 
+                                        display: "flex",
+                                        flexDirection: "row",
+                                        justifyContent: "space-between",
+                                        alignItems: "center",
+                                        gap: 20,
+                                        width: width-40, 
+                                        borderWidth: 1, 
+                                        marginBottom: 10,
+                                        borderBottomColor: flatListBorderColor,
+                                        borderRadius: 5,
+                                        padding: 10,
+                                }}>
+                            <ShowImageCliente 
+                                width={60}
+                                height={60}
+                                urlPhoto={item.photo} 
+                                amountFinancialLoansPending={0} 
+                                firsName={item.firstName} 
+                                lastName={item.lastName} 
+                            />
+                            <View style={{ flex: 1, display: "flex", flexDirection: "column", gap: 5 }}>
+                                <TextComponent text={`${item.firstName} ${item.lastName}`} fontSize={18} color={textColorPrimary} textAlign={"auto"} />
+                            </View>
+                        </View>
+                    </TouchableOpacity>
                 )}
             />
+            <ModalSystem  title={`${customerView?.firstName} ${customerView?.lastName}`} heightProp={850} setVisible={setModalVisible} visible={modalVisible} children={
+                <View style={{ display: "flex", flexDirection: "column", gap: 10, alignItems:"center" }}>
+                    <ShowImageCliente
+                        urlPhoto={customerView.photo}
+                        amountFinancialLoansPending={0}
+                        firsName={customerView.firstName}
+                        lastName={customerView.lastName}
+                        width={160}
+                        height={160}
+                    />
+
+                     <TouchableOpacity onPress={() => {setModalVisible(false), navigation.navigate("CriarEditarClientes", { clientEdit: customerView })}}>
+                            <Ionicons name="pencil-sharp" size={26} color={textColorWarning} />
+                        </TouchableOpacity>
+                </View>
+            } />
+
+          
         </View>
     );
 }

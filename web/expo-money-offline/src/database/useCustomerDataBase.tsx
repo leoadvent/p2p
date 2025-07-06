@@ -66,29 +66,95 @@ export function useCustomerDataBase() {
         }
     }
 
-    async function buscarPorNome(nome:string) {
+    async function buscarPorNome(nome: string): Promise<CUSTOMER[]> {
         try {
-            let firstName = `%${nome}%`;
-            let lastName = `%${nome}%`;
+            const likeNome = `%${nome}%`;
 
-            const response = dataBase.getAllAsync<CUSTOMER>(`
-                SELECT 
-                    * 
-                FROM 
-                    CUSTOMER c
-                    LEFT JOIN ENDERECO e ON c.endereco_id = e.id
-                WHERE 
-                    firstName LIKE '%${firstName}%' OR lastName LIKE '%${lastName}%'
-                ORDER BY 
-                    c.firstName, c.lastName ASC`);
+            const sql = `
+            SELECT 
+                c.id as id,
+                c.firstName as firstName,
+                c.lastName as lastName,
+                c.contact as contact,
+                c.photo as photo,
+                e.id as endereco_id,
+                e.cep,
+                e.logradouro,
+                e.numero,
+                e.complemento,
+                e.bairro,
+                e.localidade,
+                e.estado,
+                e.uf,
+                e.regiao
+            FROM 
+                CUSTOMER c
+                LEFT JOIN ENDERECO e ON c.endereco_id = e.id
+            WHERE 
+                c.firstName LIKE $nome OR c.lastName LIKE $nome
+            ORDER BY 
+                c.firstName, c.lastName ASC
+            `;
 
-                console.log("buscarPorNome - response", response);
-                return response;
-        }catch (error) {
-            console.error("Error:", error);
+            const rows = await dataBase.getAllAsync(sql, { $nome: likeNome });
+
+            // Mapear os dados para a interface CUSTOMER
+            return rows.map((row: any) => ({
+            id: row.id,
+            firstName: row.firstName,
+            lastName: row.lastName,
+            contact: row.contact,
+            photo: row.photo,
+            endereco: {
+                id: row.endereco_id,
+                cep: row.cep,
+                logradouro: row.logradouro,
+                numero: row.numero,
+                complemento: row.complemento,
+                bairro: row.bairro,
+                localidade: row.localidade,
+                estado: row.estado,
+                uf: row.uf,
+                regiao: row.regiao,
+            },
+            }));
+        } catch (error) {
+            console.error("Erro ao buscar clientes por nome:", error);
             throw error;
         }
     }
 
-    return {create, buscarPorNome}
+
+    async function updateCliente(cliente: CUSTOMER) {
+        
+        const rs = await dataBase.getAllAsync("SELECT * FROM CUSTOMER");
+        console.log("Cliente encontrado:", rs);
+
+        const sql = `
+            UPDATE CUSTOMER 
+            SET firstName = $firstName, lastName = $lastName, contact = $contact, photo = $photo
+            WHERE id = $id
+        `;
+
+        const statement = await dataBase.prepareAsync(sql);
+        try {
+            const result = await statement.executeAsync({
+                $firstName: cliente.firstName,
+                $lastName: cliente.lastName,
+                $contact: cliente.contact,
+                $photo: cliente.photo,
+                $id: cliente.id
+            });
+            console.log("Resultado da atualização:", JSON.stringify(result));
+            return result;
+        } catch (error) {
+            console.error("Error ao atualizar cliente:", error);
+            throw error;
+        } finally {
+            await statement.finalizeAsync();
+        }
+        
+    }
+
+    return {create, buscarPorNome, updateCliente}
 }

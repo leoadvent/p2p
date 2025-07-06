@@ -13,9 +13,10 @@ type Props = {
     title: string;
     backgroundColor?: typeof backgroundPrimary | typeof backgroundSecondary
     rolbackStack?: boolean
+    isDrawer?: boolean;
   }
 
-const BaseScreens = ( { children, title, backgroundColor, rolbackStack, childrenParam, showChildrenParan} : Props) => {
+const BaseScreens = ( { children, title, backgroundColor, rolbackStack, childrenParam, showChildrenParan, isDrawer} : Props) => {
 
   const navigation = useNavigation();
   
@@ -30,13 +31,15 @@ const BaseScreens = ( { children, title, backgroundColor, rolbackStack, children
             justifyContent: "flex-start",
             alignItems: "center",
             padding:0,
+            margin:0,
+            paddingBottom: 0,
             backgroundColor: backgroundColor ? backgroundColor : backgroundPrimary,
         }}  
     >
         <StatusBar barStyle="light-content" backgroundColor={statusBarColorPrimary} translucent={false}/>
         
         <View style={
-            [ styles(title.length === 0 && !rolbackStack ? false : true, showChildrenParan ? true : false).title,
+            [ styles(title.length === 0 && !rolbackStack ? false : true, showChildrenParan ? true : false, isDrawer===undefined ? false : isDrawer).title,
               {
                 backgroundColor: statusBarColorPrimary, paddingLeft:15
               }
@@ -81,13 +84,13 @@ const BaseScreens = ( { children, title, backgroundColor, rolbackStack, children
 }
 export default BaseScreens;
 
-const styles = (isTitle: boolean, showChildrenParan: boolean ) => StyleSheet.create({
+const styles = (isTitle: boolean, showChildrenParan: boolean, isDrawer: boolean ) => StyleSheet.create({
   title:{
     display: "flex",
     flexDirection: "column",
     width: "100%",
     minHeight: isTitle ? showChildrenParan ? 180 : 50 :  20,
-    marginTop: 0,
+    marginTop: isDrawer ? -40 : 0,
     textAlign: "center",
     alignContent: "center",
     justifyContent: "center",

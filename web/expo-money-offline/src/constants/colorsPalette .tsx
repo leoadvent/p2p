@@ -39,6 +39,8 @@ export const chartBazierbackgroundGradientFrom  = "rgba(8, 17, 100, 0.28)";
 
 export const borderCollor = "rgba(8, 13, 54, 0.47)";
 
+export const iconDrawerColor = "rgb(255, 72, 0)";
+
 
   
 

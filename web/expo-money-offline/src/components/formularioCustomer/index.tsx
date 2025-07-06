@@ -11,7 +11,9 @@ import TextComponent from "../text/text";
 const FormularioCustomer = () => {
 
     const [customer, setCustomer] = useState<CUSTOMER>( {endereco: {id:''}} as CUSTOMER);
-    const [cepModal, setCepModal] = useState<boolean>(false);
+    const [modal, setModal] = useState<boolean>(false);
+    const [mensagemModal, setMensagemModal] = useState<string>("");
+    const [tituliModal, setTituloModal] = useState<string>("");
 
     const customerDataBase = useCustomerDataBase();
 
@@ -22,7 +24,9 @@ const FormularioCustomer = () => {
     useEffect(() => {
         if(customer.endereco?.cep?.length === 9){
             apiEndereco.get(`${customer.endereco.cep}/json`).then((response) => {
-                setCepModal(true);
+                setModal(true);
+                setTituloModal("BUSCAR CEP");
+                setMensagemModal(`Endereço localizado via CEP`);
                 setCustomer({
                     ...customer,
                     endereco: {
@@ -40,17 +44,22 @@ const FormularioCustomer = () => {
 
     function handlerSave(){
         if(!customer.firstName || !customer.lastName || !customer.contact){
-            alert("Preencha os campos obrigatórios.");
+            setModal(true);
+            setMensagemModal("Preencha os campos obrigatórios.");
             return;
         }
 
        customerDataBase.create(customer)
             .then((result) => {
                 if(result.insertedId){
-                    alert("Cliente salvo com sucesso!");
+                    setModal(true);
+                    setTituloModal("SUCESSO");
+                    setMensagemModal("Cliente salvo com sucesso!");
                     handlerClear();
                 }else{
-                    alert("Erro ao salvar cliente.");
+                    setModal(true);
+                    setTituloModal("ERRO");
+                    setMensagemModal("Erro ao salvar cliente.");
                 }
             })
             .catch((error) => {
@@ -166,17 +175,17 @@ const FormularioCustomer = () => {
             </View>
 
             <ModalSystem 
-                title="BUSCAR CEP" 
-                visible={cepModal} 
-                setVisible={setCepModal} 
+                title={tituliModal}
+                visible={modal} 
+                setVisible={setModal} 
                 buttonClose={<Text style={{color: "white"}}>Fechar</Text>} 
                 heightProp={400} 
                 widthProp={400}
             >
                 <View style={{gap: 50, display: "flex", flexDirection: "column", width: "100%"}}>
-                    <TextComponent text={"Endereço localizado via CEP"} color={"rgb(247, 238, 238)"} fontSize={14} textAlign={"center"} />
+                    <TextComponent text={mensagemModal} color={"rgb(247, 238, 238)"} fontSize={14} textAlign={"center"} />
                     <ButtonComponent 
-                        nameButton={"FECHAR"} onPress={() => {setCepModal(false)}} typeButton={"primary"} width={"auto"} />
+                        nameButton={"FECHAR"} onPress={() => {setModal(false)}} typeButton={"primary"} width={"auto"} />
                 </View>
             </ModalSystem>
         </View>

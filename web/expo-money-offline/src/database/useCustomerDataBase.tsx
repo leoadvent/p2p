@@ -77,7 +77,10 @@ export function useCustomerDataBase() {
                 FROM 
                     CUSTOMER c
                     LEFT JOIN ENDERECO e ON c.endereco_id = e.id
-                WHERE firstName LIKE '%${firstName}%' OR lastName LIKE '%${lastName}%'`);
+                WHERE 
+                    firstName LIKE '%${firstName}%' OR lastName LIKE '%${lastName}%'
+                ORDER BY 
+                    c.firstName, c.lastName ASC`);
 
                 console.log("buscarPorNome - response", response);
                 return response;

@@ -1,9 +1,10 @@
-import { textColorPrimary } from "@/constants/colorsPalette ";
+import { flatListBorderColor, textColorPrimary } from "@/constants/colorsPalette ";
 import { useCustomerDataBase } from "@/database/useCustomerDataBase";
 import { CUSTOMER } from "@/types/customer";
 import { useFocusEffect } from '@react-navigation/native';
 import React, { useState } from "react";
-import { FlatList, View } from "react-native";
+import { Dimensions, FlatList, View } from "react-native";
+import ShowImageCliente from "../imageAvatar";
 import TextComponent from "../text/text";
 
 const ListarCliente = () => {
@@ -12,9 +13,10 @@ const ListarCliente = () => {
     const [nomeFiltro, setNomeFiltro] = useState<string>("");
     
     const customerDataBase = useCustomerDataBase();
+
+    const width = Dimensions.get("screen").width; // Assuming a fixed width for the FlatList items
     
     async function handlerBuscarClientes() {
-        console.log("Buscar - nomeFiltro", nomeFiltro);
         setCustomers(await customerDataBase.buscarPorNome(nomeFiltro));
     }
 
@@ -34,8 +36,28 @@ const ListarCliente = () => {
                 data={customers} 
                 keyExtractor={(item) => item.id}
                 renderItem={({ item }) => (
-                    <View style={{ padding: 10, borderBottomWidth: 1, borderBottomColor: '#ccc' }}>
-                        <TextComponent text={`${item.firstName} ${item.lastName}`} fontSize={10} color={textColorPrimary} textAlign={"auto"} />
+                    <View style={{ 
+                                    display: "flex",
+                                    flexDirection: "row",
+                                    justifyContent: "space-between",
+                                    alignItems: "center",
+                                    gap: 20,
+                                    width: width-40, 
+                                    borderWidth: 1, 
+                                    marginBottom: 10,
+                                    borderBottomColor: flatListBorderColor,
+                                    borderRadius: 5,
+                                    padding: 10,
+                            }}>
+                        <ShowImageCliente 
+                            width={60}
+                            height={60}
+                            urlPhoto={item.photo} 
+                            amountFinancialLoansPending={0} 
+                            firsName={item.firstName} 
+                            lastName={item.lastName} 
+                        />
+                        <TextComponent text={`${item.firstName} ${item.lastName}`} fontSize={18} color={textColorPrimary} textAlign={"auto"} />
                         <TextComponent text={`Contato: ${item.contact}`} fontSize={10} color={textColorPrimary} textAlign={"auto"} />
                     </View>
                 )}

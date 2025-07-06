@@ -1,7 +1,8 @@
 import { textColorPrimary } from "@/constants/colorsPalette ";
 import { useCustomerDataBase } from "@/database/useCustomerDataBase";
 import { CUSTOMER } from "@/types/customer";
-import { useEffect, useState } from "react";
+import { useFocusEffect } from '@react-navigation/native';
+import React, { useState } from "react";
 import { FlatList, View } from "react-native";
 import TextComponent from "../text/text";
 
@@ -17,7 +18,11 @@ const ListarCliente = () => {
         setCustomers(await customerDataBase.buscarPorNome(nomeFiltro));
     }
 
-    useEffect(() => {handlerBuscarClientes()}, [nomeFiltro]);
+    useFocusEffect(
+        React.useCallback(() => {
+            handlerBuscarClientes();
+        }, [])
+    )
 
     console.log("ListarCliente - customers", customers);
 

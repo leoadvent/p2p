@@ -1,19 +1,42 @@
 import { useCustomerDataBase } from "@/database/useCustomerDataBase";
+import apiEndereco from "@/src/integration/apiEndereco";
 import { CUSTOMER } from "@/types/customer";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Text, View } from "react-native";
 import ButtonComponent from "../button";
 import InputText from "../input";
+import ModalSystem from "../modal";
+import TextComponent from "../text/text";
 
 const FormularioCustomer = () => {
 
     const [customer, setCustomer] = useState<CUSTOMER>( {endereco: {id:''}} as CUSTOMER);
+    const [cepModal, setCepModal] = useState<boolean>(false);
 
     const customerDataBase = useCustomerDataBase();
 
     function handlerClear(){
         setCustomer({endereco: {id:''}} as CUSTOMER);
     }
+
+    useEffect(() => {
+        if(customer.endereco?.cep?.length === 9){
+            apiEndereco.get(`${customer.endereco.cep}/json`).then((response) => {
+                setCepModal(true);
+                setCustomer({
+                    ...customer,
+                    endereco: {
+                        ...customer.endereco,
+                        logradouro: response.data.logradouro,
+                        bairro: response.data.bairro,
+                        localidade: response.data.localidade,
+                        uf: response.data.uf,
+                        estado: response.data.uf
+                    }
+                });
+            })
+        }
+    },[customer.endereco?.cep]);
 
     function handlerSave(){
         if(!customer.firstName || !customer.lastName || !customer.contact){
@@ -141,6 +164,21 @@ const FormularioCustomer = () => {
                 <ButtonComponent nameButton={"SALVAR"} onPress={handlerSave} typeButton={"success"} width={300} />
                 <ButtonComponent nameButton={"LIMPAR"} onPress={handlerClear} typeButton={"warning"} width={300} />
             </View>
+
+            <ModalSystem 
+                title="BUSCAR CEP" 
+                visible={cepModal} 
+                setVisible={setCepModal} 
+                buttonClose={<Text style={{color: "white"}}>Fechar</Text>} 
+                heightProp={400} 
+                widthProp={400}
+            >
+                <View style={{gap: 50, display: "flex", flexDirection: "column", width: "100%"}}>
+                    <TextComponent text={"Endereço localizado via CEP"} color={"rgb(247, 238, 238)"} fontSize={14} textAlign={"center"} />
+                    <ButtonComponent 
+                        nameButton={"FECHAR"} onPress={() => {setCepModal(false)}} typeButton={"primary"} width={"auto"} />
+                </View>
+            </ModalSystem>
         </View>
         
     )

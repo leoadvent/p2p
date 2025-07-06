@@ -21,8 +21,8 @@ export async function initializeDataBase(dataBase: SQLiteDatabase) {
         CREATE TABLE IF NOT EXISTS CUSTOMER (
             id TEXT PRIMARY KEY,
             firstName TEXT NOT NULL,
-            lastName TEXT NOT NULL UNIQUE,
-            contact TEXT NULL UNIQUE,
+            lastName TEXT NOT NULL,
+            contact TEXT NULL,
             photo TEXT NULL,
             endereco_id TEXT,
             FOREIGN KEY (endereco_id) REFERENCES ENDERECO(id)

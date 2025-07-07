@@ -31,6 +31,7 @@ const Financiamento = () => {
     const [totalParcelas, setTotalParcelas] = useState<string>("1")
     const [periodocidade, setPeriodocidade] = useState<string>("")
     const [valorParcela, setValorParcela] = useState<string>("")
+    const [valorMontante, setValorMontante] = useState<string>("")
 
     
     const route = useRoute();
@@ -39,75 +40,82 @@ const Financiamento = () => {
     const width = Dimensions.get("window").width
 
     function calculaQuantidadeDeParcela() {
-    if (!dataInicio || !dataFinal || !periodocidade) return;
+        if (!dataInicio || !dataFinal || !periodocidade) return;
 
-    const inicio = new Date(dataInicio);
-    const fim = new Date(dataFinal);
+        const inicio = new Date(dataInicio);
+        const fim = new Date(dataFinal);
 
-    if (fim <= inicio) {
-        setTotalParcelas('0');
-        return;
-    }
-
-    const diffEmMilissegundos = fim.getTime() - inicio.getTime();
-    const diffEmDias = diffEmMilissegundos / (1000 * 60 * 60 * 24);
-
-    let total = 0;
-
-    switch (periodocidade.toLowerCase()) {
-        case 'mensal':
-            total = Math.ceil(diffEmDias / 30); // ou usar cálculo por mês exato se preferir
-            break;
-        case 'quinzenal':
-            total = Math.ceil(diffEmDias / 15);
-            break;
-        case 'semanal':
-            total = Math.ceil(diffEmDias / 7);
-            break;
-        default:
-            total = 0;
-    }
-
-    setTotalParcelas(total.toString());
-}
-
-
-    function calcularJurosDiario() {
-        if (!valorFinanciamento || !taxaJuros) return;
-
-        // Normaliza valores (R$ e %)
-        const valorNormalizado = valorFinanciamento.replace(/\./g, '').replace(',', '.');
-        const taxaNormalizada = taxaJuros.replace(/\./g, '').replace(',', '.').replace('%', '');
-
-        // Converte para número
-        const numValor = parseFloat(valorNormalizado);
-        const numTaxa = parseFloat(taxaNormalizada);
-
-        // Garante que são números válidos
-        if (isNaN(numValor) || isNaN(numTaxa)) {
-            setValorDiario("Valor inválido");
+        if (fim <= inicio) {
+            setTotalParcelas('0');
             return;
         }
 
-        // Cálculo dos juros diários
-        const valDiario = ((numValor * numTaxa) / 100) / 30;
+        const diffEmMilissegundos = fim.getTime() - inicio.getTime();
+        const diffEmDias = diffEmMilissegundos / (1000 * 60 * 60 * 24);
 
-        // Formata para moeda real
-        const valorFormatado = new Intl.NumberFormat('pt-BR', {
-            style: 'currency',
-            currency: 'BRL',
-            minimumFractionDigits: 2,
-            maximumFractionDigits: 2
-        }).format(valDiario);
+        let total = 0;
 
-        // Atualiza estado
-        setTaxaJurosAtraso(taxaJuros)
-        setValorDiario(valorFormatado)
-        setAdicionalDiaAtraso(valorFormatado)
-        setValorParcela((parseFloat(valorNormalizado) / parseFloat(totalParcelas)).toString())
+        switch (periodocidade.toLowerCase()) {
+            case 'mensal':
+                total = Math.ceil(diffEmDias / 30); // ou usar cálculo por mês exato se preferir
+                break;
+            case 'quinzenal':
+                total = Math.ceil(diffEmDias / 15);
+                break;
+            case 'semanal':
+                total = Math.ceil(diffEmDias / 7);
+                break;
+            default:
+                total = 0;
+        }
+
+        setTotalParcelas(total.toString());
     }
 
-    useEffect(() => {calcularJurosDiario()}, [taxaJuros, valorFinanciamento])
+
+    function calcularJurosDiario() {
+        if (!valorFinanciamento || !taxaJuros || !totalParcelas) return;
+
+        // Normaliza valores
+        const valorNormalizado = valorFinanciamento.replace(/\./g, '').replace(',', '.');
+        const taxaNormalizada = taxaJuros.replace(/\./g, '').replace(',', '.').replace('%', '');
+
+        const numValor = parseFloat(valorNormalizado);
+        const numTaxa = parseFloat(taxaNormalizada);
+        const numParcelas = parseInt(totalParcelas);
+
+        if (isNaN(numValor) || isNaN(numTaxa) || isNaN(numParcelas) || numParcelas <= 0) {
+            setValorDiario("Valor inválido");
+            setValorMontante("0");
+            setValorParcela("0");
+            return;
+        }
+
+        // Juros diário
+        const jurosTotal = (numValor * numTaxa) / 100;
+        const valDiario = jurosTotal / 30;
+
+        // Montante com juros simples
+        const valorMontante = numValor + jurosTotal;
+
+        const valorParcela = valorMontante / numParcelas;
+
+        const formatar = (valor: number) =>
+            new Intl.NumberFormat('pt-BR', {
+                style: 'currency',
+                currency: 'BRL',
+                minimumFractionDigits: 2
+            }).format(valor);
+
+        setTaxaJurosAtraso(taxaJuros);
+        setValorDiario(formatar(valDiario));
+        setAdicionalDiaAtraso(formatar(valDiario));
+        setValorMontante(formatar(valorMontante));
+        setValorParcela(valorParcela.toString()); // apenas formata no input no render
+    }
+
+
+    useEffect(() => {calcularJurosDiario()}, [taxaJuros, valorFinanciamento, totalParcelas])
 
     useEffect(() => {calculaQuantidadeDeParcela()}, [periodocidade, dataInicio, dataFinal])
 
@@ -115,31 +123,35 @@ const Financiamento = () => {
     return(
         <BaseScreens title={`FINANCIAMENTO`} rolbackStack={true}>
             
-            <View style={{ gap: 20 }}>
-                <InputText 
-                    width={330}
-                    label={"Cliente *"} 
-                    editable={false} 
-                    value={`${clientFinanciamento.firstName} ${clientFinanciamento.lastName}`}
-                />
-
-                <ButtonComponent nameButton={`TIPO: ${modalidade}`} onPress={() => {setModalidade(modalidade === MODALIDADE.Parcelado ? MODALIDADE.CarenciaDeCapital : MODALIDADE.Parcelado)} } typeButton={"primary"} width={330} />
-
-                <MeuSelect
-                    inputError={false}
-                    label='Periodicidade *'
-                    width={335}
-                    selecionado={setPeriodocidade}
-                    options={
-                        [
-                            {label:PERIODOCIDADE.Quinzenal, value:PERIODOCIDADE.Quinzenal, default:false},
-                            {label:PERIODOCIDADE.Semanal,   value:PERIODOCIDADE.Semanal, default:false},
-                            {label:PERIODOCIDADE.Mensal,    value:PERIODOCIDADE.Mensal, default:true}
-                        ]
-                    }                    
-                />
-
+            <View style={{ gap: 20, display: 'flex', flexDirection:'column', height:'100%', justifyContent:"space-between" }}>
+                
                 <View style={{ width:330, display:"flex", flexDirection:"row", flexWrap:"wrap", gap: 20, justifyContent: "center", alignItems: "center" }}>
+                
+                    <InputText 
+                        width={330}
+                        label={"Cliente *"} 
+                        editable={false} 
+                        value={`${clientFinanciamento.firstName} ${clientFinanciamento.lastName}`}
+                    />
+
+
+                    <ButtonComponent nameButton={`TIPO: ${modalidade}`} onPress={() => {setModalidade(modalidade === MODALIDADE.Parcelado ? MODALIDADE.CarenciaDeCapital : MODALIDADE.Parcelado)} } typeButton={"primary"} width={330} />
+
+                    <MeuSelect
+                        inputError={false}
+                        label='Periodicidade *'
+                        width={335}
+                        selecionado={setPeriodocidade}
+                        options={
+                            [
+                                {label:PERIODOCIDADE.Quinzenal, value:PERIODOCIDADE.Quinzenal, default:false},
+                                {label:PERIODOCIDADE.Semanal,   value:PERIODOCIDADE.Semanal, default:false},
+                                {label:PERIODOCIDADE.Mensal,    value:PERIODOCIDADE.Mensal, default:true}
+                            ]
+                        }                    
+                    />
+
+                
                     
                     <TouchableOpacity
                         onPress={() => setShowPickerDataInicio(true)}
@@ -186,9 +198,7 @@ const Financiamento = () => {
                             }}
                         />
                     )}
-                </View>
                 
-                <View style={{ width:330, display:"flex", flexDirection:"row", flexWrap:"wrap", gap: 20, justifyContent: "center", alignItems: "center" }}>
 
                     <InputText 
                             editable
@@ -228,7 +238,7 @@ const Financiamento = () => {
                                 <InputText 
                                     editable
                                     label="Adicional Por Dia Atraso *" 
-                                    placeholder='Adicional Por Dia Atraso'
+                                    placeholder='Adicional Atraso'
                                     money
                                     keyboardType="numeric"
                                     value={adicionalDiaAtraso}

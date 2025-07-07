@@ -42,6 +42,7 @@ export async function initializeDataBase(dataBase: SQLiteDatabase) {
             taxaJurosAtraso REAL NOT NULL,
             adicionalDiaAtraso REAL NOT NULL,
             valorDiaria REAL,
+            valorMontante REAL,
             modalidade TEXT NOT NULL DEFAULT 'Parcelado, CarenciaDeCapital',
             periodocidade TEXT NOT NULL DEFAULT 'Semanal, Quinzenal, Mensal',
             totalParcelas INTEGER NOT NULL,

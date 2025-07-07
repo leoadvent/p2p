@@ -34,6 +34,7 @@ export interface FINANCIAMENTO {
     taxaJurosAtraso: number // Taxa de juros de atraso anual
     adicionalDiaAtraso: number
     valorDiaria: number // Valor da diária, opcional
+    valorMontante: number  // Valor do montante
     modalidade: MODALIDADE // Modalidade do financiamento, padrão: 'Parcelado, Carência de Capital'
     periodocidade: PERIODOCIDADE
     totalParcelas: number

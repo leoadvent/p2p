@@ -83,9 +83,12 @@ const ListarCliente = () => {
                         height={160}
                     />
 
-                     <TouchableOpacity onPress={() => {setModalVisible(false), navigation.navigate("CriarEditarClientes", { clientEdit: customerView })}}>
-                            <Ionicons name="pencil-sharp" size={26} color={textColorWarning} />
-                        </TouchableOpacity>
+                    <TouchableOpacity onPress={() => {setModalVisible(false), navigation.navigate("CriarEditarClientes", { clientEdit: customerView })}}>
+                        <Ionicons name="pencil-sharp" size={26} color={textColorWarning} />
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => {setModalVisible(false), navigation.navigate("Financiamento", { clientFinanciamento: customerView })}}>
+                        <Ionicons name="cash-sharp" size={26} color={textColorWarning} />
+                    </TouchableOpacity>
                 </View>
             } />
 

@@ -4,7 +4,7 @@ import React from "react";
 import { KeyboardAvoidingView, Platform, ScrollView, StatusBar, StyleSheet, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import TextComponent from "../components/text/text";
-import { backgroundPrimary, backgroundSecondary, statusBarColorPrimary, textColorStatusBar } from "../constants/colorsPalette ";
+import { backgroundPrimary, backgroundSecondary, statusBarColorPrimary, textColorPrimary, textColorStatusBar } from "../constants/colorsPalette ";
 
 type Props = {
     children: React.ReactNode;
@@ -47,12 +47,12 @@ const BaseScreens = ( { children, title, backgroundColor, rolbackStack, children
           
           <View style={{ display:"flex", flex: 1, width:"100%", justifyContent:"center", alignItems:"center", flexDirection:"row", paddingLeft: 10}}>
             
-            <TextComponent textAlign="center" color={textColorStatusBar} fontSize={14} text={title ? title : ""}/>
-
+            <TextComponent textAlign="center" color={textColorStatusBar} fontSize={14} text={title ? `${title}` : ""}/>
+                        
             {rolbackStack && 
-              <View style={{ flex: 1, alignItems:"flex-end", paddingRight: 10}}>
+              <View style={{  marginRight: 50 }}>
                 <TouchableOpacity onPress={rolbackStack ? goBack : () => {}}>
-                  <Ionicons name="arrow-back" size={26} color={textColorStatusBar} />
+                  <Ionicons name="arrow-back" size={26} color={textColorPrimary} />
                 </TouchableOpacity> 
               </View>
             }

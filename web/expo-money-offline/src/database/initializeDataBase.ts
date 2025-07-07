@@ -28,7 +28,10 @@ export async function initializeDataBase(dataBase: SQLiteDatabase) {
             FOREIGN KEY (endereco_id) REFERENCES ENDERECO(id)
         )
     `)
-    
+
+    //await dataBase.execAsync(`DROP TABLE IF EXISTS FINANCIAMENTO;`);
+    //await dataBase.execAsync(`DROP TABLE IF EXISTS FINANCIAMENTO_PAGAMENTO;`);
+       
     await dataBase.execAsync(`
         CREATE TABLE IF NOT EXISTS FINANCIAMENTO (
             id TEXT PRIMARY KEY NOT NULL,
@@ -37,9 +40,13 @@ export async function initializeDataBase(dataBase: SQLiteDatabase) {
             valorFinanciado REAL NOT NULL,
             taxaJuros REAL NOT NULL,
             taxaJurosAtraso REAL NOT NULL,
+            adicionalDiaAtraso REAL NOT NULL,
             valorDiaria REAL,
-            modalidade TEXT NOT NULL DEFAULT 'Parcelado, Carência de Capital',
+            modalidade TEXT NOT NULL DEFAULT 'Parcelado, CarenciaDeCapital',
+            periodocidade TEXT NOT NULL DEFAULT 'Semanal, Quinzenal, Mensal',
             totalParcelas INTEGER NOT NULL,
+            finalizado INTEGER NULL,
+            atrasado INTEGER NULL,
             cliente_id TEXT,
             FOREIGN KEY (cliente_id) REFERENCES CUSTOMER(id)
         );

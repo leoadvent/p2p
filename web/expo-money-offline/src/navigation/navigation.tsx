@@ -6,6 +6,7 @@ import { createNativeStackNavigator, NativeStackNavigationProp } from '@react-na
 import { iconDrawerColor, statusBarColorPrimary, tabNavigatorColor, textColorPrimary } from '../constants/colorsPalette ';
 import ClienteCrierEditar from '../screens/ClienteCrierEditar';
 import Clientes from "../screens/Clientes";
+import Financiamento from '../screens/Financiamento';
 import Home from '../screens/Home';
 import { CUSTOMER } from '../types/customer';
 
@@ -15,6 +16,7 @@ const DrawerClient = createDrawerNavigator()
 
 type RootStackParamList = {
   CriarEditarClientes: { clientEdit?: CUSTOMER  | undefined;};
+  Financiamento: { clientFinanciamento?: CUSTOMER | undefined}
 }
 
 export type NavigationProp = NativeStackNavigationProp<RootStackParamList>;
@@ -118,6 +120,7 @@ const NavigationStack = () => {
                 <Stack.Screen name="tabNavigator" component={MyTabNavigator} options={{ headerShown: false }} />
                 <Stack.Screen name="Home" component={Clientes} options={{ headerShown: false }} />
                 <Stack.Screen name="MeuClientes" component={MyDrawerNavigatorCliente} options={{ headerShown: false }} />
+                <Stack.Screen name="Financiamento" component={Financiamento} options={{ headerShown: false }} />
             </Stack.Navigator>
         </NavigationContainer>
     )

@@ -16,7 +16,12 @@ const Financiamento = () => {
     const [showPickerDataFinal, setShowPickerDataFinal] = useState(false)
 
     const [dataInicio, setDataInicio] = useState(new Date())
-    const [dataFinal, setDataFinal] = useState(new Date())
+    const [dataFinal, setDataFinal] = useState(() => {
+        const hoje = new Date();
+        const dataMais30Dias = new Date();
+        dataMais30Dias.setDate(hoje.getDate() + 30);
+        return dataMais30Dias;
+    });
     const [valorFinanciamento, setValorFinanciamento] = useState<string>("")
     const [taxaJuros, setTaxaJuros] = useState<string>("")
     const [valorDiario, setValorDiario] = useState<string>("")

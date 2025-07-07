@@ -4,7 +4,8 @@ import React, { useEffect, useState } from "react";
 import { Dimensions, Platform, TouchableOpacity, View } from "react-native";
 import ButtonComponent from "../components/button";
 import InputText from "../components/input";
-import { FINANCIAMENTO, MODALIDADE } from "../types/financiamento";
+import MeuSelect from '../components/picker';
+import { FINANCIAMENTO, MODALIDADE, PERIODOCIDADE } from "../types/financiamento";
 import BaseScreens from "./BaseScreens";
 
 const Financiamento = () => {
@@ -28,6 +29,7 @@ const Financiamento = () => {
     const [taxaJurosAtraso, setTaxaJurosAtraso] = useState<string>("")
     const [adicionalDiaAtraso, setAdicionalDiaAtraso] = useState<string>("")
     const [totalParcelas, setTotalParcelas] = useState<string>("")
+    const [periodocidade, setPeriodocidade] = useState<PERIODOCIDADE>(PERIODOCIDADE.Mensal)
 
     
     const route = useRoute();
@@ -45,7 +47,7 @@ const Financiamento = () => {
     return(
         <BaseScreens title={`FINANCIAMENTO`} rolbackStack={true}>
             
-            <View style={{ gap: 10 }}>
+            <View style={{ gap: 20 }}>
                 <InputText 
                     width={330}
                     label={"Cliente *"} 
@@ -54,6 +56,20 @@ const Financiamento = () => {
                 />
 
                 <ButtonComponent nameButton={`TIPO: ${modalidade}`} onPress={() => {setModalidade(modalidade === MODALIDADE.Parcelado ? MODALIDADE.CarenciaDeCapital : MODALIDADE.Parcelado)} } typeButton={"primary"} width={330} />
+
+                <MeuSelect
+                    inputError={false}
+                    label='Periodocidade *'
+                    width={335}
+                    selecionado={() => {}}
+                    options={
+                        [
+                            {label:PERIODOCIDADE.Quinzenal, value:PERIODOCIDADE.Quinzenal, default:false},
+                            {label:PERIODOCIDADE.Semanal,   value:PERIODOCIDADE.Semanal, default:false},
+                            {label:PERIODOCIDADE.Mensal,    value:PERIODOCIDADE.Mensal, default:true}
+                        ]
+                    }                    
+                />
 
                 <View style={{ width:330, display:"flex", flexDirection:"row", flexWrap:"wrap", gap: 20, justifyContent: "center", alignItems: "center" }}>
                     
@@ -172,6 +188,8 @@ const Financiamento = () => {
                                 onChangeText={(text) => { setValorDiario(text)}}
                             />
                         }
+
+                    
                 </View>
 
             </View>

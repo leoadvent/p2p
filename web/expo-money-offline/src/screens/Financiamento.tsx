@@ -45,7 +45,7 @@ const Financiamento = () => {
     const [taxaJurosAtraso, setTaxaJurosAtraso] = useState<string>("")
     const [adicionalDiaAtraso, setAdicionalDiaAtraso] = useState<string>("")
     const [totalParcelas, setTotalParcelas] = useState<string>("1")
-    const [periodocidade, setPeriodocidade] = useState<string>("")
+    const [periodocidade, setPeriodocidade] = useState<string>(PERIODOCIDADE.Mensal)
     const [valorParcela, setValorParcela] = useState<string>("")
     const [valorMontante, setValorMontante] = useState<string>("")
     const [quantidadeMeses, setQuantidadeMeses] = useState<number>(1)
@@ -109,16 +109,14 @@ const Financiamento = () => {
         const quantParcelas = parseInt(totalParcelas);
         const novaLista: FINANCIAMENTO_PAGAMENTO[] = [];
 
-        const valorParcelaNumerico = parseFloat(
-            valorParcela.replace(/[^0-9,]/g, '').replace(',', '.')
-        );
-
         const valorDiarioNumerico = parseFloat(valorDiario.replace(/[^0-9,]/g, '').replace(',', '.'));
         const taxaJurosNumerico = parseFloat(taxaJuros.replace('%', '').replace(',', '.'));
         const taxaJurosAtrasoNumerico = parseFloat(taxaJurosAtraso.replace('%', '').replace(',', '.'));
 
         let quant = modalidade === MODALIDADE.CarenciaDeCapital ? 1 : quantParcelas
-        let valParcel = modalidade === MODALIDADE.CarenciaDeCapital ? valorDiario.replaceAll('.','').replace(',','.').replace('R$','') : valorParcelaNumerico
+        let valParcel = modalidade === MODALIDADE.CarenciaDeCapital 
+            ? Number(valorDiario.replaceAll('.','').replace(',','.').replace('R$','')) * 30 
+            : valorParcela
 
         for (let i = 1; i <= quant; i++) {
             novaLista.push({
@@ -196,7 +194,7 @@ const Financiamento = () => {
 
         const jurosTotal = (numValor * numTaxa) / 100;
 
-        const valorMontante = numValor + jurosTotal;
+        const valorMontante = modalidade === MODALIDADE.CarenciaDeCapital ? numValor + numValor : numValor + jurosTotal;
 
         setValorMontante(valorMontante.toString());
     }
@@ -219,15 +217,11 @@ const Financiamento = () => {
             return;
         }
 
-        // Juros diário
         const jurosTotal = (numValor * numTaxa) / 100;
 
-        // Montante com juros simples
-        const valorMontante = numValor + jurosTotal;
+        const valorMontante = modalidade === MODALIDADE.CarenciaDeCapital ? numValor + numValor : numValor + jurosTotal;
 
-        const valDiario = (valorMontante / quantidadeMeses) / 30;
-
-        
+        const valDiario = jurosTotal / 30;
 
         const valorParcela = valorMontante / numParcelas;
 
@@ -242,13 +236,13 @@ const Financiamento = () => {
         setValorDiario(formatar(valDiario));
         setAdicionalDiaAtraso(formatar(valDiario));
         setValorMontante(formatar(valorMontante));
-        setValorParcela(valorParcela.toString()); // apenas formata no input no render
+        setValorParcela(modalidade === MODALIDADE.CarenciaDeCapital ? (valDiario * 30).toString() : valorParcela.toString()); // apenas formata no input no render
 
         calcularMontante()
     }
 
 
-    useEffect(() => {calcularJurosDiario()}, [taxaJuros, valorFinanciamento, totalParcelas])
+    useEffect(() => {calcularJurosDiario()}, [taxaJuros, valorFinanciamento, totalParcelas, modalidade])
 
     useEffect(() => {calculaQuantidadeDeParcela()}, [periodocidade, dataInicio, dataFinal])
 
@@ -443,15 +437,19 @@ const Financiamento = () => {
                             backgroundColor='transparent'
                         />
                     
-                        <BalaoTexto 
-                            children={<TextComponent text={`Taxa Juros: ${financiamento.taxaJuros}%`} color={textColorPrimary} fontSize={14} textAlign={'auto'} />}
-                            backgroundColor='transparent'
-                        />
+                        {modalidade === MODALIDADE.Parcelado &&
+                            <BalaoTexto 
+                                children={<TextComponent text={`Taxa Juros: ${financiamento.taxaJuros}%`} color={textColorPrimary} fontSize={14} textAlign={'auto'} />}
+                                backgroundColor='transparent'
+                            />
+                        }
                         
-                        <BalaoTexto 
-                            children={<TextComponent text={`Taxa atraso: ${financiamento.taxaJurosAtraso}%`} color={textColorPrimary} fontSize={14} textAlign={'auto'} />}
-                            backgroundColor='transparent'
-                        />
+                        {modalidade === MODALIDADE.Parcelado &&
+                            <BalaoTexto 
+                                children={<TextComponent text={`Taxa atraso: ${financiamento.taxaJurosAtraso}%`} color={textColorPrimary} fontSize={14} textAlign={'auto'} />}
+                                backgroundColor='transparent'
+                            />
+                        }
 
                         <BalaoTexto 
                             children={<TextComponent text={`Valor: ${StringUtil.formatarMoedaReal(financiamento.valorFinanciado.toString())}`} color={textColorPrimary} fontSize={14} textAlign={'auto'} />}
@@ -463,15 +461,19 @@ const Financiamento = () => {
                             backgroundColor='transparent'
                         />
                         
-                        <BalaoTexto 
-                            children={<TextComponent text={`Diária: ${StringUtil.formatarMoedaReal(financiamento.valorDiaria.toString())}`} color={textColorPrimary} fontSize={14} textAlign={'auto'} />}
-                            backgroundColor='transparent'
-                        />
+                        {modalidade === MODALIDADE.CarenciaDeCapital &&
+                            <BalaoTexto 
+                                children={<TextComponent text={`Diária: ${StringUtil.formatarMoedaReal(financiamento.valorDiaria.toString())}`} color={textColorPrimary} fontSize={14} textAlign={'auto'} />}
+                                backgroundColor='transparent'
+                            />
+                        }
                         
-                        <BalaoTexto 
-                            children={<TextComponent text={`Adicional Atraso: ${StringUtil.formatarMoedaReal(financiamento.adicionalDiaAtraso.toString())}`} color={textColorPrimary} fontSize={14} textAlign={'auto'} />}
-                            backgroundColor='transparent'
-                        />
+                        {modalidade === MODALIDADE.Parcelado && 
+                            <BalaoTexto 
+                                children={<TextComponent text={`Adicional Atraso: ${StringUtil.formatarMoedaReal(financiamento.adicionalDiaAtraso.toString())} diários`} color={textColorPrimary} fontSize={14} textAlign={'auto'} />}
+                                backgroundColor='transparent'
+                            />
+                        }
                         
                     </View>
 
@@ -480,7 +482,8 @@ const Financiamento = () => {
                             backgroundColor={backgroundOpacityBallon}
                             children={
                                 <>
-                                    <TextComponent text={`Total de Parcelas: ${financiamento.totalParcelas} de ${StringUtil.formatarMoedaReal(valorParcela)}`} color={textColorPrimary} fontSize={14} textAlign={'center'} />
+                                    {modalidade === MODALIDADE.Parcelado && <TextComponent text={`Total de Parcelas: ${financiamento.totalParcelas} de ${StringUtil.formatarMoedaReal(valorParcela)}`} color={textColorPrimary} fontSize={14} textAlign={'center'} />}
+                                    {modalidade === MODALIDADE.CarenciaDeCapital && <TextComponent text={`Diarias de ${valorDiario} + 1 de ${StringUtil.formatarMoedaReal(valorFinanciamento.replaceAll('.','').replace(',','.'))}`} color={textColorPrimary} fontSize={12} textAlign={'center'} />}
                                     <TextComponent text={`Modalidade:  ${financiamento.modalidade}`} color={textColorPrimary} fontSize={14} textAlign={'center'} />
                                     <TextComponent text={`Periodicidade: ${financiamento.periodocidade}`} color={textColorPrimary} fontSize={14} textAlign={'center'} />
                                 </>
@@ -526,12 +529,13 @@ const Financiamento = () => {
            
             {Object.entries(financiamento).length > 0 &&
                 <ModalSystem 
+                    heightProp={300}
                     title={`${titleModal}`} 
                     children={
                         <View>
                             <TextComponent 
-                                text={`FINANCIAMENTO CONTRATO ${financiamento.id.substring(0, financiamento.id.indexOf('-'))} FINALIZADO`} 
-                                color={'rgb(247, 238, 238)'} fontSize={7} textAlign={'center'} />
+                                text={`CONTRATO ${financiamento.id.substring(0, financiamento.id.indexOf('-'))} REALIZADO`} 
+                                color={textColorPrimary} fontSize={12} textAlign={'center'} />
                         </View>
                     } 
                     setVisible={setModalShow} 

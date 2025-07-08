@@ -4,8 +4,9 @@ import { View } from "react-native";
 
 interface Props {
     children: React.ReactNode;
+    backgroundColor: typeof backgroundOpacityBallon | 'transparent'
 }
-const BalloonPayment = ({children} : Props) => {
+const BalloonPayment = ({children, backgroundColor} : Props) => {
     return (
         <View 
             style={{ 
@@ -14,7 +15,7 @@ const BalloonPayment = ({children} : Props) => {
                 flexDirection:"column", 
                 gap:5, 
                 alignItems:"center", 
-                backgroundColor: backgroundOpacityBallon, 
+                backgroundColor: backgroundColor, 
                 borderRadius: 8, borderColor:borderCollor, borderWidth:0.7, padding:13}}>
                     {children}
         </View>

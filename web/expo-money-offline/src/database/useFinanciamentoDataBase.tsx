@@ -11,9 +11,9 @@ export function useFinanciamentoDataBase() {
         const idFinanciamento  = uuid.v4();
 
         const sqlFinanciamento = `
-            INSERT INTO FINANCIAMENTO (
-                id, dataInicio, dataFim, valorFinanciado, taxaJuros, taxaJurosAtraso, valorDiaria, modalidade, totalParcelas, finalizado, atrasado, cliente_id
-            ) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )`;
+            INSERT INTO FINANCIAMENTO ( 
+                id, dataInicio, dataFim, valorFinanciado,taxaJuros, taxaJurosAtraso, adicionalDiaAtraso,valorDiaria, modalidade, totalParcelas, finalizado, atrasado, cliente_id
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
 
         const sqlFinanciamentoPagament = `
             INSERT INTO FINANCIAMENTO_PAGAMENTO (
@@ -31,6 +31,7 @@ export function useFinanciamentoDataBase() {
                 financiamento.dataFim instanceof Date ? financiamento.dataFim.toISOString() : financiamento.dataFim,
                 financiamento.valorFinanciado,
                 financiamento.taxaJuros,
+                financiamento.adicionalDiaAtraso,
                 financiamento.taxaJurosAtraso,
                 financiamento.valorDiaria,
                 financiamento.modalidade,

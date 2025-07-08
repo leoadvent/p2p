@@ -1,3 +1,4 @@
+import { Ionicons } from '@expo/vector-icons';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { useRoute } from "@react-navigation/native";
 import React, { useEffect, useState } from "react";
@@ -6,9 +7,11 @@ import uuid from 'react-native-uuid';
 import BalaoTexto from '../components/balaoTexto';
 import ButtonComponent from "../components/button";
 import InputText from "../components/input";
+import ModalSystem from '../components/modal';
 import MeuSelect from '../components/picker';
 import TextComponent from '../components/text/text';
-import { flatListBorderColor, textColorPrimary } from '../constants/colorsPalette ';
+import { backgroundOpacityBallon, flatListBorderColor, iconColorPrimary, textColorPrimary } from '../constants/colorsPalette ';
+import { useFinanciamentoDataBase } from '../database/useFinanciamentoDataBase';
 import { FINANCIAMENTO, FINANCIAMENTO_PAGAMENTO, MODALIDADE, PERIODOCIDADE } from "../types/financiamento";
 import { DataUtils } from '../utils/dataUtil';
 import { StringUtil } from '../utils/stringUtil';
@@ -24,12 +27,17 @@ const Financiamento = () => {
     const [showPickerDataInicio, setShowPickerDataInicio] = useState(false)
     const [showPickerDataFinal, setShowPickerDataFinal] = useState(false)
 
-    const [dataInicio, setDataInicio] = useState(new Date())
-    const [dataFinal, setDataFinal] = useState(() => {
+    const [dataInicio, setDataInicio] = useState(() => {
         const hoje = new Date();
         const dataMais30Dias = new Date();
         dataMais30Dias.setDate(hoje.getDate() + 30);
         return dataMais30Dias;
+    });
+    const [dataFinal, setDataFinal] = useState(() => {
+        const hoje = new Date();
+        const dataMais60Dias = new Date();
+        dataMais60Dias.setDate(hoje.getDate() + 60);
+        return dataMais60Dias;
     });
     const [valorFinanciamento, setValorFinanciamento] = useState<string>("")
     const [taxaJuros, setTaxaJuros] = useState<string>("")
@@ -43,11 +51,33 @@ const Financiamento = () => {
     const [quantidadeMeses, setQuantidadeMeses] = useState<number>(1)
 
     const [financiamentoPagament, setFinanciamentoPagamento] = useState<FINANCIAMENTO_PAGAMENTO[]>([])
-    
+
+    const [financiamentoFinalizado, setFinanciamentoFinalizado] = useState<boolean>(false);
+    const [modalShow, setModalShow] = useState<boolean>(false);
+    const [titleModal, setTitleModal] = useState<string>("")
     const route = useRoute();
     const { clientFinanciamento }: any = route.params ?? {}
 
-    function handlerComporFinanciamento(){
+    const financiamentoDataBase = useFinanciamentoDataBase();
+
+
+
+    function handlerSalvarFinanciamento(){
+
+        
+
+        financiamentoDataBase.create(financiamento).then((response) => {
+            setFinanciamentoFinalizado(true)
+            setModalShow(true);
+            setTitleModal('FINANCIAMENTO CRIADO')
+        }).catch((error) => {
+            setTitleModal('ERROR CRIAR FINANCIAMENTO')
+            alert(error)
+            setModalShow(true)
+        })
+    }
+
+    function handlerComporFinanciamento(financiamentoPagamento: FINANCIAMENTO_PAGAMENTO[]){
 
         setFinanciamento({
             id: uuid.v4().toString(),
@@ -65,7 +95,7 @@ const Financiamento = () => {
             finalizado: false,
             atrasado: false,
             cliente: clientFinanciamento,
-            pagamentos: financiamentoPagament
+            pagamentos: financiamentoPagamento
         })
     }
 
@@ -87,7 +117,10 @@ const Financiamento = () => {
         const taxaJurosNumerico = parseFloat(taxaJuros.replace('%', '').replace(',', '.'));
         const taxaJurosAtrasoNumerico = parseFloat(taxaJurosAtraso.replace('%', '').replace(',', '.'));
 
-        for (let i = 1; i <= quantParcelas; i++) {
+        let quant = modalidade === MODALIDADE.CarenciaDeCapital ? 1 : quantParcelas
+        let valParcel = modalidade === MODALIDADE.CarenciaDeCapital ? valorDiario.replaceAll('.','').replace(',','.').replace('R$','') : valorParcelaNumerico
+
+        for (let i = 1; i <= quant; i++) {
             novaLista.push({
                 cliente: clientFinanciamento,
                 id: uuid.v4().toString(),
@@ -95,7 +128,7 @@ const Financiamento = () => {
                 dataPagamento: null,
                 numeroParcela: i,
                 valorPago: 0,
-                valorAtual: valorParcelaNumerico,
+                valorAtual: Number.parseFloat(valParcel.toString()),
                 valorDiaria: valorDiarioNumerico,
                 juros: taxaJurosNumerico,
                 jurosAtraso: taxaJurosAtrasoNumerico,
@@ -112,7 +145,7 @@ const Financiamento = () => {
             }
         }
         setFinanciamentoPagamento(novaLista);
-        handlerComporFinanciamento();
+        handlerComporFinanciamento(novaLista);
     }
 
 
@@ -387,48 +420,67 @@ const Financiamento = () => {
             </View>
             
             {Object.entries(financiamento).length > 0 && 
-                <View style={{ gap: 20, display: !simulador ?'flex' : 'none', flexDirection:'column', height:'100%', width:335, justifyContent:"space-between",  alignItems: "center" }}>
+                <View style={{ gap: 10, display: !simulador ?'flex' : 'none', flexDirection:'column', height:'100%', width:335, justifyContent:"space-between",  alignItems: "center" }}>
                     
-                    <View style={{ display:"flex", flexDirection:"row", flexWrap:"wrap", gap: 10,  width:335, justifyContent: "space-between", alignItems: "center", alignContent:"center" }}>
+                    <View style={{ display:"flex", flexDirection:"row", flexWrap:"wrap", gap: 0,  width:335, justifyContent: "space-between", alignItems: "center", alignContent:"center" }}>
                         <BalaoTexto 
-                            children={<TextComponent text={`Contrato: ${financiamento.id.substring(0, financiamento.id.indexOf('-'))}`} color={textColorPrimary} fontSize={14} textAlign={'auto'} />} />
+                            children={<TextComponent text={`Contrato: ${financiamento.id.substring(0, financiamento.id.indexOf('-'))}`} color={textColorPrimary} fontSize={14} textAlign={'auto'} />} 
+                            backgroundColor='transparent'
+                        />
 
                         <BalaoTexto 
-                            children={<TextComponent text={`${financiamento.cliente.firstName} ${financiamento.cliente.lastName}`} color={textColorPrimary} fontSize={14} textAlign={'auto'} />} />
+                            children={<TextComponent text={`${financiamento.cliente.firstName} ${financiamento.cliente.lastName}`} color={textColorPrimary} fontSize={14} textAlign={'auto'} />} 
+                            backgroundColor='transparent'
+                        />
                      
                         <BalaoTexto 
-                            children={<TextComponent text={`Inicio: ${DataUtils.formatarDataBR(financiamento.dataInicio)}`} color={textColorPrimary} fontSize={14} textAlign={'auto'} />} />
+                            children={<TextComponent text={`Inicio: ${DataUtils.formatarDataBR(financiamento.dataInicio)}`} color={textColorPrimary} fontSize={14} textAlign={'auto'} />} 
+                            backgroundColor='transparent'
+                        />
                         
                         <BalaoTexto 
-                            children={<TextComponent text={`Fim: ${DataUtils.formatarDataBR(financiamento.dataFim)}`} color={textColorPrimary} fontSize={14} textAlign={'auto'} />} />
+                            children={<TextComponent text={`Fim: ${DataUtils.formatarDataBR(financiamento.dataFim)}`} color={textColorPrimary} fontSize={14} textAlign={'auto'} />}
+                            backgroundColor='transparent'
+                        />
                     
                         <BalaoTexto 
-                            children={<TextComponent text={`Taxa Juros: ${financiamento.taxaJuros}%`} color={textColorPrimary} fontSize={14} textAlign={'auto'} />} />
+                            children={<TextComponent text={`Taxa Juros: ${financiamento.taxaJuros}%`} color={textColorPrimary} fontSize={14} textAlign={'auto'} />}
+                            backgroundColor='transparent'
+                        />
                         
                         <BalaoTexto 
-                            children={<TextComponent text={`Taxa atraso: ${financiamento.taxaJurosAtraso}%`} color={textColorPrimary} fontSize={14} textAlign={'auto'} />} />
+                            children={<TextComponent text={`Taxa atraso: ${financiamento.taxaJurosAtraso}%`} color={textColorPrimary} fontSize={14} textAlign={'auto'} />}
+                            backgroundColor='transparent'
+                        />
 
                         <BalaoTexto 
-                            children={<TextComponent text={`Valor: ${StringUtil.formatarMoedaReal(financiamento.valorFinanciado.toString())}`} color={textColorPrimary} fontSize={14} textAlign={'auto'} />} />
+                            children={<TextComponent text={`Valor: ${StringUtil.formatarMoedaReal(financiamento.valorFinanciado.toString())}`} color={textColorPrimary} fontSize={14} textAlign={'auto'} />}
+                            backgroundColor='transparent'
+                        />
                         
                         <BalaoTexto 
-                            children={<TextComponent text={`Montante: ${StringUtil.formatarMoedaReal(financiamento.valorMontante.toString())}`} color={textColorPrimary} fontSize={14} textAlign={'auto'} />} />
+                            children={<TextComponent text={`Montante: ${StringUtil.formatarMoedaReal(financiamento.valorMontante.toString())}`} color={textColorPrimary} fontSize={14} textAlign={'auto'} />}
+                            backgroundColor='transparent'
+                        />
                         
                         <BalaoTexto 
-                            children={<TextComponent text={`Diária: ${StringUtil.formatarMoedaReal(financiamento.valorDiaria.toString())}`} color={textColorPrimary} fontSize={14} textAlign={'auto'} />} />
+                            children={<TextComponent text={`Diária: ${StringUtil.formatarMoedaReal(financiamento.valorDiaria.toString())}`} color={textColorPrimary} fontSize={14} textAlign={'auto'} />}
+                            backgroundColor='transparent'
+                        />
                         
                         <BalaoTexto 
-                            children={<TextComponent text={`Adicional Atraso: ${StringUtil.formatarMoedaReal(financiamento.adicionalDiaAtraso.toString())}`} color={textColorPrimary} fontSize={14} textAlign={'auto'} />} />
-                        
-                                            
+                            children={<TextComponent text={`Adicional Atraso: ${StringUtil.formatarMoedaReal(financiamento.adicionalDiaAtraso.toString())}`} color={textColorPrimary} fontSize={14} textAlign={'auto'} />}
+                            backgroundColor='transparent'
+                        />
                         
                     </View>
 
-                    <View style={{ height: 250}}>
+                    <View style={{ height: 300, width:330}}>
                         <BalaoTexto 
+                            backgroundColor={backgroundOpacityBallon}
                             children={
                                 <>
-                                    <TextComponent text={`Total de Parcelas: ${financiamento.totalParcelas} `} color={textColorPrimary} fontSize={14} textAlign={'center'} />
+                                    <TextComponent text={`Total de Parcelas: ${financiamento.totalParcelas} de ${StringUtil.formatarMoedaReal(valorParcela)}`} color={textColorPrimary} fontSize={14} textAlign={'center'} />
                                     <TextComponent text={`Modalidade:  ${financiamento.modalidade}`} color={textColorPrimary} fontSize={14} textAlign={'center'} />
                                     <TextComponent text={`Periodicidade: ${financiamento.periodocidade}`} color={textColorPrimary} fontSize={14} textAlign={'center'} />
                                 </>
@@ -436,38 +488,56 @@ const Financiamento = () => {
                         <FlatList 
                             data={financiamentoPagament} 
                             keyExtractor={(item) => item.id}
+                            scrollEnabled={true}
                             renderItem={({ item }) => (
-                                <View style={{ 
-                                    display: "flex",
-                                    flexDirection: 'row',
-                                    width: 300, 
-                                    justifyContent:"space-between",
-                                    borderWidth: 1, 
-                                    marginBottom: 10,
-                                    borderBottomColor: flatListBorderColor,
-                                    borderRadius: 15,
-                                    padding: 10,
-                                }}>
-                                        <TextComponent text={`${item.numeroParcela}`} color={textColorPrimary} fontSize={14} textAlign={'auto'} />
-                                        <TextComponent text={`${DataUtils.formatarDataBR(item.dataVencimento)}`} color={textColorPrimary} fontSize={14}  textAlign='auto' />
-                                        <TextComponent
-                                            text={item.valorAtual.toLocaleString('pt-BR', {
-                                            style: 'currency',
-                                            currency: 'BRL',
-                                            })}
-                                            textAlign='auto'
-                                            color={textColorPrimary}
-                                            fontSize={16}
-                                        />
+                                <View
+                                    style={{ 
+                                        display: 'flex',
+                                        flexDirection: 'row',
+                                        gap: 0,
+                                        padding: 10, 
+                                        width: 330,
+                                        marginBottom:10,
+                                        borderWidth: 1,
+                                        borderBottomColor: flatListBorderColor,
+                                        borderRadius: 5
+                                    }}
+                                >
+                                    <View style={{ display: 'flex', flexDirection: 'row', gap:5, alignItems:'center', width:110}}>
+                                        <Ionicons name='return-down-forward-outline' size={25} color={iconColorPrimary}/>
+                                        <TextComponent text={`Parcela ${item.numeroParcela}`} color={textColorPrimary} fontSize={14} textAlign={'auto'} />
                                     </View>
+                                    <View style={{ display: 'flex', flexDirection: 'row', gap:5, alignItems:'center',  width:130}}>
+                                        <Ionicons name='calendar-number-outline' size={20} color={iconColorPrimary}/>
+                                        <TextComponent text={`${DataUtils.formatarDataBR(item.dataVencimento)}`} color={textColorPrimary} fontSize={14}  textAlign='auto' />
+                                    </View>
+                                    <View style={{ display: 'flex', flexDirection: 'row', gap:5, alignItems:'center'}}>
+                                        <TextComponent text={`${StringUtil.formatarMoedaReal(item.valorAtual.toString())}`} color={textColorPrimary} fontSize={14}  textAlign='auto' />
+                                    </View>
+                                </View>
                             ) }               
                         />
                     </View>
-                    <ButtonComponent nameButton={'EDITAR'} onPress={() => {setSimulador(!simulador)}} typeButton={'warning'} width={335} />
-                    <ButtonComponent nameButton={'FINANCIAR'} onPress={() => {}} typeButton={'success'} width={335} />
+                    <ButtonComponent nameButton={'EDITAR'} isDisabled={financiamentoFinalizado} onPress={() => {setSimulador(!simulador)}} typeButton={'warning'} width={335} />
+                    <ButtonComponent nameButton={'FINANCIAR'} isDisabled={financiamentoFinalizado} onPress={() => {handlerSalvarFinanciamento()}} typeButton={'success'} width={335} />
                 </View>
             }
 
+           
+            {Object.entries(financiamento).length > 0 &&
+                <ModalSystem 
+                    title={`${titleModal}`} 
+                    children={
+                        <View>
+                            <TextComponent 
+                                text={`FINANCIAMENTO CONTRATO ${financiamento.id.substring(0, financiamento.id.indexOf('-'))} FINALIZADO`} 
+                                color={'rgb(247, 238, 238)'} fontSize={7} textAlign={'center'} />
+                        </View>
+                    } 
+                    setVisible={setModalShow} 
+                    visible={modalShow} 
+                />
+            }
         </BaseScreens>
     )
 }

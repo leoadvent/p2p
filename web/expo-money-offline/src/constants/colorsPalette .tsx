@@ -41,6 +41,8 @@ export const borderCollor = "rgba(8, 13, 54, 0.47)";
 
 export const iconDrawerColor = "rgb(255, 72, 0)";
 
+export const iconColorPrimary = "rgb(235, 210, 210)"
+
 
   
 

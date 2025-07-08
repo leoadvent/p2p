@@ -1,17 +1,25 @@
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { useRoute } from "@react-navigation/native";
 import React, { useEffect, useState } from "react";
-import { Dimensions, Platform, TouchableOpacity, View } from "react-native";
+import { FlatList, Platform, TouchableOpacity, View } from "react-native";
+import uuid from 'react-native-uuid';
+import BalaoTexto from '../components/balaoTexto';
 import ButtonComponent from "../components/button";
 import InputText from "../components/input";
 import MeuSelect from '../components/picker';
-import { FINANCIAMENTO, MODALIDADE, PERIODOCIDADE } from "../types/financiamento";
+import TextComponent from '../components/text/text';
+import { flatListBorderColor, textColorPrimary } from '../constants/colorsPalette ';
+import { FINANCIAMENTO, FINANCIAMENTO_PAGAMENTO, MODALIDADE, PERIODOCIDADE } from "../types/financiamento";
+import { DataUtils } from '../utils/dataUtil';
+import { StringUtil } from '../utils/stringUtil';
 import BaseScreens from "./BaseScreens";
 
 const Financiamento = () => {
 
-    const [financiamento, statementFinanciamento] = useState<FINANCIAMENTO>({} as FINANCIAMENTO)
+    const [financiamento, setFinanciamento] = useState<FINANCIAMENTO>({} as FINANCIAMENTO)
     const [modalidade, setModalidade] = useState<MODALIDADE>(MODALIDADE.Parcelado)
+
+    const [simulador, setSimulador] = useState<boolean>(true)
 
     const [showPickerDataInicio, setShowPickerDataInicio] = useState(false)
     const [showPickerDataFinal, setShowPickerDataFinal] = useState(false)
@@ -32,12 +40,82 @@ const Financiamento = () => {
     const [periodocidade, setPeriodocidade] = useState<string>("")
     const [valorParcela, setValorParcela] = useState<string>("")
     const [valorMontante, setValorMontante] = useState<string>("")
+    const [quantidadeMeses, setQuantidadeMeses] = useState<number>(1)
 
+    const [financiamentoPagament, setFinanciamentoPagamento] = useState<FINANCIAMENTO_PAGAMENTO[]>([])
     
     const route = useRoute();
     const { clientFinanciamento }: any = route.params ?? {}
 
-    const width = Dimensions.get("window").width
+    function handlerComporFinanciamento(){
+
+        setFinanciamento({
+            id: uuid.v4().toString(),
+            dataInicio: dataInicio,
+            dataFim: dataFinal,
+            valorFinanciado: Number.parseFloat(valorFinanciamento.replaceAll('.','').replace(',','.')),
+            taxaJuros: Number.parseFloat(taxaJuros.replace(',','.')),
+            taxaJurosAtraso: Number.parseFloat(taxaJurosAtraso.replace(',','.').replace('%','')),
+            adicionalDiaAtraso: Number.parseFloat(adicionalDiaAtraso.replace(',','.').replace('%','').replace('R$', '')),
+            valorDiaria: Number.parseFloat(valorDiario.replace(',','.').replace('%','').replace('R$', '')),
+            valorMontante: Number.parseFloat(valorMontante.replaceAll('.','').replace(',','.')),
+            modalidade: modalidade,
+            periodocidade: periodocidade === 'Mensal' ? PERIODOCIDADE.Mensal : periodocidade === 'Quinzenal' ? PERIODOCIDADE.Quinzenal : PERIODOCIDADE.Semanal,
+            totalParcelas: Number.parseInt(totalParcelas),
+            finalizado: false,
+            atrasado: false,
+            cliente: clientFinanciamento,
+            pagamentos: financiamentoPagament
+        })
+    }
+
+    function handlerMontarListaFinanciamentoPagamento() {
+        if (!totalParcelas || !valorParcela || !valorDiario || !taxaJuros || !taxaJurosAtraso) {
+            console.warn('Campos obrigatórios para gerar parcelas não estão preenchidos');
+            return;
+        }
+
+        let inicio = new Date(dataInicio);
+        const quantParcelas = parseInt(totalParcelas);
+        const novaLista: FINANCIAMENTO_PAGAMENTO[] = [];
+
+        const valorParcelaNumerico = parseFloat(
+            valorParcela.replace(/[^0-9,]/g, '').replace(',', '.')
+        );
+
+        const valorDiarioNumerico = parseFloat(valorDiario.replace(/[^0-9,]/g, '').replace(',', '.'));
+        const taxaJurosNumerico = parseFloat(taxaJuros.replace('%', '').replace(',', '.'));
+        const taxaJurosAtrasoNumerico = parseFloat(taxaJurosAtraso.replace('%', '').replace(',', '.'));
+
+        for (let i = 1; i <= quantParcelas; i++) {
+            novaLista.push({
+                cliente: clientFinanciamento,
+                id: uuid.v4().toString(),
+                dataVencimento: new Date(inicio),
+                dataPagamento: null,
+                numeroParcela: i,
+                valorPago: 0,
+                valorAtual: valorParcelaNumerico,
+                valorDiaria: valorDiarioNumerico,
+                juros: taxaJurosNumerico,
+                jurosAtraso: taxaJurosAtrasoNumerico,
+                executadoEmpenho: false
+            });
+
+            // Avança a data conforme periodicidade
+            if (periodocidade === PERIODOCIDADE.Mensal) {
+                inicio.setMonth(inicio.getMonth() + 1);
+            } else if (periodocidade === PERIODOCIDADE.Quinzenal) {
+                inicio.setDate(inicio.getDate() + 15);
+            } else if (periodocidade === PERIODOCIDADE.Semanal) {
+                inicio.setDate(inicio.getDate() + 7);
+            }
+        }
+        setFinanciamentoPagamento(novaLista);
+        handlerComporFinanciamento();
+    }
+
+
 
     function calculaQuantidadeDeParcela() {
         if (!dataInicio || !dataFinal || !periodocidade) return;
@@ -55,9 +133,11 @@ const Financiamento = () => {
 
         let total = 0;
 
+        setQuantidadeMeses(Math.ceil(diffEmDias / 30))
+
         switch (periodocidade.toLowerCase()) {
             case 'mensal':
-                total = Math.ceil(diffEmDias / 30); // ou usar cálculo por mês exato se preferir
+                total = Math.ceil(diffEmDias / 30);
                 break;
             case 'quinzenal':
                 total = Math.ceil(diffEmDias / 15);
@@ -69,9 +149,24 @@ const Financiamento = () => {
                 total = 0;
         }
 
+        
         setTotalParcelas(total.toString());
     }
 
+    function calcularMontante(){
+         // Normaliza valores
+        const valorNormalizado = valorFinanciamento.replace(/\./g, '').replace(',', '.');
+        const taxaNormalizada = taxaJuros.replace(/\./g, '').replace(',', '.').replace('%', '');
+
+        const numValor = parseFloat(valorNormalizado);
+        const numTaxa = parseFloat(taxaNormalizada);
+
+        const jurosTotal = (numValor * numTaxa) / 100;
+
+        const valorMontante = numValor + jurosTotal;
+
+        setValorMontante(valorMontante.toString());
+    }
 
     function calcularJurosDiario() {
         if (!valorFinanciamento || !taxaJuros || !totalParcelas) return;
@@ -93,10 +188,13 @@ const Financiamento = () => {
 
         // Juros diário
         const jurosTotal = (numValor * numTaxa) / 100;
-        const valDiario = jurosTotal / 30;
 
         // Montante com juros simples
         const valorMontante = numValor + jurosTotal;
+
+        const valDiario = (valorMontante / quantidadeMeses) / 30;
+
+        
 
         const valorParcela = valorMontante / numParcelas;
 
@@ -112,6 +210,8 @@ const Financiamento = () => {
         setAdicionalDiaAtraso(formatar(valDiario));
         setValorMontante(formatar(valorMontante));
         setValorParcela(valorParcela.toString()); // apenas formata no input no render
+
+        calcularMontante()
     }
 
 
@@ -123,7 +223,7 @@ const Financiamento = () => {
     return(
         <BaseScreens title={`FINANCIAMENTO`} rolbackStack={true}>
             
-            <View style={{ gap: 20, display: 'flex', flexDirection:'column', height:'100%', justifyContent:"space-between" }}>
+            <View style={{ gap: 20, display: simulador ?'flex' : 'none', flexDirection:'column', height:'100%', justifyContent:"space-between" }}>
                 
                 <View style={{ width:330, display:"flex", flexDirection:"row", flexWrap:"wrap", gap: 20, justifyContent: "center", alignItems: "center" }}>
                 
@@ -283,8 +383,89 @@ const Financiamento = () => {
                     
                 </View>
             
-                <ButtonComponent nameButton={'SIMULAR'} onPress={() => {}} typeButton={'primary'} width={335} />
+                <ButtonComponent nameButton={'SIMULAR'} onPress={() => {setSimulador(!simulador); handlerMontarListaFinanciamentoPagamento()}} typeButton={'primary'} width={335} />
             </View>
+            
+            {Object.entries(financiamento).length > 0 && 
+                <View style={{ gap: 20, display: !simulador ?'flex' : 'none', flexDirection:'column', height:'100%', width:335, justifyContent:"space-between",  alignItems: "center" }}>
+                    
+                    <View style={{ display:"flex", flexDirection:"row", flexWrap:"wrap", gap: 10,  width:335, justifyContent: "space-between", alignItems: "center", alignContent:"center" }}>
+                        <BalaoTexto 
+                            children={<TextComponent text={`Contrato: ${financiamento.id.substring(0, financiamento.id.indexOf('-'))}`} color={textColorPrimary} fontSize={14} textAlign={'auto'} />} />
+
+                        <BalaoTexto 
+                            children={<TextComponent text={`${financiamento.cliente.firstName} ${financiamento.cliente.lastName}`} color={textColorPrimary} fontSize={14} textAlign={'auto'} />} />
+                     
+                        <BalaoTexto 
+                            children={<TextComponent text={`Inicio: ${DataUtils.formatarDataBR(financiamento.dataInicio)}`} color={textColorPrimary} fontSize={14} textAlign={'auto'} />} />
+                        
+                        <BalaoTexto 
+                            children={<TextComponent text={`Fim: ${DataUtils.formatarDataBR(financiamento.dataFim)}`} color={textColorPrimary} fontSize={14} textAlign={'auto'} />} />
+                    
+                        <BalaoTexto 
+                            children={<TextComponent text={`Taxa Juros: ${financiamento.taxaJuros}%`} color={textColorPrimary} fontSize={14} textAlign={'auto'} />} />
+                        
+                        <BalaoTexto 
+                            children={<TextComponent text={`Taxa atraso: ${financiamento.taxaJurosAtraso}%`} color={textColorPrimary} fontSize={14} textAlign={'auto'} />} />
+                        
+                        <BalaoTexto 
+                            children={<TextComponent text={`Tipo: ${financiamento.modalidade}`} color={textColorPrimary} fontSize={14} textAlign={'auto'} />}
+                        />
+
+                        <BalaoTexto 
+                            children={<TextComponent text={`Valor: ${StringUtil.formatarMoedaReal(financiamento.valorFinanciado.toString())}`} color={textColorPrimary} fontSize={14} textAlign={'auto'} />} />
+                        
+                        <BalaoTexto 
+                            children={<TextComponent text={`Montante: ${StringUtil.formatarMoedaReal(financiamento.valorMontante.toString())}`} color={textColorPrimary} fontSize={14} textAlign={'auto'} />} />
+                        
+                        <BalaoTexto 
+                            children={<TextComponent text={`Diária: ${StringUtil.formatarMoedaReal(financiamento.valorDiaria.toString())}`} color={textColorPrimary} fontSize={14} textAlign={'auto'} />} />
+                        
+                        <BalaoTexto 
+                            children={<TextComponent text={`Adicional Atraso: ${StringUtil.formatarMoedaReal(financiamento.adicionalDiaAtraso.toString())}`} color={textColorPrimary} fontSize={14} textAlign={'auto'} />} />
+                        
+                                            
+                        
+                    </View>
+
+                    <View style={{ height: 190}}>
+                        <BalaoTexto 
+                            children={<TextComponent text={`Total de Parcelas: ${financiamento.totalParcelas}`} color={textColorPrimary} fontSize={14} textAlign={'center'} />} />  
+                        <FlatList 
+                            data={financiamentoPagament} 
+                            keyExtractor={(item) => item.id}
+                            renderItem={({ item }) => (
+                                <View style={{ 
+                                    display: "flex",
+                                    flexDirection: 'row',
+                                    width: 300, 
+                                    justifyContent:"space-between",
+                                    borderWidth: 1, 
+                                    marginBottom: 10,
+                                    borderBottomColor: flatListBorderColor,
+                                    borderRadius: 15,
+                                    padding: 10,
+                                }}>
+                                        <TextComponent text={`${item.numeroParcela}`} color={textColorPrimary} fontSize={14} textAlign={'auto'} />
+                                        <TextComponent text={`${DataUtils.formatarDataBR(item.dataVencimento)}`} color={textColorPrimary} fontSize={14}  textAlign='auto' />
+                                        <TextComponent
+                                            text={item.valorAtual.toLocaleString('pt-BR', {
+                                            style: 'currency',
+                                            currency: 'BRL',
+                                            })}
+                                            textAlign='auto'
+                                            color={textColorPrimary}
+                                            fontSize={16}
+                                        />
+                                    </View>
+                            ) }               
+                        />
+                    </View>
+                    <ButtonComponent nameButton={'EDITAR'} onPress={() => {setSimulador(!simulador)}} typeButton={'warning'} width={335} />
+                    <ButtonComponent nameButton={'FINANCIAR'} onPress={() => {}} typeButton={'success'} width={335} />
+                </View>
+            }
+
         </BaseScreens>
     )
 }

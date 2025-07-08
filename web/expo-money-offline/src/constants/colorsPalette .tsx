@@ -4,7 +4,7 @@ export const tabNavigatorColor      = "rgb(2, 1, 20)";
 export const backgroundPrimary        = "rgb(26, 18, 36)";
 export const backgroundSecondary      = "rgba(0, 0, 0, 0.16)";
 export const backgroundOpacity        = "rgba(255, 255, 255, 0.07)";
-export const backgroundOpacityBallon  = "rgba(255, 255, 255, 0.03)";
+export const backgroundOpacityBallon  = "rgba(255, 255, 255, 0.25)";
 export const backgroundSolid          = "rgb(119, 117, 117)";
 
 export const textColorPrimary       = "rgb(247, 238, 238)";
@@ -24,7 +24,7 @@ export const inputBorderColorErro   = "rgb(240, 174, 174)";
 export const buttonBackgroundColorPrimary   = "rgb(9, 69, 134)";
 export const buttonBackgroundColorSecondary = "rgb(255, 255, 255)";
 export const buttonBackgroundColorWarning   = "rgb(221, 188, 1)";
-export const buttonBackgroundColorSuccess   = "rgb(52, 199, 89)";
+export const buttonBackgroundColorSuccess   = "rgb(45, 160, 74)";
 export const buttonBackgroundColorError     = "rgb(240, 174, 174)";
 export const buttonBackgroundColorDisabled  = "rgb(200, 200, 200)";
 export const buttonBackgroundColorWhatssapp = "rgb(9, 107, 33)";

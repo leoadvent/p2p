@@ -14,7 +14,7 @@ export enum MODALIDADE {
 export interface FINANCIAMENTO_PAGAMENTO {
     id: string
     dataVencimento: Date
-    dataPagamento: Date
+    dataPagamento: Date | null
     numeroParcela: number
     valorPago: number
     valorAtual: number

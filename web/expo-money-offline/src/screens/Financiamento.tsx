@@ -407,10 +407,6 @@ const Financiamento = () => {
                         
                         <BalaoTexto 
                             children={<TextComponent text={`Taxa atraso: ${financiamento.taxaJurosAtraso}%`} color={textColorPrimary} fontSize={14} textAlign={'auto'} />} />
-                        
-                        <BalaoTexto 
-                            children={<TextComponent text={`Tipo: ${financiamento.modalidade}`} color={textColorPrimary} fontSize={14} textAlign={'auto'} />}
-                        />
 
                         <BalaoTexto 
                             children={<TextComponent text={`Valor: ${StringUtil.formatarMoedaReal(financiamento.valorFinanciado.toString())}`} color={textColorPrimary} fontSize={14} textAlign={'auto'} />} />
@@ -428,9 +424,15 @@ const Financiamento = () => {
                         
                     </View>
 
-                    <View style={{ height: 190}}>
+                    <View style={{ height: 250}}>
                         <BalaoTexto 
-                            children={<TextComponent text={`Total de Parcelas: ${financiamento.totalParcelas}`} color={textColorPrimary} fontSize={14} textAlign={'center'} />} />  
+                            children={
+                                <>
+                                    <TextComponent text={`Total de Parcelas: ${financiamento.totalParcelas} `} color={textColorPrimary} fontSize={14} textAlign={'center'} />
+                                    <TextComponent text={`Modalidade:  ${financiamento.modalidade}`} color={textColorPrimary} fontSize={14} textAlign={'center'} />
+                                    <TextComponent text={`Periodicidade: ${financiamento.periodocidade}`} color={textColorPrimary} fontSize={14} textAlign={'center'} />
+                                </>
+                            } />  
                         <FlatList 
                             data={financiamentoPagament} 
                             keyExtractor={(item) => item.id}

@@ -1,15 +1,15 @@
-import { flatListBorderColor, iconColorDanger, iconColorSuccess, iconColorWarning, textColorPrimary, textColorWarning } from "@/constants/colorsPalette ";
+import { flatListBorderColor, iconColorDanger, iconColorSuccess, iconColorWarning, textColorPrimary } from "@/constants/colorsPalette ";
 import { useCustomerDataBase } from "@/database/useCustomerDataBase";
 import { NavigationProp } from "@/src/navigation/navigation";
 import { IconsUtil } from "@/src/utils/iconsUtil";
 import { CUSTOMER } from "@/types/customer";
-import { Ionicons } from "@expo/vector-icons";
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import React, { useState } from "react";
 import { Dimensions, FlatList, TouchableOpacity, View } from "react-native";
 import ShowImageCliente from "../imageAvatar";
 import ModalSystem from "../modal";
 import TextComponent from "../text/text";
+import DetalharCliente from "./detalharCliente";
 
 const ListarCliente = () => {
 
@@ -103,23 +103,7 @@ const ListarCliente = () => {
                 )}
             />
             <ModalSystem  title={`${customerView?.firstName} ${customerView?.lastName}`} heightProp={850} setVisible={setModalVisible} visible={modalVisible} children={
-                <View style={{ display: "flex", flexDirection: "column", gap: 10, alignItems:"center" }}>
-                    <ShowImageCliente
-                        urlPhoto={customerView.photo}
-                        amountFinancialLoansPending={0}
-                        firsName={customerView.firstName}
-                        lastName={customerView.lastName}
-                        width={160}
-                        height={160}
-                    />
-
-                    <TouchableOpacity onPress={() => {setModalVisible(false), navigation.navigate("CriarEditarClientes", { clientEdit: customerView })}}>
-                        <Ionicons name="pencil-sharp" size={26} color={textColorWarning} />
-                    </TouchableOpacity>
-                    <TouchableOpacity onPress={() => {setModalVisible(false), navigation.navigate("Financiamento", { clientFinanciamento: customerView })}}>
-                        <Ionicons name="cash-sharp" size={26} color={textColorWarning} />
-                    </TouchableOpacity>
-                </View>
+                <DetalharCliente customer={customerView} setModalVisible={setModalVisible} />
             } />
 
           

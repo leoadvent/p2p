@@ -2,7 +2,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { iconColorDanger, iconColorPrimary, iconColorSuccess, iconColorWarning } from "../constants/colorsPalette ";
 
 interface Props{
-    size: 10 | 15 |20
+    size: 10 | 15 | 20 | 25 | 30
     color: typeof iconColorPrimary | typeof iconColorWarning | typeof iconColorDanger | typeof iconColorSuccess
 }
 export class IconsUtil {

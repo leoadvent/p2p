@@ -71,5 +71,53 @@ export function useFinanciamentoDataBase() {
 
     }
 
-    return {create}
+    async function atualizarPagamentosAtrasados() {
+        try {
+            // Atualiza o valorAtual nos pagamentos atrasados
+            const sqlUpdate1 = `
+                UPDATE FINANCIAMENTO_PAGAMENTO
+                SET valorAtual = (
+                SELECT 
+                    ROUND(
+                    COALESCE(fp.valorDiaria, 0) + 
+                    ((julianday('now') - julianday(fp.dataVencimento)) * COALESCE(f.adicionalDiaAtraso, 0)), 
+                    2
+                    )
+                FROM FINANCIAMENTO f
+                WHERE f.id = fp.financiamento_id
+                )
+                FROM FINANCIAMENTO_PAGAMENTO fp
+                WHERE 
+                fp.id = FINANCIAMENTO_PAGAMENTO.id
+                AND fp.dataPagamento IS NULL
+                AND DATE(fp.dataVencimento) < DATE('now');
+            `;
+
+            // Atualiza o campo "atrasado" nos financiamentos com pelo menos um pagamento vencido
+            const sqlUpdate2 =`
+                UPDATE FINANCIAMENTO
+                SET atrasado = 1
+                WHERE id IN (
+                SELECT DISTINCT financiamento_id
+                FROM FINANCIAMENTO_PAGAMENTO
+                WHERE 
+                    dataPagamento IS NULL
+                    AND DATE(dataVencimento) < DATE('now')
+                );
+            `;
+
+            const statementSqlUpdate1  = await dataBase.prepareAsync(sqlUpdate1);
+            const statementSqlUpdate2  = await dataBase.prepareAsync(sqlUpdate2);
+
+            await statementSqlUpdate1.executeAsync()
+            await statementSqlUpdate2.executeAsync()
+
+            alert('Pagamentos atrasados atualizados com sucesso.');
+        } catch (error) {
+            alert('Erro ao atualizar pagamentos atrasados:');
+        }
+    }
+
+    return {create,  atualizarPagamentosAtrasados }
+
 }

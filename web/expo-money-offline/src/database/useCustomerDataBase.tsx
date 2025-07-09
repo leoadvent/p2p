@@ -96,7 +96,7 @@ export function useCustomerDataBase() {
             WHERE 
                 c.firstName LIKE $nome OR c.lastName LIKE $nome
             ORDER BY 
-                totalParcelasAtrasadas, totalParcelasPendente DESC
+                totalParcelasAtrasadas, totalFinanciamentoAbertas DESC
             `;
 
 

@@ -530,6 +530,7 @@ const Financiamento = () => {
 
                     <View style={{ height: 300, width:330}}>
                         <BalaoTexto 
+                            borderWidth={0}
                             backgroundColor={backgroundOpacityBallon}
                             children={
                                 <>

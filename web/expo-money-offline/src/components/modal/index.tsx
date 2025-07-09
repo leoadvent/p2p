@@ -29,6 +29,8 @@ const ModalSystem = ({title, children, buttonClose, setVisible, visible=false, h
             { buttonClose }
         </TouchableOpacity>
         <Modal
+            animationIn={"flipInX"}
+            animationOut={"flipOutX"}
             isVisible={visible}
             onBackdropPress={handleClose}
             backdropTransitionOutTiming={0}

@@ -5,7 +5,7 @@ import { View } from "react-native";
 interface Props {
     children: React.ReactNode;
     backgroundColor: typeof backgroundOpacityBallon | 'transparent'
-    borderWidth: 0.7 | 1
+    borderWidth: 0 | 0.7 | 1
 }
 const BalaoTexto = ({children, backgroundColor, borderWidth} : Props) => {
     return (

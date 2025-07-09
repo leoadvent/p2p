@@ -70,13 +70,13 @@ export function useCustomerDataBase() {
         try {
             const likeNome = `%${nome}%`;
 
-            const sql = `
+           const sql = `
             SELECT 
-                c.id as id,
-                c.firstName as firstName,
-                c.lastName as lastName,
-                c.contact as contact,
-                c.photo as photo,
+                c.id as cliente_id,
+                c.firstName,
+                c.lastName,
+                c.contact,
+                c.photo,
                 e.id as endereco_id,
                 e.cep,
                 e.logradouro,
@@ -86,15 +86,19 @@ export function useCustomerDataBase() {
                 e.localidade,
                 e.estado,
                 e.uf,
-                e.regiao
+                e.regiao,
+                (SELECT COUNT(*) FROM FINANCIAMENTO f WHERE f.cliente_id = c.id AND f.finalizado = 0 AND f.atrasado = 0) as totalFinanciamentoAbertas,
+                (SELECT COUNT(*) FROM FINANCIAMENTO f WHERE f.cliente_id = c.id AND f.finalizado = 0 AND f.atrasado = 1) as totalParcelasAtrasadas,
+                (SELECT COUNT(*) FROM FINANCIAMENTO f WHERE f.cliente_id = c.id AND f.finalizado = 0) as totalParcelasPendente
             FROM 
                 CUSTOMER c
                 LEFT JOIN ENDERECO e ON c.endereco_id = e.id
             WHERE 
                 c.firstName LIKE $nome OR c.lastName LIKE $nome
             ORDER BY 
-                c.firstName, c.lastName ASC
+                totalParcelasAtrasadas, totalParcelasPendente DESC
             `;
+
 
             const rows = await dataBase.getAllAsync(sql, { $nome: likeNome });
 
@@ -105,6 +109,9 @@ export function useCustomerDataBase() {
             lastName: row.lastName,
             contact: row.contact,
             photo: row.photo,
+            totalParcelasAbertas: row.totalFinanciamentoAbertas,
+            totalParcelasAtrasadas: row.totalParcelasAtrasadas,
+            totalParcelasPendente: row.totalParcelasPendente,
             endereco: {
                 id: row.endereco_id,
                 cep: row.cep,

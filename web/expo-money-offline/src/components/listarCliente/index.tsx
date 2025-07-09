@@ -1,6 +1,7 @@
-import { flatListBorderColor, textColorPrimary, textColorWarning } from "@/constants/colorsPalette ";
+import { flatListBorderColor, iconColorDanger, iconColorSuccess, iconColorWarning, textColorPrimary, textColorWarning } from "@/constants/colorsPalette ";
 import { useCustomerDataBase } from "@/database/useCustomerDataBase";
 import { NavigationProp } from "@/src/navigation/navigation";
+import { IconsUtil } from "@/src/utils/iconsUtil";
 import { CUSTOMER } from "@/types/customer";
 import { Ionicons } from "@expo/vector-icons";
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
@@ -57,15 +58,20 @@ const ListarCliente = () => {
                                         borderRadius: 5,
                                         padding: 10,
                                 }}>
+                            <View style={{ flexDirection:"column", gap:5, width:19}}>
+                                {item.totalParcelasAbertas > 0 && IconsUtil.contrato({size: 20, color: iconColorSuccess})}
+                                {item.totalParcelasPendente > 0 && IconsUtil.contrato({size: 20, color: iconColorWarning})}
+                                {item.totalParcelasAtrasadas > 0 && IconsUtil.contrato({size: 20, color: iconColorDanger})}
+                            </View>
                             <ShowImageCliente 
                                 width={60}
                                 height={60}
                                 urlPhoto={item.photo} 
-                                amountFinancialLoansPending={0} 
+                                amountFinancialLoansPending={item.totalParcelasAtrasadas} 
                                 firsName={item.firstName} 
                                 lastName={item.lastName} 
                             />
-                            <View style={{ flex: 1, display: "flex", flexDirection: "column", gap: 5 }}>
+                            <View style={{ flex: 1, display: "flex", flexDirection: "row", gap: 5 }}>
                                 <TextComponent text={`${item.firstName} ${item.lastName}`} fontSize={18} color={textColorPrimary} textAlign={"auto"} />
                             </View>
                         </View>

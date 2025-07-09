@@ -7,4 +7,7 @@ export interface CUSTOMER {
     contact: string;
     photo: string;
     endereco: ENDERECO;
+    totalParcelasAbertas: number
+    totalParcelasAtrasadas: number
+    totalParcelasPendente: number
 }

@@ -41,6 +41,7 @@ export const borderCollor = "rgba(8, 13, 54, 0.47)";
 
 export const iconDrawerColor  = "rgb(255, 72, 0)";
 export const iconColorPrimary = "rgb(235, 210, 210)"
+export const iconColorSuccess = "rgb(35, 126, 8)"
 export const iconColorWarning = "rgb(191, 204, 13)"
 export const iconColorDanger  = "rgb(230, 39, 6)"
 

@@ -104,7 +104,7 @@ export function useCustomerDataBase() {
 
             // Mapear os dados para a interface CUSTOMER
             return rows.map((row: any) => ({
-            id: row.id,
+            id: row.cliente_id,
             firstName: row.firstName,
             lastName: row.lastName,
             contact: row.contact,

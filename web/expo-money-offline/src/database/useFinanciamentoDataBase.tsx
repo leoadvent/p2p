@@ -112,9 +112,9 @@ export function useFinanciamentoDataBase() {
             await statementSqlUpdate1.executeAsync()
             await statementSqlUpdate2.executeAsync()
 
-            alert('Pagamentos atrasados atualizados com sucesso.');
+            return true;
         } catch (error) {
-            alert('Erro ao atualizar pagamentos atrasados:');
+            return false;
         }
     }
 

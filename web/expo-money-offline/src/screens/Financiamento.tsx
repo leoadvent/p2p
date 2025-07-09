@@ -14,6 +14,7 @@ import { backgroundOpacityBallon, flatListBorderColor, iconColorPrimary, textCol
 import { useFinanciamentoDataBase } from '../database/useFinanciamentoDataBase';
 import { FINANCIAMENTO, FINANCIAMENTO_PAGAMENTO, MODALIDADE, PERIODOCIDADE } from "../types/financiamento";
 import { DataUtils } from '../utils/dataUtil';
+import { IconsUtil } from '../utils/iconsUtil';
 import { StringUtil } from '../utils/stringUtil';
 import BaseScreens from "./BaseScreens";
 
@@ -241,6 +242,114 @@ const Financiamento = () => {
         calcularMontante()
     }
 
+    function resumoFinanciamento(){
+        return(
+                    <View style={{ display:"flex", flexDirection:"row", flexWrap:"wrap", gap: 0,  width:335, justifyContent: "space-between", alignItems: "center", alignContent:"center" }}>
+                        <BalaoTexto 
+                            borderWidth={0}
+                            children={
+                                <View style={{ flexDirection:"row", width:140, alignItems:"center", gap:5}}>
+                                    {IconsUtil.contrato({size: 15, color: iconColorPrimary})}
+                                    <TextComponent text={`Contrato: ${financiamento.id.substring(0, financiamento.id.indexOf('-'))}`} color={textColorPrimary} fontSize={14} textAlign={'auto'} />
+                                </View>
+                                }
+                            backgroundColor='transparent'
+                        />
+
+                        <BalaoTexto 
+                            borderWidth={0}
+                            children={
+                                <View style={{ flexDirection:"row", width:140, alignItems:"center", gap:5}}>
+                                    {IconsUtil.cliente({size: 15, color: iconColorPrimary})}
+                                    <TextComponent text={`${financiamento.cliente.firstName} ${financiamento.cliente.lastName}`} color={textColorPrimary} fontSize={14} textAlign={'auto'} />
+                                </View>
+                                } 
+                            backgroundColor='transparent'
+                        />
+                     
+                        <BalaoTexto
+                            borderWidth={0} 
+                            children={
+                                <View style={{ flexDirection:"row", width:140, alignItems:"center", gap:5}}>
+                                    {IconsUtil.calendarioNumero({size: 15, color: iconColorPrimary})}
+                                    <TextComponent text={`Inicio: ${DataUtils.formatarDataBR(financiamento.dataInicio)}`} color={textColorPrimary} fontSize={14} textAlign={'auto'} />
+                                </View>
+                                } 
+                            backgroundColor='transparent'
+                        />
+                        
+                        <BalaoTexto
+                            borderWidth={0} 
+                            children={
+                                <View style={{ flexDirection:"row", width:140, alignItems:"center", gap:5}}>
+                                    {IconsUtil.calendarioNumero({size: 15, color: iconColorPrimary})}
+                                    <TextComponent text={`Fim: ${DataUtils.formatarDataBR(financiamento.dataFim)}`} color={textColorPrimary} fontSize={14} textAlign={'auto'} />
+                                </View>
+                                }
+                            backgroundColor='transparent'
+                        />
+                    
+                        {modalidade === MODALIDADE.Parcelado &&
+                            <BalaoTexto
+                                borderWidth={0} 
+                                children={
+                                    <View style={{ flexDirection:"row", width:140, alignItems:"center", gap:5}}>
+                                        {IconsUtil.iconTaxa({ size: 15, color: iconColorPrimary })}
+                                        <TextComponent text={`Taxa Juros: ${financiamento.taxaJuros}%`} color={textColorPrimary} fontSize={14} textAlign={'auto'} />
+                                    </View>    
+                                    }
+                                backgroundColor='transparent'
+                            />
+                        }
+                        
+                        {modalidade === MODALIDADE.Parcelado &&
+                            <BalaoTexto
+                                borderWidth={0} 
+                                children={
+                                    <View style={{ flexDirection:"row", width:140, alignItems:"center", gap:5}}>
+                                        {IconsUtil.iconTaxa({ size: 15, color: iconColorPrimary })}
+                                        <TextComponent text={`Taxa atraso: ${financiamento.taxaJurosAtraso}%`} color={textColorPrimary} fontSize={14} textAlign={'auto'} />
+                                    </View>}
+                                backgroundColor='transparent'
+                            />
+                        }
+
+                        <BalaoTexto
+                            borderWidth={0} 
+                            children={
+                                <View style={{ flexDirection:"row", width:130, alignItems:"center", gap:5}}>
+                                    {IconsUtil.dinheiro({ size: 15, color: iconColorPrimary })}    
+                                    <TextComponent text={`Valor: ${StringUtil.formatarMoedaReal(financiamento.valorFinanciado.toString())}`} color={textColorPrimary} fontSize={14} textAlign={'auto'} />
+                                </View>        
+                                }
+                            backgroundColor='transparent'
+                        />
+                        
+                        <BalaoTexto
+                            borderWidth={0} 
+                            children={<TextComponent text={`Montante: ${StringUtil.formatarMoedaReal(financiamento.valorMontante.toString())}`} color={textColorPrimary} fontSize={14} textAlign={'auto'} />}
+                            backgroundColor='transparent'
+                        />
+                        
+                        {modalidade === MODALIDADE.CarenciaDeCapital &&
+                            <BalaoTexto
+                                borderWidth={0} 
+                                children={<TextComponent text={`Diária: ${StringUtil.formatarMoedaReal(financiamento.valorDiaria.toString())}`} color={textColorPrimary} fontSize={14} textAlign={'auto'} />}
+                                backgroundColor='transparent'
+                            />
+                        }
+                        
+                        {modalidade === MODALIDADE.Parcelado && 
+                            <BalaoTexto
+                                borderWidth={0} 
+                                children={<TextComponent text={`Adicional Atraso: ${StringUtil.formatarMoedaReal(financiamento.adicionalDiaAtraso.toString())} diários`} color={textColorPrimary} fontSize={14} textAlign={'auto'} />}
+                                backgroundColor='transparent'
+                            />
+                        }
+                        
+                    </View>
+        )
+    }
 
     useEffect(() => {calcularJurosDiario()}, [taxaJuros, valorFinanciamento, totalParcelas, modalidade])
 
@@ -416,66 +525,8 @@ const Financiamento = () => {
             {Object.entries(financiamento).length > 0 && 
                 <View style={{ gap: 10, display: !simulador ?'flex' : 'none', flexDirection:'column', height:'100%', width:335, justifyContent:"space-between",  alignItems: "center" }}>
                     
-                    <View style={{ display:"flex", flexDirection:"row", flexWrap:"wrap", gap: 0,  width:335, justifyContent: "space-between", alignItems: "center", alignContent:"center" }}>
-                        <BalaoTexto 
-                            children={<TextComponent text={`Contrato: ${financiamento.id.substring(0, financiamento.id.indexOf('-'))}`} color={textColorPrimary} fontSize={14} textAlign={'auto'} />} 
-                            backgroundColor='transparent'
-                        />
-
-                        <BalaoTexto 
-                            children={<TextComponent text={`${financiamento.cliente.firstName} ${financiamento.cliente.lastName}`} color={textColorPrimary} fontSize={14} textAlign={'auto'} />} 
-                            backgroundColor='transparent'
-                        />
-                     
-                        <BalaoTexto 
-                            children={<TextComponent text={`Inicio: ${DataUtils.formatarDataBR(financiamento.dataInicio)}`} color={textColorPrimary} fontSize={14} textAlign={'auto'} />} 
-                            backgroundColor='transparent'
-                        />
-                        
-                        <BalaoTexto 
-                            children={<TextComponent text={`Fim: ${DataUtils.formatarDataBR(financiamento.dataFim)}`} color={textColorPrimary} fontSize={14} textAlign={'auto'} />}
-                            backgroundColor='transparent'
-                        />
                     
-                        {modalidade === MODALIDADE.Parcelado &&
-                            <BalaoTexto 
-                                children={<TextComponent text={`Taxa Juros: ${financiamento.taxaJuros}%`} color={textColorPrimary} fontSize={14} textAlign={'auto'} />}
-                                backgroundColor='transparent'
-                            />
-                        }
-                        
-                        {modalidade === MODALIDADE.Parcelado &&
-                            <BalaoTexto 
-                                children={<TextComponent text={`Taxa atraso: ${financiamento.taxaJurosAtraso}%`} color={textColorPrimary} fontSize={14} textAlign={'auto'} />}
-                                backgroundColor='transparent'
-                            />
-                        }
-
-                        <BalaoTexto 
-                            children={<TextComponent text={`Valor: ${StringUtil.formatarMoedaReal(financiamento.valorFinanciado.toString())}`} color={textColorPrimary} fontSize={14} textAlign={'auto'} />}
-                            backgroundColor='transparent'
-                        />
-                        
-                        <BalaoTexto 
-                            children={<TextComponent text={`Montante: ${StringUtil.formatarMoedaReal(financiamento.valorMontante.toString())}`} color={textColorPrimary} fontSize={14} textAlign={'auto'} />}
-                            backgroundColor='transparent'
-                        />
-                        
-                        {modalidade === MODALIDADE.CarenciaDeCapital &&
-                            <BalaoTexto 
-                                children={<TextComponent text={`Diária: ${StringUtil.formatarMoedaReal(financiamento.valorDiaria.toString())}`} color={textColorPrimary} fontSize={14} textAlign={'auto'} />}
-                                backgroundColor='transparent'
-                            />
-                        }
-                        
-                        {modalidade === MODALIDADE.Parcelado && 
-                            <BalaoTexto 
-                                children={<TextComponent text={`Adicional Atraso: ${StringUtil.formatarMoedaReal(financiamento.adicionalDiaAtraso.toString())} diários`} color={textColorPrimary} fontSize={14} textAlign={'auto'} />}
-                                backgroundColor='transparent'
-                            />
-                        }
-                        
-                    </View>
+                    {resumoFinanciamento()}
 
                     <View style={{ height: 300, width:330}}>
                         <BalaoTexto 
@@ -529,13 +580,12 @@ const Financiamento = () => {
            
             {Object.entries(financiamento).length > 0 &&
                 <ModalSystem 
-                    heightProp={300}
+                    heightProp={700}
+                    widthProp={450}
                     title={`${titleModal}`} 
                     children={
                         <View>
-                            <TextComponent 
-                                text={`CONTRATO ${financiamento.id.substring(0, financiamento.id.indexOf('-'))} REALIZADO`} 
-                                color={textColorPrimary} fontSize={12} textAlign={'center'} />
+                            {resumoFinanciamento()}
                         </View>
                     } 
                     setVisible={setModalShow} 

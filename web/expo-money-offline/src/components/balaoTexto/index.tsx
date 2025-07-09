@@ -5,8 +5,9 @@ import { View } from "react-native";
 interface Props {
     children: React.ReactNode;
     backgroundColor: typeof backgroundOpacityBallon | 'transparent'
+    borderWidth: 0.7 | 1
 }
-const BalaoTexto = ({children, backgroundColor} : Props) => {
+const BalaoTexto = ({children, backgroundColor, borderWidth} : Props) => {
     return (
         <View 
             style={{ 
@@ -15,7 +16,7 @@ const BalaoTexto = ({children, backgroundColor} : Props) => {
                 gap:5, 
                 alignItems:"center", 
                 backgroundColor: backgroundColor, 
-                borderRadius: 8, borderColor:borderCollor, borderWidth:0.7, padding:13}}>
+                borderRadius: 8, borderColor:borderCollor, borderWidth: borderWidth, padding:13}}>
                     {children}
         </View>
     )

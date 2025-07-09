@@ -41,7 +41,31 @@ const ListarCliente = () => {
             <TextComponent text={"LISTAR CLIENTES"} color={textColorPrimary} fontSize={7} textAlign={"left"} />
 
             <FlatList 
-                data={customers} 
+                data={
+                        [...customers].sort((a, b) => {
+                            const aEmAtraso     = a.totalParcelasAtrasadas > 0 ? 1 : 0
+                            const bEmAtraso     = b.totalParcelasAtrasadas > 0 ? 1 : 0
+                            const aEmPendencia  = a.totalParcelasPendente  > 0 ? 1 : 0
+                            const bEmPendencia  = b.totalParcelasPendente  > 0 ? 1 : 0
+                            if(bEmAtraso != aEmAtraso){
+                                return bEmAtraso - aEmAtraso
+                            }
+
+                            if(b.totalParcelasAtrasadas !== a.totalParcelasAtrasadas){
+                                return b.totalParcelasAtrasadas - a.totalParcelasAtrasadas
+                            }
+
+                            if(bEmPendencia != aEmPendencia){
+                                return bEmPendencia - aEmPendencia
+                            }
+
+                            if(b.totalParcelasPendente !== a.totalParcelasPendente){
+                                return b.totalParcelasPendente - a.totalParcelasPendente
+                            }
+
+                            return a.firstName.localeCompare(b.firstName)
+                        })
+                    } 
                 keyExtractor={(item) => item.id}
                 renderItem={({ item }) => (
                     <TouchableOpacity onPress={() => {setCustomerView(item); setModalVisible(true)}} >

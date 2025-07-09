@@ -1,9 +1,9 @@
 import { Text } from "react-native";
-import { textColorError, textColorPrimary, textColorSecondary, textColorStatusBar, textColorSuccess, textColorWarning } from "../../constants/colorsPalette ";
+import { textColorDeactivated, textColorError, textColorPrimary, textColorSecondary, textColorStatusBar, textColorSuccess, textColorWarning } from "../../constants/colorsPalette ";
 
 interface Props {
     text: string
-    color: typeof textColorPrimary | typeof textColorSecondary | typeof textColorError | typeof textColorSuccess | typeof textColorWarning | typeof textColorStatusBar
+    color: typeof textColorPrimary | typeof textColorSecondary | typeof textColorError | typeof textColorSuccess | typeof textColorWarning | typeof textColorStatusBar | typeof textColorDeactivated
     fontSize: 7 | 10 | 12 | 14 | 16 | 18 | 20 | 22 | 24 | 26 | 28 | 30
     fontWeight?: "100" | "200" | "300" | "400" | "500" | "600" | "700" | "800" | "900"
     textAlign: "left" | "right" | "center" | "justify" | "auto"

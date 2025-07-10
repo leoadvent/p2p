@@ -123,12 +123,21 @@ export function useFinanciamentoDataBase() {
     }
 
     async function  buscarFinanciamentoPorCliente(idCliente:string, tipo: TIPOFINANCIAMENTO) {
-        
         try {
             
-            const sql = `
+            let sql = `
                 SELECT * FROM FINANCIAMENTO f WHERE f.cliente_id = $cliente_id
             `
+            let filtro = ' AND f.finalizado = 0 '
+
+            if(tipo === TIPOFINANCIAMENTO.aberto){
+                filtro += ' AND f.atrasado = 0'
+            }else if(tipo === TIPOFINANCIAMENTO.atrasado) {
+                filtro += ' AND f.atrasado = 1'
+            }
+
+            sql += filtro
+
             const rows = await dataBase.getAllAsync(sql, { $cliente_id: idCliente });
 
             return rows.map((row: any) => ({

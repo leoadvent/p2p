@@ -64,6 +64,7 @@ export async function initializeDataBase(dataBase: SQLiteDatabase) {
             numeroParcela INTEGER NOT NULL,
             valorPago REAL,
             valorAtual REAL,
+            valorParcela REAL,
             valorDiaria REAL,
             juros REAL NOT NULL,
             jurosAtraso REAL NOT NULL,

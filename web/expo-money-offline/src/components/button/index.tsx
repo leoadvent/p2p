@@ -10,9 +10,10 @@ interface Props {
     isDisabled?: boolean
     typeButton: "primary" | "secondary" | "warning" | "success" | "error"
     width: number | "auto"
+    height?: number
 }
 
-const ButtonComponent = ({ nameButton, onPress, typeButton, isDisabled, isSpinner, width } : Props ) => {
+const ButtonComponent = ({ nameButton, onPress, typeButton, isDisabled, isSpinner, width, height } : Props ) => {
     
     const[backgroundButton, setBackgroundButton] = useState<string>(buttonBackgroundColorPrimary);
     const[colorTextBlack, setColorTextBlack] = useState<boolean>(false);
@@ -59,7 +60,7 @@ const ButtonComponent = ({ nameButton, onPress, typeButton, isDisabled, isSpinne
                     justifyContent: "center",
                     alignItems: "center",
                     width: width,
-                    height: 45,
+                    height: height ? height : 45,
                     gap: 10,
                     backgroundColor: isDisabled ? buttonBackgroundColorDisabled : backgroundButton,
                     opacity: isDisabled ? 0.5 : 1,

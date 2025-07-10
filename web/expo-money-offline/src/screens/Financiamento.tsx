@@ -129,6 +129,7 @@ const Financiamento = () => {
                 numeroParcela: i,
                 valorPago: 0,
                 valorAtual: Number.parseFloat(valParcel.toString()),
+                valorParcela: Number.parseFloat(valParcel.toString()),
                 valorDiaria: valorDiarioNumerico,
                 juros: taxaJurosNumerico,
                 jurosAtraso: taxaJurosAtrasoNumerico,

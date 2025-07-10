@@ -4,10 +4,11 @@ export const tabNavigatorColor      = "rgb(2, 1, 20)";
 export const backgroundPrimary        = "rgb(26, 18, 36)";
 export const backgroundSecondary      = "rgba(28, 29, 28, 0.52)";
 export const backgroundSuccess        = "rgba(18, 41, 3, 0.52)";
+export const backgroundWarning        = "rgba(100, 91, 6, 0.28)";
 export const backgroundOpacity        = "rgba(255, 255, 255, 0.07)";
 export const backgroundOpacityBallon  = "rgba(255, 255, 255, 0.25)";
 export const backgroundSolid          = "rgb(119, 117, 117)";
-export const backgroundColorError     = "rgb(124, 3, 3)";
+export const backgroundColorError     = "rgba(124, 3, 3, 0.27)";
 
 export const textColorPrimary       = "rgb(247, 238, 238)";
 export const textColorSecondary     = "rgb(36, 36, 36)";

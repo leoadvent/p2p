@@ -18,8 +18,8 @@ export function useFinanciamentoDataBase() {
 
         const sqlFinanciamentoPagament = `
             INSERT INTO FINANCIAMENTO_PAGAMENTO (
-                id, dataVencimento, dataPagamento, numeroParcela, valorPago, valorAtual, valorDiaria, juros, jurosAtraso, executadoEmpenho, cliente_id, financiamento_id  
-            ) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+                id, dataVencimento, dataPagamento, numeroParcela, valorPago, valorAtual, valorParcela, valorDiaria, juros, jurosAtraso, executadoEmpenho, cliente_id, financiamento_id  
+            ) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
 
         const statementFinanciamento          = await dataBase.prepareAsync(sqlFinanciamento);
         const statementFinanciamentoPagamento = await dataBase.prepareAsync(sqlFinanciamentoPagament);
@@ -56,6 +56,7 @@ export function useFinanciamentoDataBase() {
                 item.numeroParcela,
                 item.valorPago ?? 0,
                 item.valorAtual ?? 0,
+                item.valorParcela ?? 0,
                 item.valorDiaria ?? 0,
                 item.juros,
                 item.jurosAtraso,
@@ -164,6 +165,33 @@ export function useFinanciamentoDataBase() {
         }
     }
 
-    return {create,  atualizarPagamentosAtrasados, buscarFinanciamentoPorCliente }
+    async function buscarParcelasDeFinanciamentoPorId(idFianaciamento:string) {
+        try {
+
+            const sql = `SELECT * FROM FINANCIAMENTO_PAGAMENTO f WHERE f.financiamento_id = $financiamento_id ORDER BY f.numeroParcela`
+
+            const rows = await dataBase.getAllAsync(sql, { $financiamento_id: idFianaciamento });
+
+            return rows.map((row: any) => ({
+                id: row.id,
+                dataVencimento: row.dataVencimento,
+                dataPagamento: row.dataPagamento,
+                numeroParcela: row.numeroParcela,
+                valorPago: row.valorPago,
+                valorAtual: row.valorAtual,
+                valorParcela: row.valorParcela,
+                valorDiaria: row.valorDiaria,
+                juros: row.juros,
+                jurosAtraso: row.jurosAtraso,
+                executadoEmpenho: row.executadoEmpenho
+            }))
+
+        } catch (error) {
+            console.error("Erro ao buscar parcela do financiamento: ", error);
+            throw error;
+        }
+    }
+
+    return {create,  atualizarPagamentosAtrasados, buscarFinanciamentoPorCliente, buscarParcelasDeFinanciamentoPorId }
 
 }

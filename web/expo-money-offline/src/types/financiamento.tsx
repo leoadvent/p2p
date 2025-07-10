@@ -18,6 +18,7 @@ export interface FINANCIAMENTO_PAGAMENTO {
     numeroParcela: number
     valorPago: number
     valorAtual: number
+    valorParcela: number
     valorDiaria: number
     juros: number
     jurosAtraso: number

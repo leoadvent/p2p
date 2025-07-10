@@ -34,5 +34,21 @@ export class IconsUtil {
     static periodicidade({ size, color } : Props ){
         return <Ionicons name='time-outline' color={color} size={size} />
     }
+
+    static numeroParcela({ size, color } : Props ){
+        return <Ionicons name='return-up-forward-outline' color={color} size={size} />
+    }
+
+    static dia({ size, color } : Props ){
+        return <Ionicons name='partly-sunny-outline' color={color} size={size} />
+    }
+
+    static whatsApp({ size, color } : Props ){
+        return <Ionicons name='logo-whatsapp' color={color} size={size} />
+    }
+
+    static telefonar({ size, color } : Props ){
+        return <Ionicons name='call-outline' color={color} size={size} />
+    }
     
 }

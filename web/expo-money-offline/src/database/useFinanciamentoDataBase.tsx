@@ -1,6 +1,7 @@
 import { useSQLiteContext } from 'expo-sqlite';
 import uuid from 'react-native-uuid';
 import { FINANCIAMENTO } from '../types/financiamento';
+import { TIPOFINANCIAMENTO } from '../types/tiposFinanciamento';
 
 export function useFinanciamentoDataBase() {
     
@@ -12,8 +13,8 @@ export function useFinanciamentoDataBase() {
 
         const sqlFinanciamento = `
             INSERT INTO FINANCIAMENTO ( 
-                id, dataInicio, dataFim, valorFinanciado,taxaJuros, taxaJurosAtraso, adicionalDiaAtraso,valorDiaria, modalidade, totalParcelas, finalizado, atrasado, cliente_id
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
+                id, dataInicio, dataFim, valorFinanciado,taxaJuros, taxaJurosAtraso, adicionalDiaAtraso,valorDiaria, valorMontante, valorPago, modalidade, periodocidade, totalParcelas, finalizado, atrasado, cliente_id
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
 
         const sqlFinanciamentoPagament = `
             INSERT INTO FINANCIAMENTO_PAGAMENTO (
@@ -31,10 +32,13 @@ export function useFinanciamentoDataBase() {
                 financiamento.dataFim instanceof Date ? financiamento.dataFim.toISOString() : financiamento.dataFim,
                 financiamento.valorFinanciado,
                 financiamento.taxaJuros,
-                financiamento.adicionalDiaAtraso,
                 financiamento.taxaJurosAtraso,
+                financiamento.adicionalDiaAtraso,
                 financiamento.valorDiaria,
+                financiamento.valorMontante,
+                financiamento.valorPago,
                 financiamento.modalidade,
+                financiamento.periodocidade,
                 financiamento.totalParcelas,
                 financiamento.finalizado,
                 financiamento.atrasado,
@@ -118,6 +122,39 @@ export function useFinanciamentoDataBase() {
         }
     }
 
-    return {create,  atualizarPagamentosAtrasados }
+    async function  buscarFinanciamentoPorCliente(idCliente:string, tipo: TIPOFINANCIAMENTO) {
+        
+        try {
+            
+            const sql = `
+                SELECT * FROM FINANCIAMENTO f WHERE f.cliente_id = $cliente_id
+            `
+            const rows = await dataBase.getAllAsync(sql, { $cliente_id: idCliente });
+
+            return rows.map((row: any) => ({
+                id: row.id,
+                dataInicio: row.dataInicio,
+                dataFim: row.dataFim,
+                valorFinanciado: row.valorFinanciado,
+                taxaJuros: row.taxaJuros,
+                taxaJurosAtraso: row.taxaJurosAtraso,
+                adicionalDiaAtraso: row.adicionalDiaAtraso,
+                valorDiaria: row.valorDiaria,
+                valorMontante: row.valorMontante,
+                valorPago: row.valorPago,
+                modalidade: row.modalidade,
+                periodocidade: row.periodocidade,
+                totalParcelas: row.totalParcelas,
+                finalizado: row.finalizado,
+                atrasado: row.atrasado
+            }))
+
+        } catch (error) {
+            console.error("Erro ao buscar clientes por nome:", error);
+            throw error;
+        }
+    }
+
+    return {create,  atualizarPagamentosAtrasados, buscarFinanciamentoPorCliente }
 
 }

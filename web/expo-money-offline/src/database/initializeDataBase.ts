@@ -2,6 +2,11 @@ import { type SQLiteDatabase } from 'expo-sqlite';
 
 export async function initializeDataBase(dataBase: SQLiteDatabase) {
 
+    //await dataBase.execAsync(`DROP TABLE IF EXISTS FINANCIAMENTO;`);
+    //await dataBase.execAsync(`DROP TABLE IF EXISTS FINANCIAMENTO_PAGAMENTO;`);
+    //await dataBase.execAsync(`DROP TABLE IF EXISTS ENDERECO;`);
+    //await dataBase.execAsync(`DROP TABLE IF EXISTS CUSTOMER;`);
+
     await dataBase.execAsync(`
         CREATE TABLE IF NOT EXISTS ENDERECO (
             id TEXT PRIMARY KEY,
@@ -28,9 +33,6 @@ export async function initializeDataBase(dataBase: SQLiteDatabase) {
             FOREIGN KEY (endereco_id) REFERENCES ENDERECO(id)
         )
     `)
-
-    //await dataBase.execAsync(`DROP TABLE IF EXISTS FINANCIAMENTO;`);
-    //await dataBase.execAsync(`DROP TABLE IF EXISTS FINANCIAMENTO_PAGAMENTO;`);
        
     await dataBase.execAsync(`
         CREATE TABLE IF NOT EXISTS FINANCIAMENTO (
@@ -43,6 +45,7 @@ export async function initializeDataBase(dataBase: SQLiteDatabase) {
             adicionalDiaAtraso REAL NOT NULL,
             valorDiaria REAL,
             valorMontante REAL,
+            valorPago REAL,
             modalidade TEXT NOT NULL DEFAULT 'Parcelado, CarenciaDeCapital',
             periodocidade TEXT NOT NULL DEFAULT 'Semanal, Quinzenal, Mensal',
             totalParcelas INTEGER NOT NULL,

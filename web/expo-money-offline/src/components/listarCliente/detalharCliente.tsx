@@ -6,6 +6,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { Dispatch, SetStateAction } from "react";
 import { TouchableOpacity, View } from "react-native";
+import { TIPOFINANCIAMENTO } from '../../types/tiposFinanciamento';
 import BalaoTexto from "../balaoTexto";
 import ShowImageCliente from "../imageAvatar";
 import TextComponent from "../text/text";
@@ -31,38 +32,44 @@ const DetalharCliente = ({ customer, setModalVisible } : Props) => {
                         height={160}
                     />
 
-                    <BalaoTexto 
-                        backgroundColor={backgroundOpacityBallon} 
-                        borderWidth={0.7}                        
-                        children={
-                            <View style={{ width: 250, flexDirection:"row", alignItems:"center"}}>
-                                {IconsUtil.contrato({size: 25, color:iconColorSuccess})}
-                                <TextComponent text={`Contratos em Aberto: ${customer.totalParcelasAbertas}`} color={textColorPrimary} fontSize={16} textAlign={"center"} />
-                            </View>
-                        }               
-                    />
+                    <TouchableOpacity onPress={() => { setModalVisible(false); navigation.navigate('FinanciamentoVisualizacao', {cliente: customer, financiamentoTipo: TIPOFINANCIAMENTO.aberto})}}>
+                        <BalaoTexto 
+                            backgroundColor={backgroundOpacityBallon} 
+                            borderWidth={0.7}                        
+                            children={
+                                <View style={{ width: 250, flexDirection:"row", alignItems:"center"}}>
+                                    {IconsUtil.contrato({size: 25, color:iconColorSuccess})}
+                                    <TextComponent text={`Contratos em Aberto: ${customer.totalParcelasAbertas}`} color={textColorPrimary} fontSize={16} textAlign={"center"} />
+                                </View>
+                            }               
+                        />
+                    </TouchableOpacity>
 
-                    <BalaoTexto 
-                        backgroundColor={backgroundOpacityBallon} 
-                        borderWidth={0.7}                        
-                        children={
-                            <View style={{ width: 250, flexDirection:"row", alignItems:"center"}}>
-                                {IconsUtil.contrato({size: 25, color:iconColorWarning})}
-                                <TextComponent text={`Contratos em Pendente: ${customer.totalParcelasPendente}`} color={textColorPrimary} fontSize={16} textAlign={"center"} />
-                            </View>
-                        }               
-                    />
+                    <TouchableOpacity onPress={() => { setModalVisible(false); navigation.navigate('FinanciamentoVisualizacao', {cliente: customer, financiamentoTipo: TIPOFINANCIAMENTO.pendente })}}>
+                        <BalaoTexto 
+                            backgroundColor={backgroundOpacityBallon} 
+                            borderWidth={0.7}                        
+                            children={
+                                <View style={{ width: 250, flexDirection:"row", alignItems:"center"}}>
+                                    {IconsUtil.contrato({size: 25, color:iconColorWarning})}
+                                    <TextComponent text={`Contratos em Pendente: ${customer.totalParcelasPendente}`} color={textColorPrimary} fontSize={16} textAlign={"center"} />
+                                </View>
+                            }               
+                        />
+                    </TouchableOpacity>
 
-                    <BalaoTexto 
-                        backgroundColor={backgroundOpacityBallon} 
-                        borderWidth={0.7}                        
-                        children={
-                            <View style={{ width: 250, flexDirection:"row", alignItems:"center"}}>
-                                {IconsUtil.contrato({size: 25, color:iconColorDanger})}
-                                <TextComponent text={`Contratos em Atraso: ${customer.totalParcelasAtrasadas}`} color={textColorPrimary} fontSize={16} textAlign={"center"} />
-                            </View>
-                        }               
-                    />
+                    <TouchableOpacity onPress={() => { setModalVisible(false); navigation.navigate('FinanciamentoVisualizacao', {cliente: customer, financiamentoTipo: TIPOFINANCIAMENTO.atrasado})}}>
+                        <BalaoTexto 
+                            backgroundColor={backgroundOpacityBallon} 
+                            borderWidth={0.7}                        
+                            children={
+                                <View style={{ width: 250, flexDirection:"row", alignItems:"center"}}>
+                                    {IconsUtil.contrato({size: 25, color:iconColorDanger})}
+                                    <TextComponent text={`Contratos em Atraso: ${customer.totalParcelasAtrasadas}`} color={textColorPrimary} fontSize={16} textAlign={"center"} />
+                                </View>
+                            }               
+                        />
+                    </TouchableOpacity>
                     
                     <View style={{ width: 'auto', flexDirection:"row", gap:10}}>
                         <TouchableOpacity onPress={() => {setModalVisible(false); navigation.navigate("CriarEditarClientes", { clientEdit: customer })}}>

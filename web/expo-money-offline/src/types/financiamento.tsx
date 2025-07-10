@@ -35,6 +35,7 @@ export interface FINANCIAMENTO {
     adicionalDiaAtraso: number
     valorDiaria: number // Valor da diária, opcional
     valorMontante: number  // Valor do montante
+    valorPago: number
     modalidade: MODALIDADE // Modalidade do financiamento, padrão: 'Parcelado, Carência de Capital'
     periodocidade: PERIODOCIDADE
     totalParcelas: number

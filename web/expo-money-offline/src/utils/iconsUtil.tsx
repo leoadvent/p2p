@@ -6,6 +6,7 @@ interface Props{
     color: typeof iconColorPrimary | typeof iconColorWarning | typeof iconColorDanger | typeof iconColorSuccess
 }
 export class IconsUtil {
+
     static iconTaxa({ size, color } : Props){
         return <Ionicons name='pricetag-outline' color={color} size={size} />
     }
@@ -25,4 +26,13 @@ export class IconsUtil {
     static dinheiro({ size, color } : Props ){
         return <Ionicons name='cash-outline' color={color} size={size} />
     }
+
+    static modalidade({ size, color } : Props ){
+        return <Ionicons name='flag-outline' color={color} size={size} />
+    }
+
+    static periodicidade({ size, color } : Props ){
+        return <Ionicons name='time-outline' color={color} size={size} />
+    }
+    
 }

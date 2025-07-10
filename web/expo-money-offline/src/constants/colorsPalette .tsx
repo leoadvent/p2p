@@ -2,10 +2,12 @@ export const statusBarColorPrimary  = "rgb(3, 1, 32)";
 export const tabNavigatorColor      = "rgb(2, 1, 20)";
 
 export const backgroundPrimary        = "rgb(26, 18, 36)";
-export const backgroundSecondary      = "rgba(0, 0, 0, 0.16)";
+export const backgroundSecondary      = "rgba(28, 29, 28, 0.52)";
+export const backgroundSuccess        = "rgba(18, 41, 3, 0.52)";
 export const backgroundOpacity        = "rgba(255, 255, 255, 0.07)";
 export const backgroundOpacityBallon  = "rgba(255, 255, 255, 0.25)";
 export const backgroundSolid          = "rgb(119, 117, 117)";
+export const backgroundColorError     = "rgb(124, 3, 3)";
 
 export const textColorPrimary       = "rgb(247, 238, 238)";
 export const textColorSecondary     = "rgb(36, 36, 36)";
@@ -25,10 +27,11 @@ export const buttonBackgroundColorPrimary   = "rgb(9, 69, 134)";
 export const buttonBackgroundColorSecondary = "rgb(255, 255, 255)";
 export const buttonBackgroundColorWarning   = "rgb(221, 188, 1)";
 export const buttonBackgroundColorSuccess   = "rgb(45, 160, 74)";
-export const buttonBackgroundColorError     = "rgb(240, 174, 174)";
+export const buttonBackgroundColorError     = "rgb(124, 3, 3)";
 export const buttonBackgroundColorDisabled  = "rgb(200, 200, 200)";
 export const buttonBackgroundColorWhatssapp = "rgb(9, 107, 33)";
 export const buttonBackgroundColorCall      = "rgb(32, 34, 138)";
+
 
 export const flatListBorderColor            = "rgb(110, 110, 110)";
 export const flatListBackgroundColorpending = "rgba(252, 1, 1, 0.18)";

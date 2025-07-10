@@ -7,8 +7,10 @@ import { iconDrawerColor, statusBarColorPrimary, tabNavigatorColor, textColorPri
 import ClienteCrierEditar from '../screens/ClienteCrierEditar';
 import Clientes from "../screens/Clientes";
 import Financiamento from '../screens/Financiamento';
+import FinanciamentoVisualizacao from '../screens/FinanciamentoVisualizacao';
 import Home from '../screens/Home';
 import { CUSTOMER } from '../types/customer';
+import { TIPOFINANCIAMENTO } from '../types/tiposFinanciamento';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator()
@@ -16,7 +18,8 @@ const DrawerClient = createDrawerNavigator()
 
 type RootStackParamList = {
   CriarEditarClientes: { clientEdit?: CUSTOMER  | undefined;};
-  Financiamento: { clientFinanciamento?: CUSTOMER | undefined}
+  Financiamento: { clientFinanciamento?: CUSTOMER | undefined};
+  FinanciamentoVisualizacao: {cliente: CUSTOMER, financiamentoTipo: TIPOFINANCIAMENTO}
 }
 
 export type NavigationProp = NativeStackNavigationProp<RootStackParamList>;
@@ -121,6 +124,7 @@ const NavigationStack = () => {
                 <Stack.Screen name="Home" component={Clientes} options={{ headerShown: false }} />
                 <Stack.Screen name="MeuClientes" component={MyDrawerNavigatorCliente} options={{ headerShown: false }} />
                 <Stack.Screen name="Financiamento" component={Financiamento} options={{ headerShown: false }} />
+                <Stack.Screen name="FinanciamentoVisualizacao" component={FinanciamentoVisualizacao} options={{ headerShown: false }}/>
             </Stack.Navigator>
         </NavigationContainer>
     )

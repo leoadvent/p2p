@@ -1,10 +1,10 @@
-import { backgroundBlue, backgroundOpacityBallon, borderCollor } from "@/src/constants/colorsPalette ";
+import { backgroundBlue, backgroundOpacityBallon, backgroundWarning, borderCollor } from "@/src/constants/colorsPalette ";
 import React from "react";
 import { View } from "react-native";
 
 interface Props {
     children: React.ReactNode;
-    backgroundColor: typeof backgroundOpacityBallon | typeof backgroundBlue |'transparent'
+    backgroundColor: typeof backgroundOpacityBallon | typeof backgroundWarning | typeof backgroundBlue |'transparent'
     borderWidth: 0 | 0.7 | 1
     width?: number 
 }

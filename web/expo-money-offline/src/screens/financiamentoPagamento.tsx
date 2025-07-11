@@ -6,7 +6,7 @@ import BalaoTexto from "../components/balaoTexto";
 import ButtonComponent from "../components/button";
 import Contato from "../components/contato";
 import TextComponent from "../components/text/text";
-import { backgroundColorError, backgroundOpacityBallon, backgroundWarning, flatListBorderColor, iconColorPrimary, textColorPrimary } from "../constants/colorsPalette ";
+import { backgroundColorError, backgroundOpacityBallon, backgroundSuccess, backgroundWarning, flatListBorderColor, iconColorPrimary, textColorPrimary } from "../constants/colorsPalette ";
 import { useFinanciamentoDataBase } from '../database/useFinanciamentoDataBase';
 import { FINANCIAMENTO_PAGAMENTO } from "../types/financiamento";
 import { DataUtils } from "../utils/dataUtil";
@@ -60,7 +60,7 @@ const FinanciamentoPagamento = () => {
                             borderBottomColor: flatListBorderColor,
                             borderRadius: 5,
                             padding: 10,
-                            backgroundColor: DataUtils.calcularDiasEntreDatas(item.dataVencimento, new Date()) > 0 && item.dataPagamento === null ? backgroundColorError : backgroundWarning
+                            backgroundColor: DataUtils.calcularDiasEntreDatas(item.dataVencimento, new Date()) > 0 && item.dataPagamento === null ? backgroundColorError : item.dataPagamento != null ? backgroundSuccess : backgroundWarning
                         }}>
                             <View style={{ display: DataUtils.calcularDiasEntreDatas(item.dataVencimento, new Date()) > 0 && item.dataPagamento === null ? "flex" : "none", flexDirection: "row", gap:10, width:"100%", justifyContent:"space-between"}}>
                                 <Contato 
@@ -71,6 +71,10 @@ const FinanciamentoPagamento = () => {
                                         nomeCliente: cliente.firstName
                                     })}
                                 />
+                                <BalaoTexto 
+                                    children={<TextComponent text={"NEGOCIAR"} color={textColorPrimary} fontSize={16} textAlign={"center"} />} 
+                                    backgroundColor={backgroundWarning} 
+                                    borderWidth={1} />
                             </View>
 
                             <View style={{ display: item.dataPagamento === null ? "flex" : "none", flexDirection: "row", gap:10, width:"100%", justifyContent:"space-between"}}>

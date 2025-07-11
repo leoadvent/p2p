@@ -256,7 +256,7 @@ const FinanciamentoPagamento = () => {
                                 </View>
                             </View>
                             
-                            <View style={{ display: DataUtils.calcularDiasEntreDatas(item.dataVencimento, new Date()) > 0 && item.dataPagamento !== null ? "flex" : "none", flexDirection: "row", gap:10, width:"100%"}}>
+                            <View style={{ display: item.dataPagamento !== null ? "flex" : "none", flexDirection: "row", gap:10, width:"100%"}}>
                                 <View style={{ width:50}}>
                                     <BalaoTexto 
                                         backgroundColor={backgroundOpacityBallon} 

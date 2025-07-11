@@ -73,7 +73,7 @@ const FinanciamentoPagamento = () => {
                                 />
                             </View>
 
-                            <View style={{ display: DataUtils.calcularDiasEntreDatas(item.dataVencimento, new Date()) > 0 && item.dataPagamento === null ? "flex" : "none", flexDirection: "row", gap:10, width:"100%", justifyContent:"space-between"}}>
+                            <View style={{ display: item.dataPagamento === null ? "flex" : "none", flexDirection: "row", gap:10, width:"100%", justifyContent:"space-between"}}>
                                 <View style={{ width:70}}>
                                     <BalaoTexto 
                                         backgroundColor={backgroundOpacityBallon} 
@@ -153,7 +153,7 @@ const FinanciamentoPagamento = () => {
                                 </View>
                             </View>
 
-                            <View style={{ display: DataUtils.calcularDiasEntreDatas(item.dataVencimento, new Date()) > 0 && item.dataPagamento === null ? "flex" : "none", flexDirection: "row", gap:10, width:"100%", justifyContent:"space-between"}}>
+                            <View style={{ display: item.dataPagamento === null ? "flex" : "none", flexDirection: "row", gap:10, width:"100%", justifyContent:"space-between"}}>
                                 <View style={{ width:75,}}>
                                     <BalaoTexto 
                                         backgroundColor={backgroundOpacityBallon} 
@@ -223,7 +223,7 @@ const FinanciamentoPagamento = () => {
                                 </View>
                             </View>
                             
-                            <View style={{ display: DataUtils.calcularDiasEntreDatas(item.dataVencimento, new Date()) > 0 && item.dataPagamento === null ? "flex" : "none", flexDirection: "row", gap:10, width:"100%", justifyContent:"space-between"}}>
+                            <View style={{ display: item.dataPagamento === null ? "flex" : "none", flexDirection: "row", gap:10, width:"100%", justifyContent:"space-between"}}>
                                 
                                 <View style={{ width:150}}>
                                     <BalaoTexto 

@@ -9,6 +9,7 @@ export const backgroundOpacity        = "rgba(255, 255, 255, 0.07)";
 export const backgroundOpacityBallon  = "rgba(255, 255, 255, 0.25)";
 export const backgroundSolid          = "rgb(119, 117, 117)";
 export const backgroundColorError     = "rgba(124, 3, 3, 0.27)";
+export const backgroundBlue           = "rgba(7, 27, 68, 0.72)";
 
 export const textColorPrimary       = "rgb(247, 238, 238)";
 export const textColorSecondary     = "rgb(36, 36, 36)";
@@ -45,7 +46,7 @@ export const borderCollor = "rgba(8, 13, 54, 0.47)";
 
 export const iconDrawerColor  = "rgb(255, 72, 0)";
 export const iconColorPrimary = "rgb(235, 210, 210)"
-export const iconColorSuccess = "rgb(35, 126, 8)"
+export const iconColorSuccess = "rgb(27, 92, 7)"
 export const iconColorWarning = "rgb(191, 204, 13)"
 export const iconColorDanger  = "rgb(230, 39, 6)"
 

@@ -1,6 +1,6 @@
 import { useSQLiteContext } from 'expo-sqlite';
 import uuid from 'react-native-uuid';
-import { FINANCIAMENTO } from '../types/financiamento';
+import { FINANCIAMENTO, FINANCIAMENTO_PAGAMENTO } from '../types/financiamento';
 import { TIPOFINANCIAMENTO } from '../types/tiposFinanciamento';
 
 export function useFinanciamentoDataBase() {
@@ -85,9 +85,10 @@ export function useFinanciamentoDataBase() {
                 SELECT 
                     ROUND(
                     COALESCE(fp.valorDiaria, 0) + 
-                    ((julianday('now') - julianday(fp.dataVencimento)) * COALESCE(f.adicionalDiaAtraso, 0)), 
+                    ((julianday('now') - julianday(fp.dataVencimento)) * COALESCE(f.adicionalDiaAtraso, 0))
+                  , 
                     2
-                    )
+                    ) - COALESCE(fp.valorPago, 0)
                 FROM FINANCIAMENTO f
                 WHERE f.id = fp.financiamento_id
                 )
@@ -192,6 +193,78 @@ export function useFinanciamentoDataBase() {
         }
     }
 
-    return {create,  atualizarPagamentosAtrasados, buscarFinanciamentoPorCliente, buscarParcelasDeFinanciamentoPorId }
+    async function buscarParcelaPorId(idParcela: string) {
+
+        const sql = `SELECT * FROM FINANCIAMENTO_PAGAMENTO WHERE id = $idParcela`;
+
+        const row = await dataBase.getFirstAsync<FINANCIAMENTO_PAGAMENTO>(sql, { $idParcela: idParcela });
+
+        if (!row) return null;
+
+        return {
+            id: row.id,
+            dataVencimento: row.dataVencimento,
+            dataPagamento: row.dataPagamento,
+            numeroParcela: row.numeroParcela,
+            valorPago: row.valorPago,
+            valorAtual: row.valorAtual,
+            valorParcela: row.valorParcela,
+            valorDiaria: row.valorDiaria,
+            juros: row.juros,
+            jurosAtraso: row.jurosAtraso,
+            executadoEmpenho: row.executadoEmpenho
+        };
+    }
+
+    async function updateParcela(params: {idParcela: string, idFinanciamento: string, parcela: FINANCIAMENTO_PAGAMENTO}) {
+        const { idParcela, idFinanciamento, parcela } = params;
+        alert(`${idParcela} - ${idFinanciamento} - ${JSON.stringify(parcela)}`)
+
+           const sqlFinanciamentoParcela = `
+                UPDATE FINANCIAMENTO_PAGAMENTO
+                SET 
+                    valorPago = COALESCE(valorPago, 0) + $valor,
+                    dataPagamento = $dataPagamento,
+                    valorAtual = COALESCE(valorAtual, 0) - $valor
+                WHERE id = $idParcela
+            `;
+
+            const sqlFinanciamento = `
+                UPDATE FINANCIAMENTO
+                SET valorPago = COALESCE(valorPago, 0) + $valor
+                WHERE id = $idFinanciamento
+            `
+            const statementParcela = await dataBase.prepareAsync(sqlFinanciamentoParcela);
+            const statementFinanciamento = await dataBase.prepareAsync(sqlFinanciamento);
+
+        await dataBase.execAsync('BEGIN TRANSACTION');
+        try {
+            
+            const returno = await statementParcela.executeAsync({
+                $valor: parcela.valorPago,
+                $dataPagamento: parcela.dataPagamento?.toString() ?? null,
+                $idParcela: idParcela
+            });
+
+            await statementFinanciamento.executeAsync({
+                $valor: parcela.valorPago,
+                $idFinanciamento: idFinanciamento
+            });
+
+            await dataBase.execAsync('COMMIT');
+
+            return returno;
+        } catch (error) {
+            await dataBase.execAsync('ROLLBACK');
+            alert(`Error ao atualizar cliente: ${error}`);
+            throw error;
+        } finally {
+            await statementParcela.finalizeAsync();
+            await statementFinanciamento.finalizeAsync(); 
+        }
+    }
+
+
+    return {create,  atualizarPagamentosAtrasados, buscarFinanciamentoPorCliente, buscarParcelasDeFinanciamentoPorId, buscarParcelaPorId, updateParcela }
 
 }

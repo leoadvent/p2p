@@ -8,6 +8,7 @@ import ClienteCrierEditar from '../screens/ClienteCrierEditar';
 import Clientes from "../screens/Clientes";
 import Financiamento from '../screens/Financiamento';
 import FinanciamentoPagamento from '../screens/financiamentoPagamento';
+import FinanciamentoReceber from '../screens/FinanciamentoReceber';
 import FinanciamentoVisualizacao from '../screens/FinanciamentoVisualizacao';
 import Home from '../screens/Home';
 import { CUSTOMER } from '../types/customer';
@@ -22,6 +23,7 @@ type RootStackParamList = {
   Financiamento: { clientFinanciamento?: CUSTOMER | undefined};
   FinanciamentoVisualizacao: {cliente: CUSTOMER, financiamentoTipo: TIPOFINANCIAMENTO}
   FinanciamentoPagamento: {cliente: CUSTOMER, idFinanciamento: string}
+  FinanciamentoReceber: {idFinanciamento: string, idParcela: string, cliente: CUSTOMER}
 }
 
 export type NavigationProp = NativeStackNavigationProp<RootStackParamList>;
@@ -128,6 +130,7 @@ const NavigationStack = () => {
                 <Stack.Screen name="Financiamento" component={Financiamento} options={{ headerShown: false }} />
                 <Stack.Screen name="FinanciamentoVisualizacao" component={FinanciamentoVisualizacao} options={{ headerShown: false }}/>
                 <Stack.Screen name="FinanciamentoPagamento" component={FinanciamentoPagamento} options={{ headerShown: false }}/>
+                <Stack.Screen name="FinanciamentoReceber" component={FinanciamentoReceber} options={{ headerShown: false }}/>
             </Stack.Navigator>
         </NavigationContainer>
     )

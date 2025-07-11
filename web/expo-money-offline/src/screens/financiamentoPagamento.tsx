@@ -1,4 +1,5 @@
-import { useRoute } from "@react-navigation/native";
+import { NavigationProp } from "@/src/navigation/navigation";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import { useEffect, useState } from "react";
 import { Dimensions, FlatList, View } from "react-native";
 import BalaoTexto from "../components/balaoTexto";
@@ -18,6 +19,8 @@ const FinanciamentoPagamento = () => {
 
     const route = useRoute();
     const { cliente, idFinanciamento  }: any = route.params ?? {}
+
+    const navigation = useNavigation<NavigationProp>();
 
     const financiamentoDataBase = useFinanciamentoDataBase(); 
 
@@ -70,7 +73,7 @@ const FinanciamentoPagamento = () => {
                                 />
                             </View>
 
-                            <View style={{ flexDirection: "row", gap:10, width:"100%", justifyContent:"space-between"}}>
+                            <View style={{ display: DataUtils.calcularDiasEntreDatas(item.dataVencimento, new Date()) > 0 && item.dataPagamento === null ? "flex" : "none", flexDirection: "row", gap:10, width:"100%", justifyContent:"space-between"}}>
                                 <View style={{ width:70}}>
                                     <BalaoTexto 
                                         backgroundColor={backgroundOpacityBallon} 
@@ -150,7 +153,7 @@ const FinanciamentoPagamento = () => {
                                 </View>
                             </View>
 
-                            <View style={{ flexDirection: "row", gap:10, width:"100%", justifyContent:"space-between"}}>
+                            <View style={{ display: DataUtils.calcularDiasEntreDatas(item.dataVencimento, new Date()) > 0 && item.dataPagamento === null ? "flex" : "none", flexDirection: "row", gap:10, width:"100%", justifyContent:"space-between"}}>
                                 <View style={{ width:75,}}>
                                     <BalaoTexto 
                                         backgroundColor={backgroundOpacityBallon} 
@@ -220,7 +223,7 @@ const FinanciamentoPagamento = () => {
                                 </View>
                             </View>
                             
-                            <View style={{ flexDirection: "row", gap:10, width:"100%", justifyContent:"space-between"}}>
+                            <View style={{ display: DataUtils.calcularDiasEntreDatas(item.dataVencimento, new Date()) > 0 && item.dataPagamento === null ? "flex" : "none", flexDirection: "row", gap:10, width:"100%", justifyContent:"space-between"}}>
                                 
                                 <View style={{ width:150}}>
                                     <BalaoTexto 
@@ -245,7 +248,77 @@ const FinanciamentoPagamento = () => {
                                     />
                                 </View>
                                 <View style={{ width:150}}>
-                                    <ButtonComponent nameButton={"RECEBER"} onPress={() => {}} typeButton={"primary"} width={150} height={55} />
+                                    <ButtonComponent nameButton={"RECEBER"} onPress={() => {navigation.navigate('FinanciamentoReceber', {idFinanciamento: idFinanciamento, idParcela: item.id, cliente: cliente })}} typeButton={"primary"} width={150} height={55} />
+                                </View>
+                            </View>
+                            
+                            <View style={{ display: DataUtils.calcularDiasEntreDatas(item.dataVencimento, new Date()) > 0 && item.dataPagamento !== null ? "flex" : "none", flexDirection: "row", gap:10, width:"100%"}}>
+                                <View style={{ width:50}}>
+                                    <BalaoTexto 
+                                        backgroundColor={backgroundOpacityBallon} 
+                                        borderWidth={0} 
+                                        children={
+                                            <View style={{ flexDirection:"column", justifyContent:"space-evenly", width:'100%', alignItems:"center" }}>
+                                                
+                                                <TextComponent 
+                                                        text={"Parcela"} 
+                                                        color={textColorPrimary} 
+                                                        fontSize={7} textAlign={"auto"} />
+                                                <View style={{ flexDirection:"row", alignItems:"center", justifyContent:"center", width:"100%" }}>
+                                                    {IconsUtil.numeroParcela({size: 15, color: iconColorPrimary })}
+                                                    <TextComponent 
+                                                        text={item.numeroParcela.toString()} 
+                                                        color={textColorPrimary} 
+                                                        fontSize={16} 
+                                                        textAlign={"auto"} />
+                                                </View>
+                                            </View>
+                                        }
+                                    />
+                                </View>
+                                <View style={{ width:130}}>
+                                    <BalaoTexto 
+                                        backgroundColor={backgroundOpacityBallon} 
+                                        borderWidth={0} 
+                                        children={
+                                            <View style={{ flexDirection:"row", justifyContent:"space-evenly", width:'100%', alignItems:"center" }}>
+                                                {IconsUtil.calendarioNumero({size: 25, color: iconColorPrimary })}
+                                                <View style={{ flexDirection:"column" }}>
+                                                    <TextComponent 
+                                                        text={"Data do Pagamento"} 
+                                                        color={textColorPrimary} 
+                                                        fontSize={7} textAlign={"auto"} />
+                                                    <TextComponent 
+                                                        text={DataUtils.formatarDataBR(item.dataPagamento ?? new Date())} 
+                                                        color={textColorPrimary} 
+                                                        fontSize={16} 
+                                                        textAlign={"auto"} />
+                                                </View>
+                                            </View>
+                                        }
+                                    />
+                                </View> 
+                                <View style={{ width:145}}>
+                                    <BalaoTexto 
+                                        backgroundColor={backgroundOpacityBallon} 
+                                        borderWidth={0} 
+                                        children={
+                                            <View style={{ flexDirection:"row", justifyContent:"space-evenly", width:'100%', alignItems:"center" }}>
+                                                {IconsUtil.dinheiro({size: 25, color: iconColorPrimary })}
+                                                <View style={{ flexDirection:"column" }}>
+                                                    <TextComponent 
+                                                        text={"Valor Pago"} 
+                                                        color={textColorPrimary} 
+                                                        fontSize={7} textAlign={"auto"} />
+                                                    <TextComponent 
+                                                        text={StringUtil.formatarMoedaReal(item.valorPago.toString())} 
+                                                        color={textColorPrimary} 
+                                                        fontSize={16} 
+                                                        textAlign={"auto"} />
+                                                </View>
+                                            </View>
+                                        }
+                                    />
                                 </View>
                             </View>
                         </View>

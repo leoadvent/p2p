@@ -1,18 +1,20 @@
-import { backgroundOpacityBallon, borderCollor } from "@/src/constants/colorsPalette ";
+import { backgroundBlue, backgroundOpacityBallon, borderCollor } from "@/src/constants/colorsPalette ";
 import React from "react";
 import { View } from "react-native";
 
 interface Props {
     children: React.ReactNode;
-    backgroundColor: typeof backgroundOpacityBallon | 'transparent'
+    backgroundColor: typeof backgroundOpacityBallon | typeof backgroundBlue |'transparent'
     borderWidth: 0 | 0.7 | 1
+    width?: number 
 }
-const BalaoTexto = ({children, backgroundColor, borderWidth} : Props) => {
+const BalaoTexto = ({children, backgroundColor, borderWidth, width} : Props) => {
     return (
         <View 
             style={{ 
                 display:"flex", 
                 flexDirection:"column", 
+                width: width ?? "auto",
                 gap:5, 
                 alignItems:"center", 
                 backgroundColor: backgroundColor, 

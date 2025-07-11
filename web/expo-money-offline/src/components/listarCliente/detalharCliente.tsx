@@ -1,8 +1,7 @@
-import { backgroundOpacityBallon, iconColorDanger, iconColorSuccess, iconColorWarning, textColorPrimary, textColorWarning } from "@/src/constants/colorsPalette ";
+import { backgroundBlue, backgroundOpacityBallon, iconColorDanger, iconColorSuccess, iconColorWarning, textColorPrimary } from "@/src/constants/colorsPalette ";
 import { NavigationProp } from "@/src/navigation/navigation";
 import { CUSTOMER } from "@/src/types/customer";
 import { IconsUtil } from "@/src/utils/iconsUtil";
-import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { Dispatch, SetStateAction } from "react";
 import { TouchableOpacity, View } from "react-native";
@@ -73,10 +72,24 @@ const DetalharCliente = ({ customer, setModalVisible } : Props) => {
                     
                     <View style={{ width: 'auto', flexDirection:"row", gap:10}}>
                         <TouchableOpacity onPress={() => {setModalVisible(false); navigation.navigate("CriarEditarClientes", { clientEdit: customer })}}>
-                            <Ionicons name="pencil-sharp" size={26} color={textColorWarning} />
+                           <BalaoTexto 
+                                backgroundColor={backgroundBlue} 
+                                borderWidth={0}
+                                width={90}
+                                children={<View style={{ alignItems:"center", gap:10}}>
+                                    <TextComponent text={"Editar Cliente"} color={textColorPrimary} fontSize={10} textAlign={"auto"}  />
+                                    {IconsUtil.editar({size:30, color: iconColorWarning})}
+                                </View>} />
                         </TouchableOpacity>
                         <TouchableOpacity onPress={() => {setModalVisible(false); navigation.navigate("Financiamento", { clientFinanciamento: customer })}}>
-                            <Ionicons name="cash-sharp" size={26} color={textColorWarning} />
+                            <BalaoTexto 
+                                backgroundColor={backgroundBlue} 
+                                borderWidth={0}
+                                width={90}
+                                children={<View style={{ alignItems:"center", gap:10}}>
+                                    <TextComponent text={"Financiar"} color={textColorPrimary} fontSize={10} textAlign={"auto"}  />
+                                    {IconsUtil.dinheiro({size:30, color: iconColorSuccess})}
+                                </View>} />
                         </TouchableOpacity>
                     </View>
                 </View>

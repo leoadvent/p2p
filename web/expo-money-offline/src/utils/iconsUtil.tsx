@@ -50,5 +50,9 @@ export class IconsUtil {
     static telefonar({ size, color } : Props ){
         return <Ionicons name='call-outline' color={color} size={size} />
     }
+
+    static editar({ size, color } : Props ){
+        return <Ionicons name='pencil-sharp' color={color} size={size} />
+    }
     
 }

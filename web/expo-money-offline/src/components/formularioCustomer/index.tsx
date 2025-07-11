@@ -103,7 +103,10 @@ const FormularioCustomer = ({ navigation }: any) => {
                     estado: customer.endereco.estado,
                     numero: customer.endereco.numero,
                     complemento: customer.endereco.complemento
-                }
+                },
+                totalParcelasAbertas: 0,
+                totalParcelasAtrasadas: 0,
+                totalParcelasPendente: 0
             };  
             customerDataBase.updateCliente(edit).then((result) => {
                 if(result){  

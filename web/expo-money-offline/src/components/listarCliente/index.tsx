@@ -102,7 +102,7 @@ const ListarCliente = () => {
                     </TouchableOpacity>
                 )}
             />
-            <ModalSystem  title={`${customerView?.firstName} ${customerView?.lastName}`} heightProp={850} setVisible={setModalVisible} visible={modalVisible} children={
+            <ModalSystem  title={`${customerView?.firstName} ${customerView?.lastName}`} heightProp={900} setVisible={setModalVisible} visible={modalVisible} children={
                 <DetalharCliente customer={customerView} setModalVisible={setModalVisible} />
             } />
 

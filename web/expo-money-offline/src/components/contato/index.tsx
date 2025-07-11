@@ -35,17 +35,17 @@ const Contato = ({ telefoneNumero, mensagem = "Olá!", exibeTexto} : Props) => {
         <View style={{ flexDirection: "row", gap: 10 }}>
             <TouchableOpacity
                 onPress={abriWhatsapp}
-                style={{ display:"flex", flexDirection:"row", gap:10, padding: 10, backgroundColor: buttonBackgroundColorWhatssapp, borderRadius: 5 }}
+                style={{ display:"flex", flexDirection:"row", gap:10, padding: 10, width: 55, height: 55, backgroundColor: buttonBackgroundColorWhatssapp, borderRadius: 5 }}
             >
-                {IconsUtil.whatsApp({size: 15, color: iconColorPrimary})}
+                {IconsUtil.whatsApp({size: 30, color: iconColorPrimary})}
                 {exibeTexto && <TextComponent text={"WhatsApp"} color={textColorPrimary} fontSize={10} textAlign={"auto"} />}
             </TouchableOpacity>
 
             <TouchableOpacity
                 onPress={telefonar}
-                style={{ display:"flex", flexDirection:"row", gap:10, padding: 10, backgroundColor: buttonBackgroundColorCall, borderRadius: 5 }}
+                style={{ display:"flex", flexDirection:"row", gap:10, padding: 10, width: 55, height: 55, backgroundColor: buttonBackgroundColorCall, borderRadius: 5 }}
             >
-                {IconsUtil.telefonar({size: 15, color: iconColorPrimary})}
+                {IconsUtil.telefonar({size: 30, color: iconColorPrimary})}
                 {exibeTexto && <TextComponent text={"Ligar"} color={textColorPrimary} fontSize={10} textAlign={"auto"} />}
             </TouchableOpacity>
         </View>

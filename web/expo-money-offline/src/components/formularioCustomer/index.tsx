@@ -106,7 +106,8 @@ const FormularioCustomer = ({ navigation }: any) => {
                 },
                 totalParcelasAbertas: 0,
                 totalParcelasAtrasadas: 0,
-                totalParcelasPendente: 0
+                totalParcelasPendente: 0,
+                totalFinanciamentoFechado: 0
             };  
             customerDataBase.updateCliente(edit).then((result) => {
                 if(result){  

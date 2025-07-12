@@ -23,6 +23,7 @@ interface Props {
 }
 const FinanciamentoPagamentoView = ({ pagamento, idFinanciamento, cliente, isNegociar, isReceber, isMostraCliente } : Props ) => {
 
+    //alert(JSON.stringify(pagamento))
     const width = Dimensions.get("screen").width
     const navigation = useNavigation<NavigationProp>();
     return(
@@ -51,10 +52,11 @@ const FinanciamentoPagamentoView = ({ pagamento, idFinanciamento, cliente, isNeg
                 <View>
                     <TextComponent text={cliente.firstName} color={textColorPrimary} fontSize={24} textAlign={"center"} />
                     <TextComponent text={cliente.lastName} color={textColorPrimary} fontSize={14} textAlign={"center"} />
+                    <TextComponent text={pagamento.modalidade} color={textColorPrimary} fontSize={10} textAlign={"center"} />
                 </View>
             </View>
             
-            <View style={{ display: pagamento.dataPagamento === null ? "flex" : "none", gap: 10 }}>
+            <View style={{ display: pagamento.dataPagamento === null ? "flex" :"none", gap: 10 }}>
                 <View style={{ display: DataUtils.calcularDiasEntreDatas(pagamento.dataVencimento, new Date()) > 0 && pagamento.dataPagamento === null && isNegociar ? "flex" : "none", flexDirection: "row", justifyContent:"space-between", width:"100%"}}>
                     <Contato 
                         telefoneNumero={cliente.contact} 
@@ -304,6 +306,32 @@ const FinanciamentoPagamentoView = ({ pagamento, idFinanciamento, cliente, isNeg
                     </View>
                     <View style={{ display: isReceber ? 'flex' : 'none', width:150}}>
                         <ButtonComponent nameButton={"RECEBER"} onPress={() => {navigation.navigate('FinanciamentoReceber', {idFinanciamento: idFinanciamento, idParcela: pagamento.id, cliente: cliente })}} typeButton={"primary"} width={150} height={55} />
+                    </View>
+                    <View style={{ display: !isReceber  && pagamento.modalidade === MODALIDADE.CarenciaDeCapital? 'flex' : 'none', width:150}}>
+                            <View style={{ width:120, flexDirection:"row" }}>
+                                <BalaoTexto 
+                                    backgroundColor={backgroundOpacityBallon} 
+                                    width={150}
+                                    borderWidth={0} 
+                                    children={
+                                        <View style={{ flexDirection:"column",  width:'100%' }}>
+                                            <TextComponent 
+                                                    text={"Valor para quitar"} 
+                                                    color={textColorPrimary} 
+                                                    fontSize={7} textAlign={"auto"} />
+                                            <View style={{ flexDirection:"row", gap: 4 }}>
+                                                {IconsUtil.dinheiro({size: 25, color: iconColorPrimary })}
+                                                <TextComponent 
+                                                    text={StringUtil.formatarMoedaReal(pagamento.valorParcela.toString())} 
+                                                    color={textColorPrimary} 
+                                                    fontSize={16} 
+                                                    textAlign={"auto"} />
+                                            </View>
+                                        </View>
+                                    }
+                                />
+                                
+                            </View>
                     </View>
                     
                 </View>

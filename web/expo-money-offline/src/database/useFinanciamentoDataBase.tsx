@@ -1,6 +1,6 @@
 import { useSQLiteContext } from 'expo-sqlite';
 import uuid from 'react-native-uuid';
-import { FINANCIAMENTO, FINANCIAMENTO_PAGAMENTO } from '../types/financiamento';
+import { FINANCIAMENTO, FINANCIAMENTO_PAGAMENTO, MODALIDADE } from '../types/financiamento';
 import { TIPOFINANCIAMENTO } from '../types/tiposFinanciamento';
 
 export function useFinanciamentoDataBase() {
@@ -236,7 +236,7 @@ export function useFinanciamentoDataBase() {
 
     async function updateParcela(params: {idParcela: string, idFinanciamento: string, parcela: FINANCIAMENTO_PAGAMENTO}) {
         const { idParcela, idFinanciamento, parcela } = params;
-
+        
            const sqlFinanciamentoParcela = `
                 UPDATE FINANCIAMENTO_PAGAMENTO
                 SET 
@@ -280,39 +280,83 @@ export function useFinanciamentoDataBase() {
                 SET finalizado = 1
                 WHERE id = $idFinanciamento 
             `
-
+            const sqlAtualizarDataVencimentoparcelaCarencia =`
+                UPDATE FINANCIAMENTO_PAGAMENTO
+                SET 
+                    dataVencimento = $dataVencimento, 
+                    dataUltimoPagamento = $dataUltimoPagamento, 
+                    valorAtual = $valorAtual
+                WHERE 
+                    id = $idParcela;
+            `
 
             const statementParcela               = await dataBase.prepareAsync(sqlFinanciamentoParcela);
             const statementFinanciamento         = await dataBase.prepareAsync(sqlFinanciamento);
             const statementRemoveFlagAtrasado    = await dataBase.prepareAsync(sqlRemoveFlagAtrasadoFinanciamento);
             const statementFinalizaFinanciamento = await dataBase.prepareAsync(sqlFinalizaFinanciamento);
-
+            const statmentAtualizaDataVencimento = await dataBase.prepareAsync(sqlAtualizarDataVencimentoparcelaCarencia);
 
         await dataBase.execAsync('BEGIN TRANSACTION');
         try {
             
+            
             const returno = await statementParcela.executeAsync({
-                $valor: parcela.valorPago,
+                $valor: round2(parcela.valorPago),
                 $dataPagamento: parcela.dataPagamento?.toString() ?? null,
                 $idParcela: idParcela
             });
 
             await statementFinanciamento.executeAsync({
-                $valor: parcela.valorPago,
+                $valor: round2(parcela.valorPago),
                 $idFinanciamento: idFinanciamento
             });
+
             
-        
-           const resultAbertas   = await dataBase.getFirstAsync( sqlQuantidadeParcelasAbertas,{ $idFinanciamento: idFinanciamento } ) as { quantAbertas: number };
-           const resultAtrasadas = await dataBase.getFirstAsync( sqlQuantidadeParcelasAtrasadas,{ $idFinanciamento: idFinanciamento } ) as { quantAtrasadas: number };
 
-           if(resultAtrasadas.quantAtrasadas <= 0 ){
+           if(parcela.modalidade === MODALIDADE.CarenciaDeCapital){
+
+                if(parcela.valorPago === parcela.valorParcela){
+                    await statementFinalizaFinanciamento.executeAsync({ $idFinanciamento : idFinanciamento })
+                } else {
+                    const diasEquivalente = Math.floor(round2(parcela.valorPago / parcela.valorAtual));
+                    const dataHoje = new Date();
+                    const dataVencimento = new Date(dataHoje);
+                    dataVencimento.setDate(dataVencimento.getDate() + diasEquivalente); 
+                    if(parcela.dataVencimento > dataVencimento){
+                        dataVencimento.setDate(parcela.dataVencimento.getDate())
+                    }
+                    const dataUltimoPagamento = dataHoje
+                    const valorAtual = round2(parcela.valorDiaria)
+                    await statmentAtualizaDataVencimento.executeAsync({
+                        $dataVencimento: dataVencimento.toString(),
+                        $dataUltimoPagamento: dataUltimoPagamento.toString(),
+                        $valorAtual: valorAtual,
+                        $idParcela: idParcela
+                    })
+                    const returno = await statementParcela.executeAsync({
+                        $valor: round2(parcela.valorPago),
+                        $dataPagamento: null,
+                        $idParcela: idParcela
+                    });
+
+                }
+                return
+
+            } else {
+
+                const resultAbertas   = await dataBase.getFirstAsync( sqlQuantidadeParcelasAbertas,{ $idFinanciamento: idFinanciamento } ) as { quantAbertas: number };
+
+                if(resultAbertas.quantAbertas <= 0){
+                    await statementFinalizaFinanciamento.executeAsync({ $idFinanciamento : idFinanciamento })
+                }
+
+            }
+
+            const resultAtrasadas = await dataBase.getFirstAsync( sqlQuantidadeParcelasAtrasadas,{ $idFinanciamento: idFinanciamento } ) as { quantAtrasadas: number };
+            
+            if(resultAtrasadas.quantAtrasadas <= 0 ){
                 await statementRemoveFlagAtrasado.executeAsync({ $idFinanciamento : idFinanciamento})
-           }
-
-           if(resultAbertas.quantAbertas <= 0){
-             await statementFinalizaFinanciamento.executeAsync({ $idFinanciamento : idFinanciamento })
-           }
+            }
 
             await dataBase.execAsync('COMMIT');
 
@@ -324,6 +368,8 @@ export function useFinanciamentoDataBase() {
         } finally {
             await statementParcela.finalizeAsync();
             await statementFinanciamento.finalizeAsync(); 
+            await statementFinalizaFinanciamento.finalizeAsync();
+            await statmentAtualizaDataVencimento.finalizeAsync();
         }
     }
 

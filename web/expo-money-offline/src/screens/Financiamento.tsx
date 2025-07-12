@@ -62,7 +62,6 @@ const Financiamento = () => {
     const financiamentoDataBase = useFinanciamentoDataBase();
 
     function handlerSalvarFinanciamento(){
-        alert(JSON.stringify(financiamento))
         financiamentoDataBase.create(financiamento).then((response) => {
             setFinanciamentoFinalizado(true)
             setModalShow(true);

@@ -41,7 +41,10 @@ const FinanciamentoNegociar = () => {
             jurosAtraso: parcelas!.jurosAtraso,
             executadoEmpenho: parcelas!.executadoEmpenho,
             renegociado: parcelas!.renegociado,
-            cliente: {} as CUSTOMER
+            cliente: {} as CUSTOMER,
+            dataUltimoPagamento: parcelas?.dataUltimoPagamento ?? new Date(),
+            modalidade: parcelas!.modalidade,
+            pagamentoRealizado: parcelas?.pagamentoRealizado ?? false
         })
     }
 

@@ -113,7 +113,7 @@ const Financiamento = () => {
 
         let quant = modalidade === MODALIDADE.CarenciaDeCapital ? 1 : quantParcelas
         let valParcel = modalidade === MODALIDADE.CarenciaDeCapital 
-            ? Number(valorDiario.replaceAll('.','').replace(',','.').replace('R$','')) * 30 
+            ? Number(valorDiario.replaceAll('.','').replace(',','.').replace('R$',''))
             : valorParcela
 
         for (let i = 1; i <= quant; i++) {

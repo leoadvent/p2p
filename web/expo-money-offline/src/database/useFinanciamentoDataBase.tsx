@@ -235,8 +235,44 @@ export function useFinanciamentoDataBase() {
                 SET valorPago = COALESCE(valorPago, 0) + $valor
                 WHERE id = $idFinanciamento
             `
-            const statementParcela = await dataBase.prepareAsync(sqlFinanciamentoParcela);
-            const statementFinanciamento = await dataBase.prepareAsync(sqlFinanciamento);
+            const sqlQuantidadeParcelasAtrasadas = `
+                SELECT 
+                    count(*) as quantAtrasadas
+                FROM 
+                    FINANCIAMENTO_PAGAMENTO
+                WHERE 
+                    financiamento_id = $idFinanciamento
+                    AND dataPagamento IS NULL
+                    AND dataVencimento < datetime('now')
+            `
+            const sqlQuantidadeParcelasAbertas = `
+                SELECT 
+                    count(*) as quantAbertas
+                FROM 
+                    FINANCIAMENTO_PAGAMENTO
+                WHERE 
+                    financiamento_id = $idFinanciamento
+                    AND dataPagamento IS NULL
+                    AND dataVencimento < datetime('now')
+
+            `
+            const sqlRemoveFlagAtrasadoFinanciamento = `
+                UPDATE FINANCIAMENTO
+                SET atrasado = 0
+                WHERE id = $idFinanciamento 
+            `
+            const sqlFinalizaFinanciamento = `
+                UPDATE FINANCIAMENTO
+                SET finalizado = 1
+                WHERE id = $idFinanciamento 
+            `
+
+
+            const statementParcela               = await dataBase.prepareAsync(sqlFinanciamentoParcela);
+            const statementFinanciamento         = await dataBase.prepareAsync(sqlFinanciamento);
+            const statementRemoveFlagAtrasado    = await dataBase.prepareAsync(sqlRemoveFlagAtrasadoFinanciamento);
+            const statementFinalizaFinanciamento = await dataBase.prepareAsync(sqlFinalizaFinanciamento);
+
 
         await dataBase.execAsync('BEGIN TRANSACTION');
         try {
@@ -251,6 +287,18 @@ export function useFinanciamentoDataBase() {
                 $valor: parcela.valorPago,
                 $idFinanciamento: idFinanciamento
             });
+            
+        
+           const resultAbertas   = await dataBase.getFirstAsync( sqlQuantidadeParcelasAbertas,{ $idFinanciamento: idFinanciamento } ) as { quantAbertas: number };
+           const resultAtrasadas = await dataBase.getFirstAsync( sqlQuantidadeParcelasAtrasadas,{ $idFinanciamento: idFinanciamento } ) as { quantAtrasadas: number };
+
+           if(resultAtrasadas.quantAtrasadas <= 0 ){
+                await statementRemoveFlagAtrasado.executeAsync({ $idFinanciamento : idFinanciamento})
+           }
+
+           if(resultAbertas.quantAbertas <= 0){
+             await statementFinalizaFinanciamento.executeAsync({ $idFinanciamento : idFinanciamento })
+           }
 
             await dataBase.execAsync('COMMIT');
 

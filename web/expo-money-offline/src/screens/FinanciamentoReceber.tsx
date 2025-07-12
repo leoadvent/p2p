@@ -67,31 +67,32 @@ const FinanciamentoReceber = () => {
 
     return(
         <BaseScreens title={"RECEBER"}>
-            {Object.entries(financiamentoPagamento).length > 0 ?
-                <>
-                    <FinanciamentoPagamentoView 
-                        pagamento={financiamentoPagamento} 
-                        idFinanciamento={""}
-                        cliente={cliente} 
-                        isNegociar={true} 
-                        isReceber={false}
-                        isMostraCliente={true} 
-                    />
+   
+            {Object.entries(financiamentoPagamento).length > 0 &&
+                <FinanciamentoPagamentoView 
+                    pagamento={financiamentoPagamento} 
+                    idFinanciamento={""}
+                    cliente={cliente} 
+                    isNegociar={true} 
+                    isReceber={false}
+                    isMostraCliente={true} 
+                />
+            }
 
-                    <View style={{ display: financiamentoPagamento.dataPagamento === null ? 'flex' : 'none', gap: 10 }}>
-                        <InputText 
-                            label={"Valor Pago"} 
-                            editable={true} 
-                            onChangeText={setValorAserPago}
-                            value={valorAserPago}
-                            money keyboardType="numeric" />
+            <View style={{ display: financiamentoPagamento.dataPagamento === null ? 'flex' : 'none', gap: 10, marginBottom: 50 }}>
+                <InputText 
+                    label={"Valor Pago"} 
+                    editable={true} 
+                    onChangeText={setValorAserPago}
+                    value={valorAserPago}
+                    money keyboardType="numeric" />
                                 
-                        <ButtonComponent nameButton={"RECEBER"} onPress={() => {handlerPagarParcela()}} typeButton={"primary"} width={width - 20} />
+                <ButtonComponent nameButton={"RECEBER"} onPress={() => {handlerPagarParcela()}} typeButton={"primary"} width={width - 20} />
                         
-                        <ButtonComponent nameButton={"VOLTAR"} onPress={() => {navigation.navigate('FinanciamentoPagamento', {cliente: cliente, idFinanciamento})}} typeButton={"warning"} width={width - 20} />
-                    </View>
-                </>
-            : <ButtonComponent nameButton={"VOLTAR"} onPress={() => {navigation.navigate('FinanciamentoPagamento', {cliente: cliente, idFinanciamento})}} typeButton={"warning"} width={width - 20} />}
+            </View>
+
+            <ButtonComponent nameButton={"VOLTAR"} onPress={() => {navigation.navigate('FinanciamentoPagamento', {cliente: cliente, idFinanciamento})}} typeButton={"warning"} width={width - 20} />
+                
         </BaseScreens>
     )
 }

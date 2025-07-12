@@ -1,9 +1,9 @@
 import { Ionicons } from "@expo/vector-icons";
-import { iconColorDanger, iconColorPrimary, iconColorSuccess, iconColorWarning } from "../constants/colorsPalette ";
+import { iconColorDanger, iconColorPrimary, iconColorSuccess, iconColorWarning, iconDrawerColor } from "../constants/colorsPalette ";
 
 interface Props{
     size: 10 | 15 | 20 | 25 | 30
-    color: typeof iconColorPrimary | typeof iconColorWarning | typeof iconColorDanger | typeof iconColorSuccess
+    color: typeof iconColorPrimary | typeof iconColorWarning | typeof iconColorDanger | typeof iconColorSuccess | typeof iconDrawerColor
 }
 export class IconsUtil {
 

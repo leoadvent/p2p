@@ -1,9 +1,8 @@
 import { flatListBorderColor, iconColorDanger, iconColorSuccess, iconColorWarning, textColorPrimary } from "@/constants/colorsPalette ";
 import { useCustomerDataBase } from "@/database/useCustomerDataBase";
-import { NavigationProp } from "@/src/navigation/navigation";
 import { IconsUtil } from "@/src/utils/iconsUtil";
 import { CUSTOMER } from "@/types/customer";
-import { useFocusEffect, useNavigation } from '@react-navigation/native';
+import { useFocusEffect } from '@react-navigation/native';
 import React, { useState } from "react";
 import { Dimensions, FlatList, TouchableOpacity, View } from "react-native";
 import ShowImageCliente from "../imageAvatar";
@@ -12,8 +11,6 @@ import TextComponent from "../text/text";
 import DetalharCliente from "./detalharCliente";
 
 const ListarCliente = () => {
-
-    const navigation = useNavigation<NavigationProp>();
 
     const [customers, setCustomers] = useState<CUSTOMER[]>([]);
     const [customerView, setCustomerView] = useState<CUSTOMER>({} as CUSTOMER);
@@ -102,7 +99,7 @@ const ListarCliente = () => {
                     </TouchableOpacity>
                 )}
             />
-            <ModalSystem  title={`${customerView?.firstName} ${customerView?.lastName}`} heightProp={900} setVisible={setModalVisible} visible={modalVisible} children={
+            <ModalSystem  title={`${customerView?.firstName} ${customerView?.lastName}`} heightProp={1050} setVisible={setModalVisible} visible={modalVisible} children={
                 <DetalharCliente customer={customerView} setModalVisible={setModalVisible} />
             } />
 

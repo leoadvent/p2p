@@ -89,7 +89,7 @@ export function useFinanciamentoDataBase() {
                     ((julianday('now') - julianday(fp.dataVencimento)) * COALESCE(f.adicionalDiaAtraso, 0))
                   , 
                     2
-                    ) - COALESCE(fp.valorPago, 0)
+                    ) - COALESCE(fp.valorPago, 0) + COALESCE(fp.valorParcela, 0)
                 FROM FINANCIAMENTO f
                 WHERE f.id = fp.financiamento_id
                 )
@@ -121,6 +121,7 @@ export function useFinanciamentoDataBase() {
 
             return true;
         } catch (error) {
+            alert(error)
             return false;
         }
     }
@@ -131,13 +132,13 @@ export function useFinanciamentoDataBase() {
             let sql = `
                 SELECT * FROM FINANCIAMENTO f WHERE f.cliente_id = $cliente_id
             `
-            let filtro = ' AND f.finalizado = 0 '
+            let filtro = ` AND f.finalizado = ${tipo === TIPOFINANCIAMENTO.fechado ? 1 : 0} `
 
             if(tipo === TIPOFINANCIAMENTO.aberto){
                 filtro += ' AND f.atrasado = 0'
-            }else if(tipo === TIPOFINANCIAMENTO.atrasado) {
+            } else if (tipo === TIPOFINANCIAMENTO.atrasado) {
                 filtro += ' AND f.atrasado = 1'
-            }
+            } 
 
             sql += filtro
 

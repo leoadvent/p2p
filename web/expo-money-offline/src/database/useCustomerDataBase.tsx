@@ -89,7 +89,8 @@ export function useCustomerDataBase() {
                 e.regiao,
                 (SELECT COUNT(*) FROM FINANCIAMENTO f WHERE f.cliente_id = c.id AND f.finalizado = 0 AND f.atrasado = 0) as totalFinanciamentoAbertas,
                 (SELECT COUNT(*) FROM FINANCIAMENTO f WHERE f.cliente_id = c.id AND f.finalizado = 0 AND f.atrasado = 1) as totalParcelasAtrasadas,
-                (SELECT COUNT(*) FROM FINANCIAMENTO f WHERE f.cliente_id = c.id AND f.finalizado = 0) as totalParcelasPendente
+                (SELECT COUNT(*) FROM FINANCIAMENTO f WHERE f.cliente_id = c.id AND f.finalizado = 0) as totalParcelasPendente,
+                (SELECT COUNT(*) FROM FINANCIAMENTO f WHERE f.cliente_id = c.id AND f.finalizado = 1) as totalFinanciamentoFechado
             FROM 
                 CUSTOMER c
                 LEFT JOIN ENDERECO e ON c.endereco_id = e.id
@@ -112,6 +113,7 @@ export function useCustomerDataBase() {
             totalParcelasAbertas: row.totalFinanciamentoAbertas,
             totalParcelasAtrasadas: row.totalParcelasAtrasadas,
             totalParcelasPendente: row.totalParcelasPendente,
+            totalFinanciamentoFechado: row.totalFinanciamentoFechado,
             endereco: {
                 id: row.endereco_id,
                 cep: row.cep,

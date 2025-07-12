@@ -1,4 +1,4 @@
-import { backgroundBlue, backgroundOpacityBallon, iconColorDanger, iconColorSuccess, iconColorWarning, textColorPrimary } from "@/src/constants/colorsPalette ";
+import { backgroundBlue, backgroundOpacityBallon, iconColorDanger, iconColorSuccess, iconColorWarning, iconDrawerColor, textColorPrimary } from "@/src/constants/colorsPalette ";
 import { NavigationProp } from "@/src/navigation/navigation";
 import { CUSTOMER } from "@/src/types/customer";
 import { IconsUtil } from "@/src/utils/iconsUtil";
@@ -37,7 +37,7 @@ const DetalharCliente = ({ customer, setModalVisible } : Props) => {
                             borderWidth={0.7}                        
                             children={
                                 <View style={{ width: 250, flexDirection:"row", alignItems:"center"}}>
-                                    {IconsUtil.contrato({size: 25, color:iconColorSuccess})}
+                                    {IconsUtil.contrato({size: 25, color:iconDrawerColor})}
                                     <TextComponent text={`Contratos em Aberto: ${customer.totalParcelasAbertas}`} color={textColorPrimary} fontSize={16} textAlign={"center"} />
                                 </View>
                             }               
@@ -65,6 +65,19 @@ const DetalharCliente = ({ customer, setModalVisible } : Props) => {
                                 <View style={{ width: 250, flexDirection:"row", alignItems:"center"}}>
                                     {IconsUtil.contrato({size: 25, color:iconColorDanger})}
                                     <TextComponent text={`Contratos em Atraso: ${customer.totalParcelasAtrasadas}`} color={textColorPrimary} fontSize={16} textAlign={"center"} />
+                                </View>
+                            }               
+                        />
+                    </TouchableOpacity>
+
+                    <TouchableOpacity onPress={() => { setModalVisible(false); navigation.navigate('FinanciamentoVisualizacao', {cliente: customer, financiamentoTipo: TIPOFINANCIAMENTO.fechado})}}>
+                        <BalaoTexto 
+                            backgroundColor={backgroundOpacityBallon} 
+                            borderWidth={0.7}                        
+                            children={
+                                <View style={{ width: 250, flexDirection:"row", alignItems:"center"}}>
+                                    {IconsUtil.contrato({size: 25, color:iconColorSuccess})}
+                                    <TextComponent text={`Fechados: ${customer.totalFinanciamentoFechado}`} color={textColorPrimary} fontSize={16} textAlign={"center"} />
                                 </View>
                             }               
                         />

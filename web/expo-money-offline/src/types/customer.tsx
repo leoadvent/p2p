@@ -10,4 +10,5 @@ export interface CUSTOMER {
     totalParcelasAbertas: number
     totalParcelasAtrasadas: number
     totalParcelasPendente: number
+    totalFinanciamentoFechado: number
 }

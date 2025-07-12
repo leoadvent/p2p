@@ -62,7 +62,7 @@ const Financiamento = () => {
     const financiamentoDataBase = useFinanciamentoDataBase();
 
     function handlerSalvarFinanciamento(){
-
+        alert(JSON.stringify(financiamento))
         financiamentoDataBase.create(financiamento).then((response) => {
             setFinanciamentoFinalizado(true)
             setModalShow(true);
@@ -116,20 +116,27 @@ const Financiamento = () => {
             ? Number(valorDiario.replaceAll('.','').replace(',','.').replace('R$',''))
             : valorParcela
 
+        const dataUltimoPagamento = new Date();
+        const novaDataUltimoPagamento = new Date(dataUltimoPagamento);
+        novaDataUltimoPagamento.setDate(novaDataUltimoPagamento.getDate() - 1); 
+
         for (let i = 1; i <= quant; i++) {
             novaLista.push({
                 cliente: clientFinanciamento,
                 id: uuid.v4().toString(),
                 dataVencimento: new Date(inicio),
                 dataPagamento: null,
+                dataUltimoPagamento: novaDataUltimoPagamento,
                 numeroParcela: i,
                 valorPago: 0,
                 valorAtual: Number.parseFloat(valParcel.toString()),
-                valorParcela: Number.parseFloat(valParcel.toString()),
+                valorParcela: modalidade === MODALIDADE.Parcelado ? Number.parseFloat(valParcel.toString()) :  Number.parseFloat(valorFinanciamento.replaceAll('.','').replace(',','.')) ,
                 valorDiaria: valorDiarioNumerico,
+                modalidade: modalidade,
                 juros: taxaJurosNumerico,
                 jurosAtraso: taxaJurosAtrasoNumerico,
                 executadoEmpenho: false,
+                pagamentoRealizado: false,
                 renegociado: false,
             });
 
@@ -252,6 +259,17 @@ const Financiamento = () => {
                                     <TextComponent text={`Contrato: ${financiamento.id.substring(0, financiamento.id.indexOf('-'))}`} color={textColorPrimary} fontSize={14} textAlign={'auto'} />
                                 </View>
                                 }
+                            backgroundColor='transparent'
+                        />
+
+                        <BalaoTexto 
+                            borderWidth={0}
+                            children={
+                                <View style={{ flexDirection:"row", width:140, alignItems:"center", gap:5}}>
+                                    {IconsUtil.modalidade({size: 15, color: iconColorPrimary})}
+                                    <TextComponent text={`${financiamento.modalidade}`} color={textColorPrimary} fontSize={14} textAlign={'auto'} />
+                                </View>
+                                } 
                             backgroundColor='transparent'
                         />
 
@@ -527,7 +545,7 @@ const Financiamento = () => {
                     
                     {resumoFinanciamento()}
 
-                    <View style={{ height: 300, width:330}}>
+                    <View style={{ height: 280, width:330}}>
                         <BalaoTexto 
                             borderWidth={0}
                             backgroundColor={backgroundOpacityBallon}

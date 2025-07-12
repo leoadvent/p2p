@@ -15,14 +15,17 @@ export interface FINANCIAMENTO_PAGAMENTO {
     id: string
     dataVencimento: Date
     dataPagamento: Date | null
+    dataUltimoPagamento: Date
     numeroParcela: number
     valorPago: number
     valorAtual: number
     valorParcela: number
     valorDiaria: number
+    modalidade: MODALIDADE // Modalidade do financiamento, padrão: 'Parcelado, Carência de Capital'
     juros: number
     jurosAtraso: number
     executadoEmpenho: boolean
+    pagamentoRealizado: boolean
     renegociado: boolean
     cliente: CUSTOMER
 }

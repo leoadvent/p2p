@@ -43,6 +43,10 @@ export class IconsUtil {
         return <Ionicons name='partly-sunny-outline' color={color} size={size} />
     }
 
+    static diaCorrido({ size, color } : Props ){
+        return <Ionicons name='receipt-outline' color={color} size={size} />
+    }
+
     static whatsApp({ size, color } : Props ){
         return <Ionicons name='logo-whatsapp' color={color} size={size} />
     }

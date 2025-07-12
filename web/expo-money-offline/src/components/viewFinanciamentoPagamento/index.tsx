@@ -1,7 +1,7 @@
 import { backgroundColorError, backgroundOpacityBallon, backgroundSuccess, backgroundWarning, flatListBorderColor, iconColorPrimary, textColorPrimary } from "@/src/constants/colorsPalette "
 import { NavigationProp } from "@/src/navigation/navigation"
 import { CUSTOMER } from "@/src/types/customer"
-import { FINANCIAMENTO_PAGAMENTO } from "@/src/types/financiamento"
+import { FINANCIAMENTO_PAGAMENTO, MODALIDADE } from "@/src/types/financiamento"
 import { DataUtils } from "@/src/utils/dataUtil"
 import { IconsUtil } from "@/src/utils/iconsUtil"
 import { StringUtil } from "@/src/utils/stringUtil"
@@ -25,7 +25,6 @@ const FinanciamentoPagamentoView = ({ pagamento, idFinanciamento, cliente, isNeg
 
     const width = Dimensions.get("screen").width
     const navigation = useNavigation<NavigationProp>();
-
     return(
         <View style={{ 
             display: "flex",
@@ -41,6 +40,7 @@ const FinanciamentoPagamentoView = ({ pagamento, idFinanciamento, cliente, isNeg
             padding: 10,
             backgroundColor: DataUtils.calcularDiasEntreDatas(pagamento.dataVencimento, new Date()) > 0 && pagamento.dataPagamento === null ? backgroundColorError : pagamento.dataPagamento != null ? backgroundSuccess : backgroundWarning
         }}>
+          
             <View style={{ display: isMostraCliente ? "flex" : "none", gap: 10 , flexDirection:"row" }}>
                 <ShowImageCliente 
                     urlPhoto={cliente.photo} 
@@ -157,7 +157,7 @@ const FinanciamentoPagamentoView = ({ pagamento, idFinanciamento, cliente, isNeg
                 </View>
                 
                 <View style={{ gap: 20, display: 'flex', flexDirection:'row', justifyContent:"center",  }}>
-                    <View style={{ width:60}}>
+                    <View style={{ display: pagamento.modalidade !== MODALIDADE.CarenciaDeCapital ? "flex": "none", width:60}}>
                         <BalaoTexto 
                             backgroundColor={backgroundOpacityBallon} 
                             borderWidth={0} 
@@ -180,7 +180,54 @@ const FinanciamentoPagamentoView = ({ pagamento, idFinanciamento, cliente, isNeg
                             }
                         />
                     </View>
-                    <View style={{ width:120, alignItems:"center" }}>
+
+                    <View style={{ display: pagamento.modalidade === MODALIDADE.CarenciaDeCapital ? "flex": "none", width:60}}>
+                        <BalaoTexto 
+                            backgroundColor={backgroundOpacityBallon} 
+                            borderWidth={0} 
+                            children={
+                                <View style={{ flexDirection:"column", justifyContent:"center", width:'100%', alignItems:"center" }}>
+                                   
+                                    <TextComponent 
+                                            text={"Dias Corridos"} 
+                                            color={textColorPrimary} 
+                                            fontSize={5} textAlign={"auto"} />
+                                    <View style={{ flexDirection:"row", width:"100%", gap: 2 }}>
+                                        {IconsUtil.diaCorrido({size: 25, color: iconColorPrimary })}
+                                        <TextComponent 
+                                            text={DataUtils.calcularDiasEntreDatas(pagamento.dataUltimoPagamento, new Date()).toString()} 
+                                            color={textColorPrimary} 
+                                            fontSize={16} 
+                                            textAlign={"auto"} />
+                                    </View>
+                                </View>
+                            }
+                        />
+                    </View>
+                    <View style={{ display: pagamento.modalidade === MODALIDADE.CarenciaDeCapital ? "flex": "none", width:120, alignItems:"center" }}>
+                        <BalaoTexto 
+                            backgroundColor={backgroundOpacityBallon} 
+                            width={122}
+                            borderWidth={0} 
+                            children={
+                                <View style={{ flexDirection:"column",  width:'118%', justifyContent:"center" }}>
+                                    <TextComponent 
+                                            text={"Valor Diária"} 
+                                            color={textColorPrimary} 
+                                            fontSize={7} textAlign={"auto"} />
+                                    <View style={{ flexDirection:"row", gap: 4 }}>
+                                        {IconsUtil.dinheiro({size: 25, color: iconColorPrimary })}
+                                        <TextComponent 
+                                            text={StringUtil.formatarMoedaReal(pagamento.valorDiaria.toString())} 
+                                            color={textColorPrimary} 
+                                            fontSize={16} 
+                                            textAlign={"auto"} />
+                                    </View>
+                                </View>
+                            }
+                        />
+                    </View>
+                    <View style={{ display: pagamento.modalidade !== MODALIDADE.CarenciaDeCapital ? "flex": "none", width:120, alignItems:"center" }}>
                         <BalaoTexto 
                             backgroundColor={backgroundOpacityBallon} 
                             width={122}

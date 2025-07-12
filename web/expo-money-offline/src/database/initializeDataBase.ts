@@ -46,7 +46,7 @@ export async function initializeDataBase(dataBase: SQLiteDatabase) {
             valorDiaria REAL,
             valorMontante REAL,
             valorPago REAL,
-            modalidade TEXT NOT NULL DEFAULT 'Parcelado, CarenciaDeCapital',
+            modalidade TEXT NOT NULL,
             periodocidade TEXT NOT NULL DEFAULT 'Semanal, Quinzenal, Mensal',
             totalParcelas INTEGER NOT NULL,
             finalizado INTEGER NULL,
@@ -61,6 +61,7 @@ export async function initializeDataBase(dataBase: SQLiteDatabase) {
             id TEXT PRIMARY KEY NOT NULL,
             dataVencimento TEXT NOT NULL,
             dataPagamento TEXT,
+            dataUltimoPagamento TEXT,
             numeroParcela INTEGER NOT NULL,
             valorPago REAL,
             valorAtual REAL,
@@ -68,7 +69,9 @@ export async function initializeDataBase(dataBase: SQLiteDatabase) {
             valorDiaria REAL,
             juros REAL NOT NULL,
             jurosAtraso REAL NOT NULL,
+            modalidade TEXT NOT NULL,
             executadoEmpenho INTEGER, -- BOOLEAN representado como INTEGER
+            pagamentoRealizado INTEGER, -- BOOLEAN representado como INTEGER
             renegociado INTEGER NULL,
             cliente_id TEXT,
             financiamento_id TEXT,

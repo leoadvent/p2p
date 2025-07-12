@@ -30,6 +30,7 @@ const FinanciamentoReceber = () => {
             id: parcelas?.id ?? '',
             dataVencimento: parcelas?.dataVencimento ?? new Date(),
             dataPagamento: parcelas?.dataPagamento ?? null,
+            dataUltimoPagamento: parcelas?.dataUltimoPagamento ?? new Date(),
             numeroParcela: parcelas!.numeroParcela,
             valorPago: parcelas!.valorPago,
             valorAtual: parcelas!.valorAtual,
@@ -37,7 +38,9 @@ const FinanciamentoReceber = () => {
             valorDiaria: parcelas!.valorDiaria,
             juros: parcelas!.juros,
             jurosAtraso: parcelas!.jurosAtraso,
+            modalidade: parcelas!.modalidade,
             executadoEmpenho: parcelas!.executadoEmpenho,
+            pagamentoRealizado: parcelas!.pagamentoRealizado,
             renegociado: parcelas!.renegociado,
             cliente: {} as CUSTOMER
         })

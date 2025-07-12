@@ -23,8 +23,8 @@ export function useFinanciamentoDataBase() {
 
         const sqlFinanciamentoPagament = `
             INSERT INTO FINANCIAMENTO_PAGAMENTO (
-                id, dataVencimento, dataPagamento, numeroParcela, valorPago, valorAtual, valorParcela, valorDiaria, juros, jurosAtraso, executadoEmpenho, renegociado, cliente_id, financiamento_id  
-            ) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+                id, dataVencimento, dataPagamento, dataUltimoPagamento, numeroParcela, valorPago, valorAtual, valorParcela, valorDiaria, juros, jurosAtraso, modalidade, executadoEmpenho, pagamentoRealizado, renegociado, cliente_id, financiamento_id  
+            ) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
 
         const statementFinanciamento          = await dataBase.prepareAsync(sqlFinanciamento);
         const statementFinanciamentoPagamento = await dataBase.prepareAsync(sqlFinanciamentoPagament);
@@ -54,10 +54,11 @@ export function useFinanciamentoDataBase() {
             for (const item of financiamento.pagamentos) {
                 const idPagamento = uuid.v4() as string;
 
-                await statementFinanciamentoPagamento.executeAsync([
+                const retorno = await statementFinanciamentoPagamento.executeAsync([
                 idPagamento,
                 item.dataVencimento instanceof Date ? item.dataVencimento.toISOString() : item.dataVencimento,
                 item.dataPagamento ? (item.dataPagamento instanceof Date ? item.dataPagamento.toISOString() : item.dataPagamento) : null,
+                item.dataUltimoPagamento.toISOString(),
                 item.numeroParcela,
                 round2(item.valorPago ?? 0),
                 round2(item.valorAtual ?? 0),
@@ -65,11 +66,14 @@ export function useFinanciamentoDataBase() {
                 round2(item.valorDiaria ?? 0),
                 item.juros,
                 item.jurosAtraso,
+                item.modalidade,
                 item.executadoEmpenho ? 1 : 0,
+                item.pagamentoRealizado,
                 item.renegociado ? 1 : 0,
                 item.cliente.id,
                 idFinanciamento
                 ]);
+
             }
             
         }catch (error) {
@@ -184,6 +188,7 @@ export function useFinanciamentoDataBase() {
                 id: row.id,
                 dataVencimento: row.dataVencimento,
                 dataPagamento: row.dataPagamento,
+                dataUltimoPagamento: row.dataUltimoPagamento,
                 numeroParcela: row.numeroParcela,
                 valorPago: row.valorPago,
                 valorAtual: row.valorAtual,
@@ -191,7 +196,9 @@ export function useFinanciamentoDataBase() {
                 valorDiaria: row.valorDiaria,
                 juros: row.juros,
                 jurosAtraso: row.jurosAtraso,
-                executadoEmpenho: row.executadoEmpenho
+                executadoEmpenho: row.executadoEmpenho,
+                pagamentoRealizado: row.pagamentoRealizado,
+                modalidade: row.modalidade
             }))
 
         } catch (error) {
@@ -212,6 +219,7 @@ export function useFinanciamentoDataBase() {
             id: row.id,
             dataVencimento: row.dataVencimento,
             dataPagamento: row.dataPagamento,
+            dataUltimoPagamento: row.dataUltimoPagamento,
             numeroParcela: row.numeroParcela,
             valorPago: row.valorPago,
             valorAtual: row.valorAtual,
@@ -220,7 +228,9 @@ export function useFinanciamentoDataBase() {
             juros: row.juros,
             jurosAtraso: row.jurosAtraso,
             executadoEmpenho: row.executadoEmpenho,
-            renegociado: row.renegociado
+            pagamentoRealizado: row.pagamentoRealizado,
+            renegociado: row.renegociado,
+            modalidade: row.modalidade
         };
     }
 
@@ -343,6 +353,29 @@ export function useFinanciamentoDataBase() {
 
     }
 
-    return {create,  atualizarPagamentosAtrasados, buscarFinanciamentoPorCliente, buscarParcelasDeFinanciamentoPorId, buscarParcelaPorId, updateParcela, negociarValorPagamento }
+    async function atualizarValorParcelaCarenciaCapital(){
+
+            const sql = `UPDATE FINANCIAMENTO_PAGAMENTO
+                    SET valorAtual = ROUND(valorDiaria * CAST(julianday('now') - julianday(dataUltimoPagamento) AS INTEGER), 2)
+                    WHERE 
+                        pagamentoRealizado = 0
+                        AND modalidade = 'Carência de Capital'
+                        AND dataUltimoPagamento IS NOT NULL;`
+
+            const statementCalculoParcelaCarencia = await dataBase.prepareAsync(sql); 
+
+            try {
+                await statementCalculoParcelaCarencia.executeAsync()
+                return true;
+            } catch (error) {
+                alert(`Error ao atualizar Valor da parcela Carência de Capital: ${error}`);
+                throw error;
+            } finally {
+                statementCalculoParcelaCarencia.finalizeAsync();
+            }
+        }
+
+
+    return {create,  atualizarPagamentosAtrasados, buscarFinanciamentoPorCliente, buscarParcelasDeFinanciamentoPorId, buscarParcelaPorId, updateParcela, negociarValorPagamento, atualizarValorParcelaCarenciaCapital }
 
 }

@@ -19,6 +19,7 @@ const Home = () => {
                 <ButtonComponent
                     nameButton={"ATUALIZAR JUROS"}
                     onPress={async () => {
+                        await useFinanciamento.atualizarValorParcelaCarenciaCapital();
                         const result = await useFinanciamento.atualizarPagamentosAtrasados();
                         setExecutadoCalculoJuros(result);
                     }}

@@ -10,7 +10,6 @@ interface Props {
   }
 
 const Contato = ({ telefoneNumero, mensagem = "Olá!", exibeTexto} : Props) => {
-
     const abriWhatsapp = async () => {
         const url = `https://wa.me/${telefoneNumero.replace(/\D/g, "")}?text=${encodeURIComponent(mensagem)}`;
         const supported = await Linking.canOpenURL(url);

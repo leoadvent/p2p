@@ -61,11 +61,7 @@ const Financiamento = () => {
 
     const financiamentoDataBase = useFinanciamentoDataBase();
 
-
-
     function handlerSalvarFinanciamento(){
-
-        
 
         financiamentoDataBase.create(financiamento).then((response) => {
             setFinanciamentoFinalizado(true)
@@ -133,7 +129,8 @@ const Financiamento = () => {
                 valorDiaria: valorDiarioNumerico,
                 juros: taxaJurosNumerico,
                 jurosAtraso: taxaJurosAtrasoNumerico,
-                executadoEmpenho: false
+                executadoEmpenho: false,
+                renegociado: false,
             });
 
             // Avança a data conforme periodicidade

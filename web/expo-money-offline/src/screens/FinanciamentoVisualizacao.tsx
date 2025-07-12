@@ -2,7 +2,7 @@ import { useFinanciamentoDataBase } from "@/database/useFinanciamentoDataBase";
 import { NavigationProp } from "@/src/navigation/navigation";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { useEffect, useState } from "react";
-import { Dimensions, FlatList, TouchableOpacity, View } from "react-native";
+import { FlatList, TouchableOpacity, View } from "react-native";
 import BalaoTexto from "../components/balaoTexto";
 import TextComponent from "../components/text/text";
 import { backgroundColorError, backgroundOpacityBallon, backgroundSuccess, flatListBorderColor, iconColorPrimary, textColorPrimary } from "../constants/colorsPalette ";
@@ -17,7 +17,6 @@ const FinanciamentoVisualizacao = () => {
 
     const [financiamentos, setFinanciamentos] = useState<FINANCIAMENTO[]>([])
 
-    const dimensions = Dimensions.get("window");
     const route = useRoute();
     const { cliente, financiamentoTipo  }: any = route.params ?? {}
     const navigation = useNavigation<NavigationProp>();

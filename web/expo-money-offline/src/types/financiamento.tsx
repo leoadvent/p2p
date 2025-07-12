@@ -23,6 +23,7 @@ export interface FINANCIAMENTO_PAGAMENTO {
     juros: number
     jurosAtraso: number
     executadoEmpenho: boolean
+    renegociado: boolean
     cliente: CUSTOMER
 }
 

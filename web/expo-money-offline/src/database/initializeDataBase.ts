@@ -69,6 +69,7 @@ export async function initializeDataBase(dataBase: SQLiteDatabase) {
             juros REAL NOT NULL,
             jurosAtraso REAL NOT NULL,
             executadoEmpenho INTEGER, -- BOOLEAN representado como INTEGER
+            renegociado INTEGER NULL,
             cliente_id TEXT,
             financiamento_id TEXT,
             FOREIGN KEY (cliente_id) REFERENCES CUSTOMER(id),

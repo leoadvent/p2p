@@ -18,8 +18,8 @@ export function useFinanciamentoDataBase() {
 
         const sqlFinanciamentoPagament = `
             INSERT INTO FINANCIAMENTO_PAGAMENTO (
-                id, dataVencimento, dataPagamento, numeroParcela, valorPago, valorAtual, valorParcela, valorDiaria, juros, jurosAtraso, executadoEmpenho, cliente_id, financiamento_id  
-            ) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+                id, dataVencimento, dataPagamento, numeroParcela, valorPago, valorAtual, valorParcela, valorDiaria, juros, jurosAtraso, executadoEmpenho, renegociado, cliente_id, financiamento_id  
+            ) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
 
         const statementFinanciamento          = await dataBase.prepareAsync(sqlFinanciamento);
         const statementFinanciamentoPagamento = await dataBase.prepareAsync(sqlFinanciamentoPagament);
@@ -61,6 +61,7 @@ export function useFinanciamentoDataBase() {
                 item.juros,
                 item.jurosAtraso,
                 item.executadoEmpenho ? 1 : 0,
+                item.renegociado ? 1 : 0,
                 item.cliente.id,
                 idFinanciamento
                 ]);
@@ -212,13 +213,13 @@ export function useFinanciamentoDataBase() {
             valorDiaria: row.valorDiaria,
             juros: row.juros,
             jurosAtraso: row.jurosAtraso,
-            executadoEmpenho: row.executadoEmpenho
+            executadoEmpenho: row.executadoEmpenho,
+            renegociado: row.renegociado
         };
     }
 
     async function updateParcela(params: {idParcela: string, idFinanciamento: string, parcela: FINANCIAMENTO_PAGAMENTO}) {
         const { idParcela, idFinanciamento, parcela } = params;
-        alert(`${idParcela} - ${idFinanciamento} - ${JSON.stringify(parcela)}`)
 
            const sqlFinanciamentoParcela = `
                 UPDATE FINANCIAMENTO_PAGAMENTO
@@ -264,7 +265,32 @@ export function useFinanciamentoDataBase() {
         }
     }
 
+    async function negociarValorPagamento(params : {idParcela: string, valorAtualNegociado: number}) {
+        const {idParcela, valorAtualNegociado } = params
 
-    return {create,  atualizarPagamentosAtrasados, buscarFinanciamentoPorCliente, buscarParcelasDeFinanciamentoPorId, buscarParcelaPorId, updateParcela }
+        const sql = `UPDATE FINANCIAMENTO_PAGAMENTO 
+            SET valorAtual = $valorAtualNegociado, renegociado = 1
+            WHERE id = $idParcela
+        `
+        const statementNegociacao = await dataBase.prepareAsync(sql);
+        try {
+
+            const returno = await statementNegociacao.executeAsync({
+                $valorAtualNegociado: valorAtualNegociado,
+                $idParcela: idParcela
+            });
+
+            return returno;
+
+        } catch (error) {
+            alert(`Error ao atualizar Valor atual da Parcela: ${error}`);
+            throw error;
+        } finally {
+            statementNegociacao.finalizeAsync()
+        }
+
+    }
+
+    return {create,  atualizarPagamentosAtrasados, buscarFinanciamentoPorCliente, buscarParcelasDeFinanciamentoPorId, buscarParcelaPorId, updateParcela, negociarValorPagamento }
 
 }

@@ -20,7 +20,7 @@ const Tab = createBottomTabNavigator()
 const DrawerClient = createDrawerNavigator()
 
 type RootStackParamList = {
-  MeuClientes: {};
+  tabNavigator: {};
   CriarEditarClientes: { clientEdit?: CUSTOMER  | undefined;};
   Financiamento: { clientFinanciamento?: CUSTOMER | undefined};
   FinanciamentoVisualizacao: {cliente: CUSTOMER, financiamentoTipo: TIPOFINANCIAMENTO}

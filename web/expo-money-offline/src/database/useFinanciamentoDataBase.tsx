@@ -7,6 +7,11 @@ export function useFinanciamentoDataBase() {
     
     const dataBase = useSQLiteContext();
 
+    function round2(value: number | undefined | null): number {
+    if (value == null) return 0;
+        return Math.round(value * 100) / 100;
+    }
+
     async function create (financiamento: Omit<FINANCIAMENTO, 'id'>){
 
         const idFinanciamento  = uuid.v4();
@@ -30,13 +35,13 @@ export function useFinanciamentoDataBase() {
                 idFinanciamento,
                 financiamento.dataInicio instanceof Date ? financiamento.dataInicio.toISOString() : financiamento.dataInicio,
                 financiamento.dataFim instanceof Date ? financiamento.dataFim.toISOString() : financiamento.dataFim,
-                financiamento.valorFinanciado,
+                round2(financiamento.valorFinanciado),
                 financiamento.taxaJuros,
                 financiamento.taxaJurosAtraso,
-                financiamento.adicionalDiaAtraso,
-                financiamento.valorDiaria,
-                financiamento.valorMontante,
-                financiamento.valorPago,
+                round2(financiamento.adicionalDiaAtraso),
+                round2(financiamento.valorDiaria),
+                round2(financiamento.valorMontante),
+                round2(financiamento.valorPago),
                 financiamento.modalidade,
                 financiamento.periodocidade,
                 financiamento.totalParcelas,
@@ -54,10 +59,10 @@ export function useFinanciamentoDataBase() {
                 item.dataVencimento instanceof Date ? item.dataVencimento.toISOString() : item.dataVencimento,
                 item.dataPagamento ? (item.dataPagamento instanceof Date ? item.dataPagamento.toISOString() : item.dataPagamento) : null,
                 item.numeroParcela,
-                item.valorPago ?? 0,
-                item.valorAtual ?? 0,
-                item.valorParcela ?? 0,
-                item.valorDiaria ?? 0,
+                round2(item.valorPago ?? 0),
+                round2(item.valorAtual ?? 0),
+                round2(item.valorParcela ?? 0),
+                round2(item.valorDiaria ?? 0),
                 item.juros,
                 item.jurosAtraso,
                 item.executadoEmpenho ? 1 : 0,
@@ -254,8 +259,6 @@ export function useFinanciamentoDataBase() {
                 WHERE 
                     financiamento_id = $idFinanciamento
                     AND dataPagamento IS NULL
-                    AND dataVencimento < datetime('now')
-
             `
             const sqlRemoveFlagAtrasadoFinanciamento = `
                 UPDATE FINANCIAMENTO

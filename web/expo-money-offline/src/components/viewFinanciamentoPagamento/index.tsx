@@ -10,6 +10,7 @@ import { Dimensions, TouchableOpacity, View } from "react-native"
 import BalaoTexto from "../balaoTexto"
 import ButtonComponent from "../button"
 import Contato from "../contato"
+import ShowImageCliente from "../imageAvatar"
 import TextComponent from "../text/text"
 
 interface Props {
@@ -40,8 +41,17 @@ const FinanciamentoPagamentoView = ({ pagamento, idFinanciamento, cliente, isNeg
             padding: 10,
             backgroundColor: DataUtils.calcularDiasEntreDatas(pagamento.dataVencimento, new Date()) > 0 && pagamento.dataPagamento === null ? backgroundColorError : pagamento.dataPagamento != null ? backgroundSuccess : backgroundWarning
         }}>
-            <View style={{ display: isMostraCliente ? "flex" : "none", gap: 10 }}>
-                <TextComponent text={"SHOW CLIENTE"} color={textColorPrimary} fontSize={20} textAlign={"center"} />
+            <View style={{ display: isMostraCliente ? "flex" : "none", gap: 10 , flexDirection:"row" }}>
+                <ShowImageCliente 
+                    urlPhoto={cliente.photo} 
+                    amountFinancialLoansPending={0} 
+                    width={80}
+                    height={80}
+                    firsName={cliente.firstName} lastName={cliente.lastName} />
+                <View>
+                    <TextComponent text={cliente.firstName} color={textColorPrimary} fontSize={24} textAlign={"center"} />
+                    <TextComponent text={cliente.lastName} color={textColorPrimary} fontSize={14} textAlign={"center"} />
+                </View>
             </View>
             
             <View style={{ display: pagamento.dataPagamento === null ? "flex" : "none", gap: 10 }}>

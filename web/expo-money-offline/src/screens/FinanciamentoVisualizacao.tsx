@@ -1,7 +1,7 @@
 import { useFinanciamentoDataBase } from "@/database/useFinanciamentoDataBase";
 import { NavigationProp } from "@/src/navigation/navigation";
-import { useNavigation, useRoute } from "@react-navigation/native";
-import { useEffect, useState } from "react";
+import { useFocusEffect, useNavigation, useRoute } from "@react-navigation/native";
+import React, { useState } from "react";
 import { FlatList, TouchableOpacity, View } from "react-native";
 import BalaoTexto from "../components/balaoTexto";
 import TextComponent from "../components/text/text";
@@ -34,7 +34,11 @@ const FinanciamentoVisualizacao = () => {
         );
     }
 
-    useEffect(() => {handlerBuscarFinanciamentoCliente()}, [])
+    useFocusEffect(
+        React.useCallback(() => {
+            handlerBuscarFinanciamentoCliente()
+        },[])
+    )
 
     return(
         <BaseScreens title={`Financiamentos de ${cliente.firstName} ${financiamentoTipo}`} rolbackStack>

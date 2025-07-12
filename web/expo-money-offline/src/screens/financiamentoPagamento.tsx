@@ -1,6 +1,6 @@
-import { useRoute } from "@react-navigation/native";
-import { useEffect, useState } from "react";
-import { Dimensions, FlatList, View } from "react-native";
+import { useFocusEffect, useRoute } from "@react-navigation/native";
+import React, { useState } from "react";
+import { FlatList, View } from "react-native";
 import FinanciamentoPagamentoView from "../components/viewFinanciamentoPagamento";
 import { useFinanciamentoDataBase } from '../database/useFinanciamentoDataBase';
 import { FINANCIAMENTO_PAGAMENTO } from "../types/financiamento";
@@ -16,19 +16,23 @@ const FinanciamentoPagamento = () => {
 
     const [financiamentoPagamento, setFinanciamentoPagamento] = useState<FINANCIAMENTO_PAGAMENTO[]>([])
     
-    const width = Dimensions.get("screen").width
 
-    useEffect(() => {
-        const fetchParcelas = async () => {
-            const parcelas = await financiamentoDataBase.buscarParcelasDeFinanciamentoPorId(idFinanciamento);
-            const parcelasComCliente = parcelas.map((parcela: any) => ({
-                ...parcela,
-                cliente: cliente
-            }));
-            setFinanciamentoPagamento(parcelasComCliente);
-        };
-        fetchParcelas();
-    },[])
+    async function handlerBuscarFinanciamentoPorId(){
+        const parcelas = await financiamentoDataBase.buscarParcelasDeFinanciamentoPorId(idFinanciamento);
+        const parcelasComCliente = parcelas.map((parcela: any) => ({
+            ...parcela,
+            cliente: cliente
+        }));
+        setFinanciamentoPagamento(parcelasComCliente);
+    }
+
+    useFocusEffect(
+        React.useCallback(() => {
+           
+            handlerBuscarFinanciamentoPorId()
+      
+        },[idFinanciamento])
+    )
 
     return(
         <BaseScreens title={`${cliente.firstName    } - Contrato ${idFinanciamento.substring(0, idFinanciamento.indexOf('-'))}`} rolbackStack>

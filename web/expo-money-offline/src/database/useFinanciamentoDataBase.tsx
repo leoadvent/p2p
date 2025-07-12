@@ -85,7 +85,7 @@ export function useFinanciamentoDataBase() {
                 SET valorAtual = (
                 SELECT 
                     ROUND(
-                    COALESCE(fp.valorDiaria, 0) + 
+                    -- COALESCE(fp.valorDiaria, 0) + 
                     ((julianday('now') - julianday(fp.dataVencimento)) * COALESCE(f.adicionalDiaAtraso, 0))
                   , 
                     2

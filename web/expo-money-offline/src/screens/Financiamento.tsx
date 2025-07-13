@@ -115,10 +115,9 @@ const Financiamento = () => {
             ? Number(valorDiario.replaceAll('.','').replace(',','.').replace('R$',''))
             : valorParcela
 
-        const dataUltimoPagamento = new Date();
+        const dataUltimoPagamento = new Date(dataInicio);
         const novaDataUltimoPagamento = new Date(dataUltimoPagamento);
         novaDataUltimoPagamento.setDate(novaDataUltimoPagamento.getDate() - 1); 
-
         for (let i = 1; i <= quant; i++) {
             novaLista.push({
                 cliente: clientFinanciamento,
@@ -129,7 +128,7 @@ const Financiamento = () => {
                 numeroParcela: i,
                 valorPago: 0,
                 valorAtual: Number.parseFloat(valParcel.toString()),
-                valorParcela: modalidade === MODALIDADE.Parcelado ? Number.parseFloat(valParcel.toString()) :  Number.parseFloat(valorFinanciamento.replaceAll('.','').replace(',','.')) ,
+                valorParcela: modalidade === MODALIDADE.Parcelado ? Number.parseFloat(valParcel.toString()) :  Number.parseFloat(valorMontante.replaceAll('.','').replace(',','.')) ,
                 valorDiaria: valorDiarioNumerico,
                 modalidade: modalidade,
                 juros: taxaJurosNumerico,
@@ -200,7 +199,7 @@ const Financiamento = () => {
 
         const jurosTotal = (numValor * numTaxa) / 100;
 
-        const valorMontante = modalidade === MODALIDADE.CarenciaDeCapital ? numValor + numValor : numValor + jurosTotal;
+        const valorMontante = modalidade === MODALIDADE.CarenciaDeCapital ? numValor + jurosTotal : numValor + jurosTotal;
 
         setValorMontante(valorMontante.toString());
     }
@@ -551,7 +550,7 @@ const Financiamento = () => {
                             children={
                                 <>
                                     {modalidade === MODALIDADE.Parcelado && <TextComponent text={`Total de Parcelas: ${financiamento.totalParcelas} de ${StringUtil.formatarMoedaReal(valorParcela)}`} color={textColorPrimary} fontSize={14} textAlign={'center'} />}
-                                    {modalidade === MODALIDADE.CarenciaDeCapital && <TextComponent text={`Diarias de ${valorDiario} + 1 de ${StringUtil.formatarMoedaReal(valorFinanciamento.replaceAll('.','').replace(',','.'))}`} color={textColorPrimary} fontSize={12} textAlign={'center'} />}
+                                    {modalidade === MODALIDADE.CarenciaDeCapital && <TextComponent text={`Diarias de ${valorDiario} + 1 de ${StringUtil.formatarMoedaReal(valorMontante.replaceAll('.','').replace(',','.'))}`} color={textColorPrimary} fontSize={12} textAlign={'center'} />}
                                     <TextComponent text={`Modalidade:  ${financiamento.modalidade}`} color={textColorPrimary} fontSize={14} textAlign={'center'} />
                                     <TextComponent text={`Periodicidade: ${financiamento.periodocidade}`} color={textColorPrimary} fontSize={14} textAlign={'center'} />
                                 </>

@@ -531,6 +531,17 @@ const Financiamento = () => {
                             />
                         }
 
+                        {modalidade === MODALIDADE.CarenciaDeCapital &&
+                            <InputText 
+                                    editable={false}
+                                    label="Quantidade Meses" 
+                                    keyboardType="numeric"
+                                    value={totalParcelas}
+                                    width={150}
+                                    onChangeText={(text) => { setTotalParcelas(text)}}
+                                />
+                        }
+
                     
                 </View>
             

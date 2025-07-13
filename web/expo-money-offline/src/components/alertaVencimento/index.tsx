@@ -44,7 +44,7 @@ const AlertaVencimento = () => {
         ))
     }
     return(
-        <View style={{ alignItems:"center", width:"100%", borderWidth:mostar ? 1 : 0, borderColor:"white", borderRadius:10, backgroundColor: mostar ? backgroundSecondary : backgroundPrimary}}>
+        <View style={{ alignContent:"center", alignItems:"center", width:"100%", borderWidth:mostar ? 1 : 0, borderColor:"white", borderRadius:10, backgroundColor: mostar ? backgroundSecondary : backgroundPrimary}}>
             
             <View style={{display:'flex', flexDirection:"row", marginTop:5, alignItems:"center", justifyContent:"center", gap:10, width:"100%"}}>
                 <View style={{ display: mostar ? 'flex':'none',  marginTop:10, width: 120, marginLeft:8 }}> 
@@ -65,7 +65,7 @@ const AlertaVencimento = () => {
 
             
 
-            <ScrollView style={{ display: mostar ? 'flex':'none', height: 450, marginTop:10 }}>                
+            <ScrollView style={{ display: mostar ? 'flex':'none', height: 400, marginTop:10 }}>                
                 {handlerMontarparcelas()}
             </ScrollView>
         </View>

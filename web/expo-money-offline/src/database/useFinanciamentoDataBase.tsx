@@ -529,6 +529,7 @@ export function useFinanciamentoDataBase() {
                 WHERE 
                    fp.dataVencimento >= $dataInicio 
                    and fp.dataVencimento <= $dataLimite
+                   and fp.dataPagamento is null
                    and f.finalizado = 0
                 ORDER BY
                     fp.dataVencimento DESC
@@ -573,6 +574,81 @@ export function useFinanciamentoDataBase() {
             } finally {}
         }
 
-    return {create,  atualizarPagamentosAtrasados, buscarFinanciamentoPorCliente, buscarParcelasDeFinanciamentoPorId, buscarParcelaPorId, updateParcela, negociarValorPagamento, atualizarValorParcelaCarenciaCapital, buscarParcelaVencimentoEmDias }
+        async function buscarParcelaVencidas() : Promise<FINANCIAMENTO_PAGAMENTO[]> {
+            
+            const dataInicio = new Date();
+
+            const sqlBuscarVencimento = `
+                SELECT 
+                    fp.id,
+                    fp.dataVencimento,
+                    fp.dataPagamento,
+                    fp.dataUltimoPagamento,
+                    fp.numeroParcela,
+                    fp.valorPago,
+                    fp.valorAtual,
+                    fp.valorParcela,
+                    fp.valorDiaria,
+                    fp.modalidade,
+                    fp.juros,
+                    fp.jurosAtraso,
+                    fp.executadoEmpenho,
+                    fp.pagamentoRealizado,
+                    fp.renegociado,
+                    c.id as idCliente,
+                    c.firstName,
+                    c.lastName,
+                    c.contact,
+                    c.photo
+                FROM 
+                    FINANCIAMENTO_PAGAMENTO fp
+                    INNER JOIN FINANCIAMENTO f on f.id = fp.financiamento_id
+                    INNER JOIN CUSTOMER c on c.id = fp.cliente_id
+                WHERE 
+                   fp.dataVencimento <= $dataInicio 
+                   and fp.dataPagamento is null
+                   and f.finalizado = 0
+                ORDER BY
+                    fp.dataVencimento DESC
+            `
+            
+            try {
+
+                const rows = await dataBase.getAllAsync<FINANCIAMENTO_PAGAMENTO>(sqlBuscarVencimento, {
+                    $dataInicio: dataInicio.toISOString(),
+                })
+
+                return rows.map((row: any) => ({
+                    id: row.id,
+                    dataVencimento: row.dataVencimento,
+                    dataPagamento: row.dataPagamento,
+                    dataUltimoPagamento: row.dataUltimoPagamento,
+                    numeroParcela: row.numeroParcela,
+                    valorPago: row.valorPago,
+                    valorAtual: row.valorAtual,
+                    valorParcela: row.valorParcela,
+                    valorDiaria: row.valorDiaria,
+                    modalidade: row.modalidade,
+                    juros: row.juros,
+                    jurosAtraso: row.jurosAtraso,
+                    executadoEmpenho: row.executadoEmpenho,
+                    pagamentoRealizado: row.pagamentoRealizado,
+                    renegociado: row.renegociado,
+                    cliente: {
+                        id: row.idCliente,
+                        firstName: row.firstName,
+                        lastName: row.lastName,
+                        contact: row.contact,
+                        photo: row.photo
+                    } as CUSTOMER
+                }))
+
+            } catch ( error ){
+                alert(`ERROU ${error}`)
+                throw error
+            } finally {}
+        }
+
+    return {create,  atualizarPagamentosAtrasados, buscarFinanciamentoPorCliente, buscarParcelasDeFinanciamentoPorId, buscarParcelaPorId, updateParcela, negociarValorPagamento, atualizarValorParcelaCarenciaCapital, buscarParcelaVencimentoEmDias, buscarParcelaVencidas }
 
 }

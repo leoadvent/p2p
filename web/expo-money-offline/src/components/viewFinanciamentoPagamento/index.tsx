@@ -47,7 +47,7 @@ const FinanciamentoPagamentoView = ({ pagamento, idFinanciamento, cliente, isNeg
                 <View>
                     <Contato 
                         telefoneNumero={cliente.contact} 
-                        mensagem={StringUtil.formatarMensagemNotificacaoVencimento({
+                        mensagem={StringUtil.formatarMensagemPagamentoAtrasado({
                                     financiamentoPagamento: pagamento,
                                     idContrato: idFinanciamento.toString(),
                                     nomeCliente: cliente.firstName

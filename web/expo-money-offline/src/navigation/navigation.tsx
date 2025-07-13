@@ -12,6 +12,7 @@ import FinanciamentoPagamento from '../screens/financiamentoPagamento';
 import FinanciamentoReceber from '../screens/FinanciamentoReceber';
 import FinanciamentoVisualizacao from '../screens/FinanciamentoVisualizacao';
 import Home from '../screens/Home';
+import Investimentos from '../screens/Investimentos';
 import { CUSTOMER } from '../types/customer';
 import { TIPOFINANCIAMENTO } from '../types/tiposFinanciamento';
 
@@ -109,7 +110,9 @@ const MyTabNavigator = () => {
                       iconName = focused ? 'document-text' : 'document-text-outline';
                   } else if (route.name === 'Clients') {
                       iconName = focused ? 'people' : 'people-outline';
-                  }	
+                  }	else if (route.name === 'Investimentos'){
+                      iconName = focused ? 'receipt' : 'receipt-outline';
+                  }
                   
                   return <Ionicons name={iconName} size={size} color={color} />;
               },
@@ -119,6 +122,7 @@ const MyTabNavigator = () => {
     >
         <Tab.Screen name="Home" component={Home} options={{ title: "PG HOME" }} />
         <Tab.Screen name="Clients" component={MyDrawerNavigatorCliente} options={{ title: "CLIENTES" }} />
+        <Tab.Screen name="Investimentos" component={Investimentos} options={{ title: "INVESTIMENTOS" }} />
     </Tab.Navigator>
     )
 }
@@ -135,6 +139,7 @@ const NavigationStack = () => {
                 <Stack.Screen name="FinanciamentoPagamento" component={FinanciamentoPagamento} options={{ headerShown: false }}/>
                 <Stack.Screen name="FinanciamentoReceber" component={FinanciamentoReceber} options={{ headerShown: false }}/>
                 <Stack.Screen name="FinanciamentoNegociar" component={FinanciamentoNegociar} options={{ headerShown: false }}/>
+                <Stack.Screen name="Investimentos" component={Investimentos} options={{ headerShown: false }}/>
             </Stack.Navigator>
         </NavigationContainer>
     )

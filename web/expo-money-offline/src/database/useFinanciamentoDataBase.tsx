@@ -2,6 +2,7 @@ import { useSQLiteContext } from 'expo-sqlite';
 import uuid from 'react-native-uuid';
 import { CUSTOMER } from '../types/customer';
 import { FINANCIAMENTO, FINANCIAMENTO_PAGAMENTO, MODALIDADE } from '../types/financiamento';
+import { INVESTIMENTO } from '../types/investimento';
 import { TIPOFINANCIAMENTO } from '../types/tiposFinanciamento';
 
 export function useFinanciamentoDataBase() {
@@ -649,6 +650,42 @@ export function useFinanciamentoDataBase() {
             } finally {}
         }
 
-    return {create,  atualizarPagamentosAtrasados, buscarFinanciamentoPorCliente, buscarParcelasDeFinanciamentoPorId, buscarParcelaPorId, updateParcela, negociarValorPagamento, atualizarValorParcelaCarenciaCapital, buscarParcelaVencimentoEmDias, buscarParcelaVencidas }
+    async function buscarInvestimentos(): Promise<INVESTIMENTO> {
+        const sqlTotalInvestido = `
+            SELECT 
+                (SELECT COALESCE(SUM(valorFinanciado), 0) FROM FINANCIAMENTO) AS totalInvestido,
+                (SELECT COALESCE(SUM(valorMontante), 0) FROM FINANCIAMENTO) AS totalMontante,
+                (SELECT COALESCE(SUM(valorPago), 0) FROM FINANCIAMENTO) AS totalRecebido,
+                (SELECT COUNT(*) FROM FINANCIAMENTO WHERE finalizado = 1) AS totalFinalizado,
+                (SELECT COUNT(*) FROM FINANCIAMENTO WHERE finalizado = 0) AS totalNaoFinalizado,
+                (SELECT COUNT(*) FROM FINANCIAMENTO WHERE atrasado = 1) AS totalAtrasado
+        `;
+
+
+        try {
+            const row = await dataBase.getFirstAsync<INVESTIMENTO>(sqlTotalInvestido);
+
+            if (!row) {
+                throw new Error("Nenhum dado de investimento encontrado.");
+            }
+
+            return  {
+                totalInvestido: row.totalInvestido,
+                totalMontante: row!.totalMontante,
+                totalRecebido: row!.totalRecebido,
+                totalFinalizado: row!.totalFinalizado,
+                totalNaoFinalizado: row!.totalNaoFinalizado,
+                totalAtrasado: row!.totalAtrasado
+            };
+
+
+        } catch (error) {
+            alert(`ERRO AO BUSCAR TOTAIS INVESTIDOS: ${error}`);
+            throw error;
+        }
+    }
+
+
+    return {create,  atualizarPagamentosAtrasados, buscarFinanciamentoPorCliente, buscarParcelasDeFinanciamentoPorId, buscarParcelaPorId, updateParcela, negociarValorPagamento, atualizarValorParcelaCarenciaCapital, buscarParcelaVencimentoEmDias, buscarParcelaVencidas, buscarInvestimentos }
 
 }

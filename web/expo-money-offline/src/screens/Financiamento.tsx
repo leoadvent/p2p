@@ -554,7 +554,7 @@ const Financiamento = () => {
                     
                     {resumoFinanciamento()}
 
-                    <View style={{ height: 280, width:330}}>
+                    <View style={{ height: 250, width:330}}>
                         <BalaoTexto 
                             borderWidth={0}
                             backgroundColor={backgroundOpacityBallon}

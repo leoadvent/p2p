@@ -21,4 +21,16 @@ export class StringUtil{
         Se tiver qualquer dúvida, estou à disposição! 😊`;
         return message;
     }
+
+    static formatarMensagemNotificacaoVencimento({ financiamentoPagamento, idContrato, nomeCliente } : PropsMensagemParcelaAtrasada){
+        const message = `👋 Olá ${nomeCliente}, tudo bem?
+        
+        💡 Estou entrando em contato para lembrar sobre a *parcela ${financiamentoPagamento.numeroParcela}* referente ao *contrato ${idContrato.slice(0, idContrato.indexOf('-'))}*, vai vencer no dia *${DataUtils.formatarDataBR(financiamentoPagamento.dataVencimento)}*.
+        
+        💰 O valor atualizado está em *${this.formatarMoedaReal(financiamentoPagamento.valorAtual.toString())}*.
+
+        Se tiver qualquer dúvida, estou à disposição! 😊
+        `
+        return message;
+    }
 }

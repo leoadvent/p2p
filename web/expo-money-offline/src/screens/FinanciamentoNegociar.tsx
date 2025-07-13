@@ -70,6 +70,7 @@ const FinanciamentoNegociar = () => {
                      isNegociar={false}
                      isReceber={false}
                      isMostraCliente={true}
+                     isNotificacaoVencimento={false}
                 /> 
                 <View style={{ display: financiamentoPagamento.dataPagamento === null ? 'flex' : 'none', gap: 10 }}>
                     <InputText 

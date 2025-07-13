@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { View } from "react-native";
+import AlertaVencimento from "../components/alertaVencimento";
 import ButtonComponent from "../components/button";
 import ModalSystem from "../components/modal";
 import TextComponent from "../components/text/text";
@@ -29,6 +30,10 @@ const Home = () => {
                 <TextComponent text={"HOME"} color={"rgb(247, 238, 238)"} fontSize={7} textAlign={"center"} />
             </View>
 
+            
+            <AlertaVencimento />
+          
+            
             <ModalSystem 
                 title={"JUROS ATUALIZADOS"} 
                 setVisible={setExecutadoCalculoJuros} 

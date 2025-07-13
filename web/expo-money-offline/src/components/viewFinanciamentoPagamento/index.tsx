@@ -18,10 +18,11 @@ interface Props {
     idFinanciamento: string,
     cliente: CUSTOMER,
     isNegociar: boolean,
+    isNotificacaoVencimento: boolean,
     isReceber: boolean,
     isMostraCliente: boolean,
 }
-const FinanciamentoPagamentoView = ({ pagamento, idFinanciamento, cliente, isNegociar, isReceber, isMostraCliente } : Props ) => {
+const FinanciamentoPagamentoView = ({ pagamento, idFinanciamento, cliente, isNegociar, isReceber, isMostraCliente, isNotificacaoVencimento } : Props ) => {
 
     //alert(JSON.stringify(pagamento))
     const width = Dimensions.get("screen").width
@@ -43,6 +44,16 @@ const FinanciamentoPagamentoView = ({ pagamento, idFinanciamento, cliente, isNeg
         }}>
 
             <View style={{ display: isMostraCliente ? "flex" : "none", gap: 10 , flexDirection:"row" }}>
+                <View>
+                    <Contato 
+                        telefoneNumero={cliente.contact} 
+                        mensagem={StringUtil.formatarMensagemNotificacaoVencimento({
+                                    financiamentoPagamento: pagamento,
+                                    idContrato: idFinanciamento.toString(),
+                                    nomeCliente: cliente.firstName
+                                })}
+                    />
+                </View>
                 <ShowImageCliente 
                     urlPhoto={cliente.photo} 
                     amountFinancialLoansPending={0} 

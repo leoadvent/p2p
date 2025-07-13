@@ -55,6 +55,7 @@ const FinanciamentoPagamento = () => {
                             isNegociar={true}
                             isReceber={true}
                             isMostraCliente={false}
+                            isNotificacaoVencimento={false}
                         />
                     )}            
                 />

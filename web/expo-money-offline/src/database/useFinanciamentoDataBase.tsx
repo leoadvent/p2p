@@ -605,7 +605,7 @@ export function useFinanciamentoDataBase() {
                     INNER JOIN FINANCIAMENTO f on f.id = fp.financiamento_id
                     INNER JOIN CUSTOMER c on c.id = fp.cliente_id
                 WHERE 
-                   fp.dataVencimento <= $dataInicio 
+                   fp.dataVencimento < $dataInicio 
                    and fp.dataPagamento is null
                    and f.finalizado = 0
                 ORDER BY

@@ -534,7 +534,7 @@ const Financiamento = () => {
                         {modalidade === MODALIDADE.CarenciaDeCapital &&
                             <InputText 
                                     editable={false}
-                                    label="Quantidade Meses" 
+                                    label="Quantidade Parcelas" 
                                     keyboardType="numeric"
                                     value={totalParcelas}
                                     width={150}

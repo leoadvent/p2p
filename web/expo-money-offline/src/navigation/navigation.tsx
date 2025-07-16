@@ -3,6 +3,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator, NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { iconDrawerColor, statusBarColorPrimary, tabNavigatorColor, textColorPrimary } from '../constants/colorsPalette ';
 import ClienteCrierEditar from '../screens/ClienteCrierEditar';
 import Clientes from "../screens/Clientes";
@@ -36,7 +37,7 @@ function MyDrawerNavigatorCliente() {
 
   const colorIcon = iconDrawerColor
   const sizeIcon = 25
-
+  
   return (
     <DrawerClient.Navigator
         initialRouteName='Meus Clientes'
@@ -85,6 +86,9 @@ function MyDrawerNavigatorCliente() {
 }
 
 const MyTabNavigator = () => {
+
+    const inset = useSafeAreaInsets();
+
     return(
         <Tab.Navigator
           screenOptions={({ route }) => ({
@@ -92,11 +96,12 @@ const MyTabNavigator = () => {
               tabBarStyle: {
                   display: "flex",
                   backgroundColor: tabNavigatorColor,
-                  height: 60,
-                  paddingBottom: 0,
+                  height: 60 + inset.bottom ,
                   paddingTop: 5,
+                  paddingBottom: 0,
+                  marginBottom: 0,                 
                   borderTopWidth: 0,
-                  position: "relative",
+                  position: "fixed",
                   bottom: 0,
                   left: 0,
                   right: 0

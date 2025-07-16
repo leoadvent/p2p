@@ -1,7 +1,7 @@
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import React from "react";
-import { KeyboardAvoidingView, Platform, ScrollView, StatusBar, StyleSheet, TouchableOpacity, View } from "react-native";
+import { Dimensions, KeyboardAvoidingView, Platform, ScrollView, StatusBar, StyleSheet, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import TextComponent from "../components/text/text";
 import { backgroundPrimary, backgroundSecondary, statusBarColorPrimary, textColorPrimary, textColorStatusBar } from "../constants/colorsPalette ";
@@ -19,6 +19,7 @@ type Props = {
 const BaseScreens = ( { children, title, backgroundColor, rolbackStack, childrenParam, showChildrenParan, isDrawer} : Props) => {
 
   const navigation = useNavigation();
+  const dimension = Dimensions.get("screen")
   
   const goBack = () => {
     navigation.goBack();
@@ -30,10 +31,8 @@ const BaseScreens = ( { children, title, backgroundColor, rolbackStack, children
             flex: 1,
             justifyContent: "flex-start",
             alignItems: "center",
-            padding:0,
-            margin:0,
-            paddingBottom: 0,
-            backgroundColor: backgroundColor ? backgroundColor : backgroundPrimary,
+            height: dimension.height,
+            backgroundColor:statusBarColorPrimary,
         }}  
     >
         <StatusBar barStyle="light-content" backgroundColor={statusBarColorPrimary} translucent={false}/>
@@ -73,7 +72,7 @@ const BaseScreens = ( { children, title, backgroundColor, rolbackStack, children
             contentContainerStyle={{ flexGrow: 1 }}
             keyboardShouldPersistTaps="handled"
           >
-            <View style={{ display:"flex", width:"100%", alignItems:"center", flex: 1, padding: 10}}>
+            <View style={{ display:"flex", width:"100%", alignItems:"center", flex: 1, padding: 10,}}>
               { children }
             </View>
             

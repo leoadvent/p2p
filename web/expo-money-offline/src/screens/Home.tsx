@@ -16,7 +16,12 @@ const Home = () => {
     const [executadoCalculoJuros, setExecutadoCalculoJuros] = useState<boolean>(false)
 
     return (
-        <BaseScreens title={"HOME"}>
+        <BaseScreens title={"HOME"} 
+            showChildrenParan
+            childrenParam={
+            <View style={{ height:250 }}>
+            </View>
+        }>
             <View>
                 <ButtonComponent
                     nameButton={"ATUALIZAR JUROS"}

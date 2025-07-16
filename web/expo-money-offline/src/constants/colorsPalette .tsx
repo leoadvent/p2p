@@ -1,4 +1,4 @@
-export const statusBarColorPrimary  = "rgb(3, 1, 32)";
+export const statusBarColorPrimary  = "rgba(5, 3, 41, 1)";
 export const tabNavigatorColor      = "rgb(2, 1, 20)";
 
 export const backgroundPrimary        = "rgb(26, 18, 36)";

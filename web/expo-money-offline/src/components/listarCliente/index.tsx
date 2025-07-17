@@ -3,14 +3,18 @@ import { useCustomerDataBase } from "@/database/useCustomerDataBase";
 import { IconsUtil } from "@/src/utils/iconsUtil";
 import { CUSTOMER } from "@/types/customer";
 import { useFocusEffect } from '@react-navigation/native';
-import React, { useState } from "react";
+import React, { Dispatch, SetStateAction, useState } from "react";
 import { Dimensions, FlatList, TouchableOpacity, View } from "react-native";
 import ShowImageCliente from "../imageAvatar";
 import ModalSystem from "../modal";
 import TextComponent from "../text/text";
 import DetalharCliente from "./detalharCliente";
 
-const ListarCliente = () => {
+interface Props {
+    setNomeFiltroParam: Dispatch<SetStateAction<string>>
+    nomeFiltroParam: string
+}
+const ListarCliente = ( {setNomeFiltroParam, nomeFiltroParam} : Props) => {
 
     const [customers, setCustomers] = useState<CUSTOMER[]>([]);
     const [customerView, setCustomerView] = useState<CUSTOMER>({} as CUSTOMER);
@@ -23,13 +27,13 @@ const ListarCliente = () => {
     const width = Dimensions.get("screen").width; // Assuming a fixed width for the FlatList items
     
     async function handlerBuscarClientes() {
-        setCustomers(await customerDataBase.buscarPorNome(nomeFiltro));
+        setCustomers(await customerDataBase.buscarPorNome(nomeFiltroParam));
     }
 
     useFocusEffect(
         React.useCallback(() => {
             handlerBuscarClientes();
-        }, [])
+        }, [nomeFiltroParam])
     )
 
 

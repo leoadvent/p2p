@@ -39,8 +39,6 @@ const ListarCliente = ( {setNomeFiltroParam, nomeFiltroParam} : Props) => {
 
     return (
         <View>
-            <TextComponent text={"LISTAR CLIENTES"} color={textColorPrimary} fontSize={7} textAlign={"left"} />
-
             <FlatList 
                 data={
                         [...customers].sort((a, b) => {

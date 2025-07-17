@@ -96,8 +96,8 @@ const MyTabNavigator = () => {
               tabBarStyle: {
                   display: "flex",
                   backgroundColor: tabNavigatorColor,
-                  height: 60 + inset.bottom ,
-                  paddingTop: 5,
+                  height: 65 + inset.bottom ,
+                  paddingTop: 10,
                   paddingBottom: 0,
                   marginBottom: 0,                 
                   borderTopWidth: 0,

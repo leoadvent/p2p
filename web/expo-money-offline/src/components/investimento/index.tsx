@@ -3,7 +3,7 @@ import { useFinanciamentoDataBase } from "@/src/database/useFinanciamentoDataBas
 import { INVESTIMENTO } from "@/src/types/investimento"
 import { useEffect, useState } from "react"
 import { View } from "react-native"
-import { AnimatedNumber } from "../animacaoNumero"
+import { AnicaoDinheiro } from "../animacaoNumero"
 import BalaoTexto from "../balaoTexto"
 import TextComponent from "../text/text"
 
@@ -34,7 +34,7 @@ const Investimento = () => {
                             borderWidth={0} />
                         <BalaoTexto 
                             children={
-                                <AnimatedNumber
+                                <AnicaoDinheiro
                                 toValue={investimentos.totalInvestido} 
                                 color={textColorPrimary}
                                 fontSize={20}
@@ -51,7 +51,7 @@ const Investimento = () => {
                             borderWidth={0} />
                         <BalaoTexto 
                             children={
-                                <AnimatedNumber
+                                <AnicaoDinheiro
                                 toValue={investimentos.totalMontante} 
                                 color={textColorPrimary}
                                 fontSize={20}
@@ -68,7 +68,7 @@ const Investimento = () => {
                             borderWidth={0} />
                         <BalaoTexto 
                             children={
-                                <AnimatedNumber
+                                <AnicaoDinheiro
                                 toValue={investimentos.totalRecebido} 
                                 color={textColorPrimary}
                                 fontSize={20}

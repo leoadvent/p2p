@@ -685,7 +685,34 @@ export function useFinanciamentoDataBase() {
         }
     }
 
+    async function contadorContratosAberto() : Promise <number> {
+        
+        const sql = "SELECT COUNT(*) as total FROM FINANCIAMENTO WHERE finalizado = 0"
 
-    return {create,  atualizarPagamentosAtrasados, buscarFinanciamentoPorCliente, buscarParcelasDeFinanciamentoPorId, buscarParcelaPorId, updateParcela, negociarValorPagamento, atualizarValorParcelaCarenciaCapital, buscarParcelaVencimentoEmDias, buscarParcelaVencidas, buscarInvestimentos }
+        try{
+            const statement = await dataBase.getAllAsync<{total:number}>(sql)
+            const count = statement[0]?.total;
+
+            return count
+        } catch(error) {
+            return 0
+        }
+    }
+
+    async function contadorContratosAtrasados() : Promise <number> {
+        
+        const sql = "SELECT COUNT(*) as total FROM FINANCIAMENTO WHERE finalizado = 0 AND atrasado = 1"
+
+        try{
+            const statement = await dataBase.getAllAsync<{total:number}>(sql)
+            const count = statement[0]?.total;
+
+            return count
+        } catch(error) {
+            return 0
+        }
+    }
+
+    return {create,  atualizarPagamentosAtrasados, buscarFinanciamentoPorCliente, buscarParcelasDeFinanciamentoPorId, buscarParcelaPorId, updateParcela, negociarValorPagamento, atualizarValorParcelaCarenciaCapital, buscarParcelaVencimentoEmDias, buscarParcelaVencidas, buscarInvestimentos, contadorContratosAberto, contadorContratosAtrasados }
 
 }

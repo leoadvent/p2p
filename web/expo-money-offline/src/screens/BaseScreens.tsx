@@ -2,7 +2,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import React from "react";
 import { Dimensions, KeyboardAvoidingView, Platform, ScrollView, StatusBar, StyleSheet, TouchableOpacity, View } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
 import TextComponent from "../components/text/text";
 import { backgroundPrimary, backgroundSecondary, statusBarColorPrimary, textColorPrimary, textColorStatusBar } from "../constants/colorsPalette ";
 
@@ -19,7 +19,8 @@ type Props = {
 const BaseScreens = ( { children, title, backgroundColor, rolbackStack, childrenParam, showChildrenParan, isDrawer} : Props) => {
 
   const navigation = useNavigation();
-  const dimension = Dimensions.get("screen")
+  const dimension = Dimensions.get("window")
+  const insets = useSafeAreaInsets();
   
   const goBack = () => {
     navigation.goBack();
@@ -27,17 +28,19 @@ const BaseScreens = ( { children, title, backgroundColor, rolbackStack, children
 
   return (
     <SafeAreaView
+        edges={['top', 'left', 'right']}
         style={{
             flex: 1,
             justifyContent: "flex-start",
             alignItems: "center",
-            height: dimension.height,
-            backgroundColor:statusBarColorPrimary,
+            height: 50,
+            backgroundColor: statusBarColorPrimary,
         }}  
     >
-        <StatusBar barStyle="light-content" backgroundColor={statusBarColorPrimary} translucent={false}/>
-        
-        <View style={
+
+      <StatusBar barStyle="light-content" translucent={true} showHideTransition={"slide"} animated/>
+
+      <View style={
             [ styles(title.length === 0 && !rolbackStack ? false : true, showChildrenParan ? true : false, isDrawer===undefined ? false : isDrawer).title,
               {
                 backgroundColor: statusBarColorPrimary, paddingLeft:15
@@ -56,23 +59,24 @@ const BaseScreens = ( { children, title, backgroundColor, rolbackStack, children
               </View>
             }
           </View>
-          
-          
+
           { showChildrenParan && childrenParam && (
             <>{childrenParam}</>
           )}
 
-        </View>
-        <KeyboardAvoidingView
-          behavior={Platform.OS === "ios" ? "padding" : "height"}
-          keyboardVerticalOffset={Platform.OS === "ios" ? 100 : 0}
-          style={{ flex: 1 }}
-        >
+      </View>
+      <View style={{ width: "100%", height:24, backgroundColor: backgroundColor ? backgroundColor : backgroundPrimary, marginTop:-20}}/>
+
+      <KeyboardAvoidingView
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        keyboardVerticalOffset={Platform.OS === "ios" ? 100 : 0}
+        style={{ flex: 10 }}
+      >
           <ScrollView 
             contentContainerStyle={{ flexGrow: 1 }}
             keyboardShouldPersistTaps="handled"
           >
-            <View style={{ display:"flex", width:"100%", alignItems:"center", flex: 1, padding: 10,}}>
+            <View style={{ display:"flex", height:"100%", width: dimension.width, alignItems:"center",  padding: 0, backgroundColor: backgroundColor ? backgroundColor : backgroundPrimary}}>
               { children }
             </View>
             

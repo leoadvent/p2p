@@ -65,7 +65,7 @@ const ButtonComponent = ({ nameButton, onPress, typeButton, isDisabled, isSpinne
                     backgroundColor: isDisabled ? buttonBackgroundColorDisabled : backgroundButton,
                     opacity: isDisabled ? 0.5 : 1,
                     padding: 10,
-                    borderRadius: 5,
+                    borderRadius: 30,
                     
                 }}    
             >

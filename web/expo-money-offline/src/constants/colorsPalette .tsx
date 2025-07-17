@@ -1,7 +1,8 @@
-export const statusBarColorPrimary  = "rgba(5, 3, 41, 1)";
+export const statusBarColorPrimary  = "rgb(130,10,209)";
+export const balaoBarColorPrimary   = "rgba(255, 255, 255, 0.15)";
 export const tabNavigatorColor      = "rgb(2, 1, 20)";
 
-export const backgroundPrimary        = "rgb(26, 18, 36)";
+export const backgroundPrimary        = "rgba(3, 2, 3, 1)";
 export const backgroundSecondary      = "rgba(77, 90, 77, 0.52)";
 export const backgroundSuccess        = "rgba(67, 122, 29, 0.52)";
 export const backgroundWarning        = "rgba(100, 91, 6, 0.64)";
@@ -27,7 +28,7 @@ export const inputBorderColorErro   = "rgb(240, 174, 174)";
 
 export const buttonBackgroundColorPrimary   = "rgb(9, 69, 134)";
 export const buttonBackgroundColorSecondary = "rgb(255, 255, 255)";
-export const buttonBackgroundColorWarning   = "rgb(221, 188, 1)";
+export const buttonBackgroundColorWarning   = "rgba(248, 212, 4, 1)";
 export const buttonBackgroundColorSuccess   = "rgb(45, 160, 74)";
 export const buttonBackgroundColorError     = "rgb(124, 3, 3)";
 export const buttonBackgroundColorDisabled  = "rgb(200, 200, 200)";

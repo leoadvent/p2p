@@ -161,5 +161,21 @@ export function useCustomerDataBase() {
         
     }
 
-    return {create, buscarPorNome, updateCliente}
+    async function contadorDeCliente() : Promise <number> {
+        const sql = `SELECT COUNT(*) as total FROM CUSTOMER`
+
+        try{
+           
+            const statement = await dataBase.getAllAsync<{total:number}>(sql);
+
+            const count = statement[0]?.total;
+
+            return count
+        }catch(erro){
+            alert(erro)
+            return 0
+        }
+    }
+
+    return {create, buscarPorNome, updateCliente, contadorDeCliente}
 }

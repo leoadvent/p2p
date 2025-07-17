@@ -1,11 +1,10 @@
 import { useState } from "react";
-import { View } from "react-native";
-import AlertaVencidas from "../components/alertaVencidas";
-import AlertaVencimento from "../components/alertaVencimento";
+import { FlatList, View } from "react-native";
 import ButtonComponent from "../components/button";
+import { Contador } from "../components/contadorCliente";
 import ModalSystem from "../components/modal";
 import TextComponent from "../components/text/text";
-import { textColorPrimary } from "../constants/colorsPalette ";
+import { backgroundPrimary, balaoBarColorPrimary, textColorPrimary } from "../constants/colorsPalette ";
 import { useFinanciamentoDataBase } from "../database/useFinanciamentoDataBase";
 import BaseScreens from "./BaseScreens";
 
@@ -18,10 +17,32 @@ const Home = () => {
     return (
         <BaseScreens title={"HOME"} 
             showChildrenParan
+            backgroundColor={backgroundPrimary}
             childrenParam={
             <View style={{ height:250 }}>
+                
             </View>
         }>
+                            
+            <FlatList 
+                horizontal
+                data={[1, 2, 3]} 
+                renderItem={({ item }) => (
+                    <View style={{
+                        width:200,
+                        height:65,
+                        padding:10,
+                        backgroundColor: balaoBarColorPrimary,
+                        borderRadius: 25,
+                        margin: 10
+                    }}>
+                        {item === 1 && <Contador tipo="CLIENTE" />}
+                        {item === 2 && <Contador tipo="CONTRATO" />}
+                        {item === 3 && <Contador tipo="CONTRATO ATRASADO" />}
+                    </View>
+                )}               
+            />
+
             <View>
                 <ButtonComponent
                     nameButton={"ATUALIZAR JUROS"}
@@ -30,17 +51,12 @@ const Home = () => {
                         const result = await useFinanciamento.atualizarPagamentosAtrasados();
                         setExecutadoCalculoJuros(result);
                     }}
-                    typeButton={"warning"}
+                    typeButton={"primary"}
                     width={330}
                     height={60}
                 />
             </View>
-
-            
-            <AlertaVencimento />
-
-            <AlertaVencidas />
-          
+                    
             
             <ModalSystem 
                 title={"JUROS ATUALIZADOS"} 

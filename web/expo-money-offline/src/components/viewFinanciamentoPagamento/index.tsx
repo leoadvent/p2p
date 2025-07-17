@@ -42,7 +42,7 @@ const FinanciamentoPagamentoView = ({ pagamento, idFinanciamento, cliente, isNeg
             padding: 10,
             backgroundColor: DataUtils.calcularDiasEntreDatas(pagamento.dataVencimento, new Date()) > 0 && pagamento.dataPagamento === null ? backgroundColorError : pagamento.dataPagamento != null ? backgroundSuccess : backgroundWarning
         }}>
-
+            
             <View style={{ display: isMostraCliente ? "flex" : "none", gap: 10 , flexDirection:"row" }}>
                 <View>
                     <Contato 

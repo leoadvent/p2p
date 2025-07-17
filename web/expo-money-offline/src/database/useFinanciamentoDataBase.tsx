@@ -477,7 +477,7 @@ export function useFinanciamentoDataBase() {
     async function atualizarValorParcelaCarenciaCapital(){
 
             const sql = `UPDATE FINANCIAMENTO_PAGAMENTO
-                    SET valorAtual = ROUND(valorDiaria * CAST(julianday('now') - julianday(dataUltimoPagamento) AS INTEGER), 2)
+                    SET valorAtual = ROUND(valorDiaria * CAST((julianday('now') - julianday(dataUltimoPagamento)) + 1 AS INTEGER), 2)
                     WHERE 
                         pagamentoRealizado = 0
                         AND modalidade = 'Carência de Capital'`
@@ -485,7 +485,7 @@ export function useFinanciamentoDataBase() {
             const statementCalculoParcelaCarencia = await dataBase.prepareAsync(sql); 
 
             try {
-                await statementCalculoParcelaCarencia.executeAsync()
+                const retorno = await statementCalculoParcelaCarencia.executeAsync()
                 return true;
             } catch (error) {
                 alert(`Error ao atualizar Valor da parcela Carência de Capital: ${error}`);
@@ -493,9 +493,9 @@ export function useFinanciamentoDataBase() {
             } finally {
                 await statementCalculoParcelaCarencia.finalizeAsync();
             }
-        }
+    }
 
-        async function buscarParcelaVencimentoEmDias(quantidadeDiasParaVencer:number) : Promise<FINANCIAMENTO_PAGAMENTO[]> {
+    async function buscarParcelaVencimentoEmDias(quantidadeDiasParaVencer:number) : Promise<FINANCIAMENTO_PAGAMENTO[]> {
             
             const dataInicio = new Date();
             const dataLimite = new Date(dataInicio);
@@ -573,7 +573,7 @@ export function useFinanciamentoDataBase() {
                 alert(`ERROU ${error}`)
                 throw error
             } finally {}
-        }
+    }
 
         async function buscarParcelaVencidas() : Promise<FINANCIAMENTO_PAGAMENTO[]> {
             

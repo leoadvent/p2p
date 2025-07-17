@@ -86,7 +86,7 @@ function MyDrawerNavigatorCliente() {
             component={AlertaVencimento} 
             options={{
                 drawerIcon: ({ color }) => (
-                    <Ionicons name="calendar-number-outline" size={sizeIcon} color={colorIcon} />
+                    <Ionicons name="calendar-number-sharp" size={sizeIcon} color={colorIcon} />
                 ),
                 headerShown: true,
             }} 

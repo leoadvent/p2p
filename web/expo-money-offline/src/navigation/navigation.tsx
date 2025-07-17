@@ -5,6 +5,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator, NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { iconDrawerColor, statusBarColorPrimary, tabNavigatorColor, textColorPrimary } from '../constants/colorsPalette ';
+import AlertaVencido from '../screens/AlertaVencido';
 import AlertaVencimento from '../screens/AlertaVencimento';
 import ClienteCrierEditar from '../screens/ClienteCrierEditar';
 import Clientes from "../screens/Clientes";
@@ -87,6 +88,16 @@ function MyDrawerNavigatorCliente() {
             options={{
                 drawerIcon: ({ color }) => (
                     <Ionicons name="calendar-number-sharp" size={sizeIcon} color={colorIcon} />
+                ),
+                headerShown: true,
+            }} 
+        />
+        <DrawerClient.Screen 
+            name="Vencidos" 
+            component={AlertaVencido} 
+            options={{
+                drawerIcon: ({ color }) => (
+                    <Ionicons name="calendar-clear-sharp" size={sizeIcon} color={colorIcon} />
                 ),
                 headerShown: true,
             }} 

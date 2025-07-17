@@ -1,24 +1,24 @@
-import { backgroundPrimary, backgroundSecondary } from "@/src/constants/colorsPalette ";
 import { useFinanciamentoDataBase } from "@/src/database/useFinanciamentoDataBase";
+import BaseScreens from "@/src/screens/BaseScreens";
 import { FINANCIAMENTO_PAGAMENTO } from "@/src/types/financiamento";
 import { useFocusEffect } from "@react-navigation/native";
 import React, { useEffect, useState } from "react";
-import { Dimensions, ScrollView, View } from "react-native";
-import ButtonComponent from "../button";
-import InputText from "../input";
-import FinanciamentoPagamentoView from "../viewFinanciamentoPagamento";
+import { Dimensions, View } from "react-native";
+import InputText from "../components/input";
+import TextComponent from "../components/text/text";
+import FinanciamentoPagamentoView from "../components/viewFinanciamentoPagamento";
+import { textColorPrimary } from "../constants/colorsPalette ";
 
 
 const AlertaVencimento = () => {
 
-    const width = Dimensions.get("screen").width
+    const dimension = Dimensions.get("screen")
 
     const useFinanciamento = useFinanciamentoDataBase();
     
     const [financiamentoPagamento, setFinanciamentoPagamento] = useState<FINANCIAMENTO_PAGAMENTO[]>([])
     const [quantDiasVencimento, setQuantDiasVencimento] = useState(10)
     const [quantDiasVencimentoString, setQuantDiasVencimentoString] = useState<string>("10")
-    const [mostar, setMostrar] = useState<boolean>(false)
 
     async function handlerBuscarParagmentoVencendo(){
         setFinanciamentoPagamento(await useFinanciamento.buscarParcelaVencimentoEmDias(quantDiasVencimento));
@@ -44,10 +44,10 @@ const AlertaVencimento = () => {
         ))
     }
     return(
-        <View style={{ alignContent:"center", alignItems:"center", width:"100%", borderWidth:mostar ? 1 : 0, borderColor:"white", borderRadius:10, backgroundColor: mostar ? backgroundSecondary : backgroundPrimary}}>
+        <BaseScreens title={""} isDrawer={true}>
             
-            <View style={{display:'flex', flexDirection:"row", marginTop:5, alignItems:"center", justifyContent:"center", gap:10, width:"100%"}}>
-                <View style={{ display: mostar ? 'flex':'none',  marginTop:10, width: 120, marginLeft:8 }}> 
+            <View style={{ flexDirection:"row", width:dimension.width -50, marginTop:5 ,gap:10, margin: 10, alignItems:"center" }}>
+                <View> 
                     <InputText 
                         label={"DIAS PARA VENCER"} 
                         value={quantDiasVencimentoString}
@@ -55,20 +55,20 @@ const AlertaVencimento = () => {
                         keyboardType="numeric"
                         editable={true} 
                     />
+                    
                 </View>
-                <View style={{ marginTop:10, flex: 1 }}>
-                    <ButtonComponent 
-                        nameButton={mostar ? "OCULTAR VENCIMENTO" : "BUSCAR VENCIMENTOS"} 
-                        onPress={() => setMostrar(!mostar)} typeButton={"primary"} width={mostar ? 200 : width-50} height={65} />
+                <View style={{width:dimension.width / 2}}>
+                    <TextComponent 
+                        text={`Total de financiamentos encontrados: ${financiamentoPagamento.length}`} 
+                        color={textColorPrimary} numberOfLines={2}
+                        fontSize={14} textAlign={"center"} />
                 </View>
             </View>
 
-            
+            {handlerMontarparcelas()}
 
-            <ScrollView style={{ display: mostar ? 'flex':'none', height: 400, marginTop:10 }}>                
-                {handlerMontarparcelas()}
-            </ScrollView>
-        </View>
+        
+        </BaseScreens>
     )
 }
 

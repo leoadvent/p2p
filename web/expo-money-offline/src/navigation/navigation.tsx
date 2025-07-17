@@ -5,6 +5,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator, NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { iconDrawerColor, statusBarColorPrimary, tabNavigatorColor, textColorPrimary } from '../constants/colorsPalette ';
+import AlertaVencimento from '../screens/AlertaVencimento';
 import ClienteCrierEditar from '../screens/ClienteCrierEditar';
 import Clientes from "../screens/Clientes";
 import Financiamento from '../screens/Financiamento';
@@ -80,6 +81,16 @@ function MyDrawerNavigatorCliente() {
                 headerShown: true,
             }} 
         />
+        <DrawerClient.Screen 
+            name="Vencendo" 
+            component={AlertaVencimento} 
+            options={{
+                drawerIcon: ({ color }) => (
+                    <Ionicons name="calendar-number-outline" size={sizeIcon} color={colorIcon} />
+                ),
+                headerShown: true,
+            }} 
+        />
         {/* Add other screens here */}
     </DrawerClient.Navigator>
   )
@@ -101,7 +112,7 @@ const MyTabNavigator = () => {
                   paddingBottom: 0,
                   marginBottom: 0,                 
                   borderTopWidth: 0,
-                  position: "fixed",
+                  position: "relative",
                   bottom: 0,
                   left: 0,
                   right: 0

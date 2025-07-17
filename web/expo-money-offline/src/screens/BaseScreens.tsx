@@ -2,7 +2,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import React from "react";
 import { Dimensions, KeyboardAvoidingView, Platform, ScrollView, StatusBar, StyleSheet, TouchableOpacity, View } from "react-native";
-import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
+import { SafeAreaView } from "react-native-safe-area-context";
 import TextComponent from "../components/text/text";
 import { backgroundPrimary, backgroundSecondary, statusBarColorPrimary, textColorPrimary, textColorStatusBar } from "../constants/colorsPalette ";
 
@@ -20,7 +20,6 @@ const BaseScreens = ( { children, title, backgroundColor, rolbackStack, children
 
   const navigation = useNavigation();
   const dimension = Dimensions.get("window")
-  const insets = useSafeAreaInsets();
   
   const goBack = () => {
     navigation.goBack();

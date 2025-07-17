@@ -2,7 +2,7 @@ import { Ionicons } from '@expo/vector-icons';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { useRoute } from "@react-navigation/native";
 import React, { useEffect, useState } from "react";
-import { FlatList, Platform, TouchableOpacity, View } from "react-native";
+import { Dimensions, FlatList, Platform, TouchableOpacity, View } from "react-native";
 import uuid from 'react-native-uuid';
 import BalaoTexto from '../components/balaoTexto';
 import ButtonComponent from "../components/button";
@@ -50,6 +50,8 @@ const Financiamento = () => {
     const [valorParcela, setValorParcela] = useState<string>("")
     const [valorMontante, setValorMontante] = useState<string>("")
     const [quantidadeMeses, setQuantidadeMeses] = useState<number>(1)
+
+    const dimension = Dimensions.get("screen")
 
     const [financiamentoPagament, setFinanciamentoPagamento] = useState<FINANCIAMENTO_PAGAMENTO[]>([])
 
@@ -150,8 +152,6 @@ const Financiamento = () => {
         setFinanciamentoPagamento(novaLista);
         handlerComporFinanciamento(novaLista);
     }
-
-
 
     function calculaQuantidadeDeParcela() {
         if (!dataInicio || !dataFinal || !periodocidade) return;
@@ -374,7 +374,7 @@ const Financiamento = () => {
     return(
         <BaseScreens title={`FINANCIAMENTO`} rolbackStack={true}>
             
-            <View style={{ gap: 20, display: simulador ?'flex' : 'none', flexDirection:'column', height:'100%', justifyContent:"space-between" }}>
+            <View style={{ gap: 20, display: simulador ?'flex' : 'none', flexDirection:'column', justifyContent:"space-between" }}>
                 
                 <View style={{ width:330, display:"flex", flexDirection:"row", flexWrap:"wrap", gap: 20, justifyContent: "center", alignItems: "center" }}>
                 
@@ -549,12 +549,12 @@ const Financiamento = () => {
             </View>
             
             {Object.entries(financiamento).length > 0 && 
-                <View style={{ gap: 10, display: !simulador ?'flex' : 'none', flexDirection:'column', height:'100%', width:335, justifyContent:"space-between",  alignItems: "center" }}>
+                <View style={{ padding:10, gap: 10, display: !simulador ?'flex' : 'none', flexDirection:'column', height:'100%', width:335, justifyContent:"space-between",  alignItems: "center" }}>
                     
                     
                     {resumoFinanciamento()}
 
-                    <View style={{ height: 250, width:330}}>
+                    <View style={{ height: 200, width:330}}>
                         <BalaoTexto 
                             borderWidth={0}
                             backgroundColor={backgroundOpacityBallon}

@@ -8,11 +8,13 @@ interface Props {
     fontWeight?: "100" | "200" | "300" | "400" | "500" | "600" | "700" | "800" | "900"
     textAlign: "left" | "right" | "center" | "justify" | "auto"
     key?: string
+    numberOfLines?: number
 }
-const TextComponent = ( { text, color, fontSize, textAlign, fontWeight, key } : Props) => {
+const TextComponent = ( { text, color, fontSize, textAlign, fontWeight, key, numberOfLines } : Props) => {
   return (
     <Text
         key={key}
+        numberOfLines={numberOfLines}
         style={{ 
           color: color,
           width: "100%",

@@ -291,6 +291,48 @@ const FinanciamentoPagamentoView = ({ pagamento, idFinanciamento, cliente, isNeg
 
                 <View style={{ gap: 20, display: 'flex', flexDirection:'row', width:"100%", justifyContent:"space-between" }}>
                     
+                    <View style={{ display: pagamento.modalidade === MODALIDADE.CarenciaDeCapital ? "flex": "none", width:60}}>
+                        <BalaoTexto 
+                            backgroundColor={backgroundOpacityBallon} 
+                            borderWidth={0} 
+                            children={
+                                <View style={{ flexDirection:"column", justifyContent:"center", width:'100%', height:30, alignItems:"center" }}>
+                                   
+                                    
+                                </View>
+                            }
+                        />
+                    </View>
+
+                    <View style={{ display: pagamento.modalidade === MODALIDADE.CarenciaDeCapital ? "flex": "none", width:120, alignItems:"center" }}>
+                        <View style={{ width:120, alignItems:"center" }}>
+                        <BalaoTexto 
+                            backgroundColor={backgroundOpacityBallon} 
+                            width={122}
+                            borderWidth={0} 
+                            children={
+                                <View style={{ flexDirection:"column",  width:'118%', justifyContent:"center" }}>
+                                    <TextComponent 
+                                            text={"Data último Pagamento"} 
+                                            color={textColorPrimary} 
+                                            fontSize={7} textAlign={"auto"} />
+                                    <View style={{ flexDirection:"row", gap: 4 }}>
+                                        {IconsUtil.calendarioNumero({size: 25, color: iconColorPrimary })}
+                                        <TextComponent 
+                                            text={DataUtils.formatarDataBR(pagamento.dataUltimoPagamento)} 
+                                            color={textColorPrimary} 
+                                            fontSize={16} 
+                                            textAlign={"auto"} />
+                                    </View>
+                                </View>
+                            }
+                        />
+                    </View>
+                    </View>
+                </View>
+
+                <View style={{ gap: 20, display: 'flex', flexDirection:'row', width:"100%", justifyContent:"space-between" }}>
+                    
                     <View style={{ width:120, flexDirection:"row" }}>
                         <BalaoTexto 
                             backgroundColor={backgroundOpacityBallon} 

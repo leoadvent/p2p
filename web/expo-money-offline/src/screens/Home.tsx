@@ -19,7 +19,7 @@ const Home = () => {
             showChildrenParan
             backgroundColor={backgroundPrimary}
             childrenParam={
-            <View style={{ height:250 }}>
+            <View style={{ height:150 }}>
                 
             </View>
         }>
@@ -43,7 +43,7 @@ const Home = () => {
                 )}               
             />
 
-            <View>
+    
                 <ButtonComponent
                     nameButton={"ATUALIZAR JUROS"}
                     onPress={async () => {
@@ -55,7 +55,6 @@ const Home = () => {
                     width={330}
                     height={60}
                 />
-            </View>
                     
             
             <ModalSystem 

@@ -533,7 +533,9 @@ export function useFinanciamentoDataBase() {
                    and fp.dataPagamento is null
                    and f.finalizado = 0
                 ORDER BY
-                    fp.dataVencimento DESC
+                    fp.dataVencimento ,
+                    fp.numeroParcela,
+                    c.firstName ASC
             `
 
             
@@ -610,7 +612,7 @@ export function useFinanciamentoDataBase() {
                    and fp.dataPagamento is null
                    and f.finalizado = 0
                 ORDER BY
-                    fp.dataVencimento DESC
+                    fp.dataVencimento ASC
             `
             
             try {
@@ -714,77 +716,7 @@ export function useFinanciamentoDataBase() {
     }
 
     async function atualizarStatusFinanciamento(idFinanciamento:string) {
-        
-        const sqlBuscaValorPago = `SELECT SUM(valorPago) as valorPago FROM FINANCIAMENTO_PAGAMENTO WHERE financiamento_id = $idFinanciamento`
-        
-        const sqlAtualizarValorPago = `
-            UPDATE FINANCIAMENTO set valorPago = $valorPago WHERE id =  $idFinanciamento
-        `
-        const sqlQuantidadeParcelasAbertas = `
-                SELECT 
-                    count(*) as quantAbertas
-                FROM 
-                    FINANCIAMENTO_PAGAMENTO
-                WHERE 
-                    financiamento_id = $idFinanciamento
-                    AND dataPagamento IS NULL`
-        
-         const sqlFinalizaFinanciamento = `
-                UPDATE FINANCIAMENTO
-                SET finalizado = 1
-                WHERE id = $idFinanciamento 
-            `
-        const sqlQuantidadeParcelasAtrasadas = `
-                SELECT 
-                    count(*) as quantAtrasadas
-                FROM 
-                    FINANCIAMENTO_PAGAMENTO
-                WHERE 
-                    financiamento_id = $idFinanciamento
-                    AND dataPagamento IS NULL
-                    AND dataVencimento < datetime('now')
-            `
-        const sqlRemoveFlagAtrasadoFinanciamento = `
-                UPDATE FINANCIAMENTO
-                SET atrasado = 0
-                WHERE id = $idFinanciamento 
-            `
-
-        const steteamentAtualizaValorPago = await dataBase.prepareAsync(sqlAtualizarValorPago)
-        const statementFinalizaFinanciamento = await dataBase.prepareAsync(sqlFinalizaFinanciamento);
-        const statementRemoveFlagAtrasado    = await dataBase.prepareAsync(sqlRemoveFlagAtrasadoFinanciamento);
-        
-        await dataBase.execAsync('BEGIN TRANSACTION');
-        try {
-
-            const valorPago = await dataBase.getAllSync<{valorPago:number}>(sqlBuscaValorPago, { $idFinanciamento : idFinanciamento})
-            const valorTotal = valorPago[0]?.valorPago;
-
-            await steteamentAtualizaValorPago.executeAsync({$valorpago: valorTotal, $idFinanciamento : idFinanciamento})
-
-            const resultAtrasadas = await dataBase.getFirstAsync( sqlQuantidadeParcelasAtrasadas,{ $idFinanciamento: idFinanciamento } ) as { quantAtrasadas: number };
-            
-            if(resultAtrasadas.quantAtrasadas <= 0 ){
-                await statementRemoveFlagAtrasado.executeAsync({ $idFinanciamento : idFinanciamento})
-            }
-
-            const resultAbertas   = await dataBase.getFirstAsync( sqlQuantidadeParcelasAbertas,{ $idFinanciamento: idFinanciamento } ) as { quantAbertas: number };
-
-            if(resultAbertas.quantAbertas <= 0){
-                await statementFinalizaFinanciamento.executeAsync({ $idFinanciamento : idFinanciamento })
-            }
-
-           
-            await dataBase.execAsync('COMMIT');
-
-        }catch(error){
-            await dataBase.execAsync('ROLLBACK');
-            alert(error)
-        } finally {
-            await steteamentAtualizaValorPago.finalizeAsync()
-            await statementFinalizaFinanciamento.finalizeAsync()
-            await statementRemoveFlagAtrasado.finalizeAsync()
-        }
+        return
     }
 
     return {create,  atualizarPagamentosAtrasados, buscarFinanciamentoPorCliente, buscarParcelasDeFinanciamentoPorId, buscarParcelaPorId, updateParcela, negociarValorPagamento, atualizarValorParcelaCarenciaCapital, buscarParcelaVencimentoEmDias, buscarParcelaVencidas, buscarInvestimentos, contadorContratosAberto, contadorContratosAtrasados }

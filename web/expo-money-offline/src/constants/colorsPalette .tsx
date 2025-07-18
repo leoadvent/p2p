@@ -43,12 +43,12 @@ export const chartBazierbackgroundGradientTo    = "rgba(3, 17, 66, 0.16)";
 export const chartBazierbackgroundColor         = "rgb(27, 173, 39)";
 export const chartBazierbackgroundGradientFrom  = "rgba(8, 17, 100, 0.28)";
 
-export const borderCollor = "rgba(8, 13, 54, 0.47)";
+export const borderCollor = "rgba(47, 51, 80, 1)";
 
 export const iconDrawerColor  = "rgba(255, 166, 0, 1)";
 export const iconColorPrimary = "rgb(235, 210, 210)"
 export const iconColorSuccess = "rgba(64, 255, 5, 1)"
-export const iconColorWarning = "rgb(191, 204, 13)"
+export const iconColorWarning = "rgba(255, 251, 10, 1)"
 export const iconColorDanger  = "rgba(255, 8, 8, 1)"
 
 

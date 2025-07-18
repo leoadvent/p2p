@@ -6,6 +6,7 @@ export async function initializeDataBase(dataBase: SQLiteDatabase) {
     //await dataBase.execAsync(`DROP TABLE IF EXISTS FINANCIAMENTO_PAGAMENTO;`);
     //await dataBase.execAsync(`DROP TABLE IF EXISTS ENDERECO;`);
     //await dataBase.execAsync(`DROP TABLE IF EXISTS CUSTOMER;`);
+    //await dataBase.execAsync(`DROP TABLE IF EXISTS FINANCIADOR;`);
 
     await dataBase.execAsync(`
         CREATE TABLE IF NOT EXISTS ENDERECO (
@@ -79,6 +80,19 @@ export async function initializeDataBase(dataBase: SQLiteDatabase) {
             FOREIGN KEY (financiamento_id) REFERENCES FINANCIAMENTO(id)
         );
     `);
+
+    await dataBase.execAsync(`
+        CREATE TABLE IF NOT EXISTS FINANCIADOR (
+            id TEXT PRIMARY KEY NOT NULL,
+            firstName TEXT NOT NULL,
+            lastName TEXT NOT NULL
+        )
+    `)
+
+    await dataBase.execAsync(`
+        INSERT OR IGNORE INTO FINANCIADOR (id, firstName, lastName)
+            VALUES ('1', 'Meu Nome', 'Meu Sobrenome');
+    `)
 
     await dataBase.execAsync(`CREATE INDEX IF NOT EXISTS idx_financiamento_cliente ON FINANCIAMENTO(cliente_id)`);
     await dataBase.execAsync(`CREATE INDEX IF NOT EXISTS idx_pagamento_cliente ON FINANCIAMENTO_PAGAMENTO(cliente_id)`);

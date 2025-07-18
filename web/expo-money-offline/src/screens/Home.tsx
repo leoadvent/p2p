@@ -1,25 +1,79 @@
-import { useState } from "react";
-import { FlatList, View } from "react-native";
+import { useNavigation } from "@react-navigation/native";
+import { useEffect, useState } from "react";
+import { FlatList, TouchableOpacity, View } from "react-native";
 import ButtonComponent from "../components/button";
 import { Contador } from "../components/contadorCliente";
 import ModalSystem from "../components/modal";
 import TextComponent from "../components/text/text";
-import { backgroundPrimary, balaoBarColorPrimary, textColorPrimary } from "../constants/colorsPalette ";
+import { backgroundPrimary, balaoBarColorPrimary, iconColorPrimary, iconColorWarning, textColorPrimary } from "../constants/colorsPalette ";
+import { useFinanciadorDataBase } from "../database/useFinanciador";
 import { useFinanciamentoDataBase } from "../database/useFinanciamentoDataBase";
+import { NavigationProp } from "../navigation/navigation";
+import { FINANCIADOR } from "../types/financiador";
+import { IconsUtil } from "../utils/iconsUtil";
 import BaseScreens from "./BaseScreens";
 
 const Home = () => {
 
     const useFinanciamento = useFinanciamentoDataBase();
+    const useFinanciador = useFinanciadorDataBase()
 
     const [executadoCalculoJuros, setExecutadoCalculoJuros] = useState<boolean>(false)
+    const [atualizar, setAtualizar] = useState<boolean>(false)
+    const [financiador, setFinanciador] = useState<FINANCIADOR>({} as FINANCIADOR)
+
+    const navigation = useNavigation<NavigationProp>();
+
+    async function handlerBuscarFinanciador(){
+        setFinanciador( await useFinanciador.recuperarFinanciador())
+    }
+
+    async function handlerCalcularJuros(){
+        await useFinanciamento.atualizarValorParcelaCarenciaCapital();
+        const result = await useFinanciamento.atualizarPagamentosAtrasados();
+        setExecutadoCalculoJuros(result);
+    }
+
+    useEffect(() => {
+        handlerBuscarFinanciador()
+        handlerCalcularJuros()
+    },[atualizar])
 
     return (
-        <BaseScreens title={"HOME"} 
+        <BaseScreens title={""} 
             showChildrenParan
             backgroundColor={backgroundPrimary}
             childrenParam={
             <View style={{ height:150 }}>
+                
+                <View style={{ flexDirection: "row", justifyContent:"space-between", padding:10, gap:10}}>
+                    
+                    <View style={{ flexDirection: "row", justifyContent:"flex-start", alignItems:"center", padding:10, gap:10, width:150}}>
+                        {IconsUtil.pessoa({size:20, color: iconColorWarning})}
+                        <TextComponent text={`Olá, ${financiador.firstName}`} color={textColorPrimary} fontSize={18} textAlign={"left"} />
+                    </View>
+                    
+                    <View style={{ flexDirection: "row", alignItems:"flex-end", padding:10, gap:20, }}>
+                        
+                        <TouchableOpacity
+                            onPress={() => { setAtualizar(!atualizar) }}
+                        >
+                            {IconsUtil.atualizar({size:25, color: iconColorPrimary})}
+                        </TouchableOpacity>
+                        
+                        {IconsUtil.olhoAberto({size:25, color: iconColorPrimary})}
+                        
+                        <TouchableOpacity
+                            onPress={() => { navigation.navigate('Configuracoes', {})}}
+                        >
+                            {IconsUtil.ferramentas({size:25, color: iconColorWarning})}
+                        </TouchableOpacity>
+                    </View>
+                </View>
+
+                <View style={{ flexDirection: "row", justifyContent:"space-between", padding:10, gap:10}}>
+                    <TextComponent text={`Bem Vindo ${financiador.firstName} ${financiador.lastName}`} color={"rgb(247, 238, 238)"} fontSize={10} textAlign={"auto"} />
+                </View>
                 
             </View>
         }>
@@ -46,11 +100,7 @@ const Home = () => {
     
                 <ButtonComponent
                     nameButton={"ATUALIZAR JUROS"}
-                    onPress={async () => {
-                        await useFinanciamento.atualizarValorParcelaCarenciaCapital();
-                        const result = await useFinanciamento.atualizarPagamentosAtrasados();
-                        setExecutadoCalculoJuros(result);
-                    }}
+                    onPress={async () => { handlerCalcularJuros() }}
                     typeButton={"primary"}
                     width={330}
                     height={60}

@@ -58,5 +58,24 @@ export class IconsUtil {
     static editar({ size, color } : Props ){
         return <Ionicons name='pencil-sharp' color={color} size={size} />
     }
+
+    static ferramentas({ size, color } : Props ){
+        return <Ionicons name='construct-outline' color={color} size={size} />
+    }
+
+    static pessoa({ size, color } : Props ){
+        return <Ionicons name='person-outline' color={color} size={size} />
+    }
     
+    static olhoAberto({ size, color } : Props ){
+        return <Ionicons name='eye-outline' color={color} size={size} />
+    }
+
+    static olhoFechado({ size, color } : Props ){
+        return <Ionicons name='eye-off-outline' color={color} size={size} />
+    }
+
+    static atualizar({ size, color } : Props ){
+        return <Ionicons name='refresh-circle-outline' color={color} size={size} />
+    }
 }

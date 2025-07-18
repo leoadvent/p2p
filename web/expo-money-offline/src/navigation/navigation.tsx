@@ -9,6 +9,7 @@ import AlertaVencido from '../screens/AlertaVencido';
 import AlertaVencimento from '../screens/AlertaVencimento';
 import ClienteCrierEditar from '../screens/ClienteCrierEditar';
 import Clientes from "../screens/Clientes";
+import Configuracoes from '../screens/configuracoes';
 import Financiamento from '../screens/Financiamento';
 import FinanciamentoNegociar from '../screens/FinanciamentoNegociar';
 import FinanciamentoPagamento from '../screens/financiamentoPagamento';
@@ -31,6 +32,7 @@ type RootStackParamList = {
   FinanciamentoPagamento: {cliente: CUSTOMER, idFinanciamento: string}
   FinanciamentoReceber: {idFinanciamento: string, idParcela: string, cliente: CUSTOMER}
   FinanciamentoNegociar: {idFinanciamento: string, idParcela: string, cliente: CUSTOMER}
+  Configuracoes: {}
 }
 
 export type NavigationProp = NativeStackNavigationProp<RootStackParamList>;
@@ -167,6 +169,7 @@ const NavigationStack = () => {
                 <Stack.Screen name="FinanciamentoReceber" component={FinanciamentoReceber} options={{ headerShown: false }}/>
                 <Stack.Screen name="FinanciamentoNegociar" component={FinanciamentoNegociar} options={{ headerShown: false }}/>
                 <Stack.Screen name="Investimentos" component={Investimentos} options={{ headerShown: false }}/>
+                <Stack.Screen name="Configuracoes" component={Configuracoes} options={{ headerShown: false }}/>
             </Stack.Navigator>
         </NavigationContainer>
     )

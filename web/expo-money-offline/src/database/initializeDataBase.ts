@@ -80,4 +80,8 @@ export async function initializeDataBase(dataBase: SQLiteDatabase) {
         );
     `);
 
+    await dataBase.execAsync(`CREATE INDEX IF NOT EXISTS idx_financiamento_cliente ON FINANCIAMENTO(cliente_id)`);
+    await dataBase.execAsync(`CREATE INDEX IF NOT EXISTS idx_pagamento_cliente ON FINANCIAMENTO_PAGAMENTO(cliente_id)`);
+    await dataBase.execAsync(`CREATE INDEX IF NOT EXISTS idx_pagamento_financiamento ON FINANCIAMENTO_PAGAMENTO(financiamento_id)`);
+    await dataBase.execAsync(`CREATE INDEX IF NOT EXISTS idx_pagamento_dataVencimento ON FINANCIAMENTO_PAGAMENTO(dataVencimento)`);
 }

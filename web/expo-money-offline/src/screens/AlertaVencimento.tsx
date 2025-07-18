@@ -40,7 +40,7 @@ const AlertaVencimento = () => {
     function handlerMontarparcelas(){
         return Object.entries(financiamentoPagamento).length > 0 && financiamentoPagamento.map((item) => (
             <FinanciamentoPagamentoView 
-                pagamento={item} idFinanciamento={""} cliente={item.cliente} isNegociar={false} isReceber={true} isMostraCliente={true} isNotificacaoVencimento={true} />
+                pagamento={item} idFinanciamento={""} cliente={item.cliente} isNegociar={false} isReceber={false} isMostraCliente={true} isNotificacaoVencimento={true} />
         ))
     }
     return(

@@ -93,7 +93,7 @@ const Home = () => {
                             
             <FlatList 
                 horizontal
-                data={[1, 2, 3]} 
+                data={[1, 2, 3, 4]} 
                 renderItem={({ item }) => (
                     <View style={{
                         width:200,
@@ -106,6 +106,7 @@ const Home = () => {
                         {item === 1 && <Contador tipo="CLIENTE" />}
                         {item === 2 && <Contador tipo="CONTRATO" />}
                         {item === 3 && <Contador tipo="CONTRATO ATRASADO" />}
+                        {item === 4 && <Contador tipo="FINALIZADO" />}
                     </View>
                 )}               
             />

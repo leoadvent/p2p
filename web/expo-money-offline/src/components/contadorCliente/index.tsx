@@ -1,4 +1,4 @@
-import { iconColorDanger, iconColorPrimary, textColorPrimary } from "@/src/constants/colorsPalette "
+import { iconColorDanger, iconColorPrimary, iconColorSuccess, textColorPrimary } from "@/src/constants/colorsPalette "
 import { useCustomerDataBase } from "@/src/database/useCustomerDataBase"
 import { useFinanciamentoDataBase } from "@/src/database/useFinanciamentoDataBase"
 import { IconsUtil } from "@/src/utils/iconsUtil"
@@ -8,7 +8,7 @@ import { AnimacaoNumero } from "../animacaoNumero"
 import TextComponent from "../text/text"
 
 interface Props {
-    tipo: "CLIENTE" | "CONTRATO" | "CONTRATO ATRASADO"
+    tipo: "CLIENTE" | "CONTRATO" | "CONTRATO ATRASADO" | "FINALIZADO"
 }
 export function Contador ( { tipo } : Props)  {
 
@@ -30,6 +30,11 @@ export function Contador ( { tipo } : Props)  {
                 setContador(response)
                 setIcon(IconsUtil.contrato({size: 25, color:iconColorDanger}))
             })
+        }else if( tipo === "FINALIZADO"){
+            useFinanciamentoDataBase().contadorContratosFinalizado().then((response) => {
+                setContador(response)
+                setIcon(IconsUtil.contrato({size: 25, color:iconColorSuccess}))
+            })
         }
        
 
@@ -40,7 +45,7 @@ export function Contador ( { tipo } : Props)  {
             {icon}
             <View>
                 <TextComponent text={`Total de ${tipo.toLowerCase()}`} color={textColorPrimary} fontSize={12} textAlign={"center"} />
-                <AnimacaoNumero toValue={contador} duration={5000} />
+                <AnimacaoNumero toValue={contador} duration={2000} />
             </View>
         </View>
     )

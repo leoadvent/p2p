@@ -717,10 +717,24 @@ export function useFinanciamentoDataBase() {
         }
     }
 
+    async function contadorContratosFinalizado() : Promise <number> {
+        
+        const sql = "SELECT COUNT(*) as total FROM FINANCIAMENTO WHERE finalizado = 1"
+
+        try{
+            const statement = await dataBase.getAllAsync<{total:number}>(sql)
+            const count = statement[0]?.total;
+
+            return count
+        } catch(error) {
+            return 0
+        }
+    }
+
     async function atualizarStatusFinanciamento(idFinanciamento:string) {
         return
     }
 
-    return {create,  atualizarPagamentosAtrasados, buscarFinanciamentoPorCliente, buscarParcelasDeFinanciamentoPorId, buscarParcelaPorId, updateParcela, negociarValorPagamento, atualizarValorParcelaCarenciaCapital, buscarParcelaVencimentoEmDias, buscarParcelaVencidas, buscarInvestimentos, contadorContratosAberto, contadorContratosAtrasados }
+    return {create,  atualizarPagamentosAtrasados, buscarFinanciamentoPorCliente, buscarParcelasDeFinanciamentoPorId, buscarParcelaPorId, updateParcela, negociarValorPagamento, atualizarValorParcelaCarenciaCapital, buscarParcelaVencimentoEmDias, buscarParcelaVencidas, buscarInvestimentos, contadorContratosAberto, contadorContratosAtrasados, contadorContratosFinalizado }
 
 }

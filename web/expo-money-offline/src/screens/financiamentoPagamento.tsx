@@ -63,7 +63,7 @@ const FinanciamentoPagamento = () => {
             </View>
 
             <View style={{ marginTop:20}}>
-                <ButtonComponent nameButton={"VOLTAR"} onPress={ () => {navigation.navigate('MeuClientes', {})} } typeButton={"primary"} width={width} />
+                <ButtonComponent nameButton={"VOLTAR"} onPress={ () => {navigation.navigate('tabNavigator', { screen: 'Clients'})} } typeButton={"primary"} width={width} />
             </View>
             
         </BaseScreens>

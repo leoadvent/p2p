@@ -296,9 +296,20 @@ const FinanciamentoPagamentoView = ({ pagamento, idFinanciamento, cliente, isNeg
                             backgroundColor={backgroundOpacityBallon} 
                             borderWidth={0} 
                             children={
-                                <View style={{ flexDirection:"column", justifyContent:"center", width:'100%', height:30, alignItems:"center" }}>
-                                   
+                                <View style={{ flexDirection:"column", justifyContent:"center", width:'100%', alignItems:"center" }}>
                                     
+                                    <TextComponent 
+                                            text={"Dias atrasado"} 
+                                            color={textColorPrimary} 
+                                            fontSize={5} textAlign={"auto"} />
+                                    <View style={{ flexDirection:"row", width:"100%" }}>
+                                        {IconsUtil.dia({size: 25, color: iconColorPrimary })}
+                                        <TextComponent 
+                                            text={DataUtils.calcularDiasEntreDatas(pagamento.dataVencimento, new Date()).toString()} 
+                                            color={textColorPrimary} 
+                                            fontSize={16} 
+                                            textAlign={"auto"} />
+                                    </View>
                                 </View>
                             }
                         />

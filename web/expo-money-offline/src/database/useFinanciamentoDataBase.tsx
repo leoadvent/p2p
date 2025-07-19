@@ -4,6 +4,7 @@ import { CUSTOMER } from '../types/customer';
 import { FINANCIAMENTO, FINANCIAMENTO_PAGAMENTO, MODALIDADE } from '../types/financiamento';
 import { INVESTIMENTO } from '../types/investimento';
 import { TIPOFINANCIAMENTO } from '../types/tiposFinanciamento';
+import { DataUtils } from '../utils/dataUtil';
 
 export function useFinanciamentoDataBase() {
     
@@ -389,15 +390,16 @@ export function useFinanciamentoDataBase() {
         try {
 
             let retorno
-
+            const diasAcressimo = DataUtils.calcularDiasEntreDatas(parcela.dataUltimoPagamento, new Date) >= 25 ? 25 : 0;
             const diasEquivalente = Math.floor(round2(parcela.valorPago / parcela.valorDiaria));
             const dataHoje = new Date();
             const dataVencimento = new Date(parcela.dataVencimento);
-            dataVencimento.setDate(dataVencimento.getDate() + diasEquivalente); 
+            dataVencimento.setDate(dataVencimento.getDate() + diasEquivalente + diasAcressimo); 
             const dataVencimentoOriginal = new Date(parcela.dataVencimento);
             if (dataVencimentoOriginal > dataVencimento) {
                 dataVencimento.setTime(dataVencimentoOriginal.getTime());
             }
+
             const dataUltimoPagamento = dataHoje
             dataUltimoPagamento.setDate(dataUltimoPagamento.getDate() - 1)
             const valorAtual = round2(parcela.valorDiaria)

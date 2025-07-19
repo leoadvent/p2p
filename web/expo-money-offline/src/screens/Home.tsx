@@ -1,11 +1,11 @@
 import { useNavigation } from "@react-navigation/native";
 import { useEffect, useState } from "react";
-import { FlatList, TouchableOpacity, View } from "react-native";
+import { FlatList, Image, TouchableOpacity, View } from "react-native";
 import ButtonComponent from "../components/button";
 import { Contador } from "../components/contadorCliente";
 import ModalSystem from "../components/modal";
 import TextComponent from "../components/text/text";
-import { backgroundPrimary, balaoBarColorPrimary, iconColorPrimary, iconColorWarning, textColorPrimary } from "../constants/colorsPalette ";
+import { backgroundPrimary, balaoBarColorPrimary, iconColorPrimary, iconColorWarning, textColorDeactivated, textColorPrimary } from "../constants/colorsPalette ";
 import { useFinanciadorDataBase } from "../database/useFinanciador";
 import { useFinanciamentoDataBase } from "../database/useFinanciamentoDataBase";
 import { NavigationProp } from "../navigation/navigation";
@@ -72,7 +72,20 @@ const Home = () => {
                 </View>
 
                 <View style={{ flexDirection: "row", justifyContent:"space-between", padding:10, gap:10}}>
-                    <TextComponent text={`Bem Vindo ${financiador.firstName} ${financiador.lastName}`} color={"rgb(247, 238, 238)"} fontSize={10} textAlign={"auto"} />
+                    <TextComponent text={`Bem Vindo ${financiador.firstName} ${financiador.lastName}`} color={"rgb(247, 238, 238)"} fontSize={10} textAlign={"right"} />
+                </View>
+
+                <View style={{ flexDirection: "row", justifyContent:"space-between",  gap:10}}>
+                    <Image source={require("../../assets/images/logo.png")}
+                        style={{
+                            height: 45,
+                            width: 45,
+                            alignSelf:"baseline",
+                            objectFit:"fill"
+                        }}
+                    />
+
+                    <TextComponent text={"APP P2P"} fontWeight={"800"} color={textColorDeactivated} fontSize={24} textAlign={"auto"} />
                 </View>
                 
             </View>

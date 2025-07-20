@@ -79,7 +79,7 @@ const FinanciamentoPagamentoView = ({ pagamento, idFinanciamento, cliente, isNeg
                                     nomeCliente: cliente.firstName
                                 })}
                     />
-                    {}
+                    {isReceber &&
                     <TouchableOpacity onPress={() => {navigation.navigate('FinanciamentoNegociar', {idFinanciamento: idFinanciamento, idParcela: pagamento.id, cliente: cliente })}}>
                         <BalaoTexto 
                             children={<TextComponent text={"NEGOCIAR"} color={textColorPrimary} fontSize={16} textAlign={"center"} />} 
@@ -87,6 +87,7 @@ const FinanciamentoPagamentoView = ({ pagamento, idFinanciamento, cliente, isNeg
                             width={200}
                             borderWidth={1} />
                     </TouchableOpacity>
+                    }
                 </View>
             
                 <View style={{ gap: 20, display: 'flex', flexDirection:'row', justifyContent:"center",  }}>

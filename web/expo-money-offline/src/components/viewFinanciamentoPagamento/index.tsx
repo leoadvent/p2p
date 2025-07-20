@@ -43,8 +43,9 @@ const FinanciamentoPagamentoView = ({ pagamento, idFinanciamento, cliente, isNeg
             backgroundColor: DataUtils.calcularDiasEntreDatas(pagamento.dataVencimento, new Date()) > 0 && pagamento.dataPagamento === null ? backgroundColorError : pagamento.dataPagamento != null ? backgroundSuccess : backgroundWarning
         }}>
             
-            <View style={{ display: isMostraCliente && DataUtils.calcularDiasEntreDatas(pagamento.dataUltimoPagamento, new Date()) <= 0 ? "flex" : "none", gap: 10 , flexDirection:"row" }}>
+            <View style={{ display:"flex" , gap: 10 , flexDirection:"row" }}>
                 <View>
+                    {DataUtils.calcularDiasEntreDatas(pagamento.dataUltimoPagamento, new Date()) <= 0 &&
                     <Contato 
                         telefoneNumero={cliente.contact} 
                         mensagem={StringUtil.formatarMensagemNotificacaoVencimento({
@@ -53,6 +54,7 @@ const FinanciamentoPagamentoView = ({ pagamento, idFinanciamento, cliente, isNeg
                                     nomeCliente: cliente.firstName
                                 })}
                     />
+                    }
                 </View>
                 <ShowImageCliente 
                     urlPhoto={cliente.photo} 

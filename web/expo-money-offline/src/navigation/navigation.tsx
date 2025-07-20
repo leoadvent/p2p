@@ -26,6 +26,7 @@ const Tab = createBottomTabNavigator()
 const DrawerClient = createDrawerNavigator()
 
 type RootStackParamList = {
+  BoasVindas: {};
   tabNavigator: {};
   MeuClientes: {};
   CriarEditarClientes: { clientEdit?: CUSTOMER  | undefined;};

@@ -78,4 +78,8 @@ export class IconsUtil {
     static atualizar({ size, color } : Props ){
         return <Ionicons name='refresh-circle-outline' color={color} size={size} />
     }
+
+    static sair({ size, color } : Props ){
+        return <Ionicons name='exit-outline' color={color} size={size} />
+    }
 }

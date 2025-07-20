@@ -24,10 +24,8 @@ async function autenticarComBiometria() : Promise<boolean> {
   });
 
   if (result.success) {
-    Alert.alert('Sucesso', 'Autenticado com sucesso!');
     return true
   } else {
-    Alert.alert('Falha', 'Autenticação falhou ou foi cancelada.');
     return false
   }
 }

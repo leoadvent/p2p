@@ -1,15 +1,15 @@
 import { useNavigation } from "@react-navigation/native";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { FlatList, Image, TouchableOpacity, View } from "react-native";
 import ButtonComponent from "../components/button";
 import { Contador } from "../components/contadorCliente";
 import ModalSystem from "../components/modal";
 import TextComponent from "../components/text/text";
-import { backgroundPrimary, balaoBarColorPrimary, iconColorPrimary, iconColorWarning, textColorDeactivated, textColorPrimary } from "../constants/colorsPalette ";
+import { backgroundPrimary, balaoBarColorPrimary, iconColorDanger, iconColorPrimary, iconColorWarning, textColorDeactivated, textColorPrimary } from "../constants/colorsPalette ";
+import { AuthContext } from "../context/AuthContext";
 import { useFinanciadorDataBase } from "../database/useFinanciador";
 import { useFinanciamentoDataBase } from "../database/useFinanciamentoDataBase";
 import { NavigationProp } from "../navigation/navigation";
-import autenticarComBiometria from "../seguranca/AutenticacaoComBiometria";
 import { FINANCIADOR } from "../types/financiador";
 import { IconsUtil } from "../utils/iconsUtil";
 import BaseScreens from "./BaseScreens";
@@ -24,6 +24,7 @@ const Home = () => {
     const [financiador, setFinanciador] = useState<FINANCIADOR>({} as FINANCIADOR)
 
     const navigation = useNavigation<NavigationProp>();
+    const { Logout, logado } = useContext(AuthContext)
 
     async function handlerBuscarFinanciador(){
         setFinanciador( await useFinanciador.recuperarFinanciador())
@@ -39,6 +40,12 @@ const Home = () => {
         handlerBuscarFinanciador()
         handlerCalcularJuros()
     },[atualizar])
+
+    useEffect(() => {
+        if(!logado){
+            navigation.navigate('BoasVindas',{})
+        }
+    },[logado])
 
     return (
         <BaseScreens title={""} 
@@ -68,6 +75,11 @@ const Home = () => {
                             onPress={() => { navigation.navigate('Configuracoes', {})}}
                         >
                             {IconsUtil.ferramentas({size:25, color: iconColorWarning})}
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            onPress={() => { Logout(); navigation.navigate('BoasVindas', {})}}
+                        >
+                            {IconsUtil.sair({size:25, color: iconColorDanger})}
                         </TouchableOpacity>
                     </View>
                 </View>
@@ -111,8 +123,6 @@ const Home = () => {
                     </View>
                 )}               
             />
-
-                <ButtonComponent nameButton={"BIOMETRIA"} onPress={() => autenticarComBiometria()} typeButton={"primary"} width={300} />
     
                 <ButtonComponent
                     nameButton={"ATUALIZAR JUROS"}

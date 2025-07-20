@@ -94,23 +94,23 @@ export function useFinanciamentoDataBase() {
             // Atualiza o valorAtual nos pagamentos atrasados
             const sqlUpdate1 = `
                 UPDATE FINANCIAMENTO_PAGAMENTO
-                SET valorAtual = (
-                SELECT 
-                    ROUND(
-                    -- COALESCE(fp.valorDiaria, 0) + 
-                    ((julianday('now') - julianday(fp.dataVencimento)) * COALESCE(f.adicionalDiaAtraso, 0))
-                  , 
-                    2
-                    ) - COALESCE(fp.valorPago, 0) + COALESCE(fp.valorParcela, 0)
-                FROM FINANCIAMENTO f
-                WHERE f.id = fp.financiamento_id
-                )
+                SET valorAtual = ROUND((
+                    SELECT 
+                            ROUND(
+                            -- COALESCE(fp.valorDiaria, 0) + 
+                            ((julianday('now') - julianday(fp.dataVencimento)) * COALESCE(f.adicionalDiaAtraso, 0))
+                        , 
+                            2
+                            ) - COALESCE(fp.valorPago, 0) + COALESCE(fp.valorParcela, 0)
+                        FROM FINANCIAMENTO f
+                        WHERE f.id = fp.financiamento_id
+                    ),2)
                 FROM FINANCIAMENTO_PAGAMENTO fp
                 WHERE 
-                fp.id = FINANCIAMENTO_PAGAMENTO.id
-                AND fp.dataPagamento IS NULL
-                AND DATE(fp.dataVencimento) < DATE('now')
-                AND fp.modalidade = 'Parcelado'
+                    fp.id = FINANCIAMENTO_PAGAMENTO.id
+                    AND fp.dataPagamento IS NULL
+                    AND DATE(fp.dataVencimento) < DATE('now')
+                    AND fp.modalidade = 'Parcelado'
                 ;
             `;
 

@@ -17,9 +17,15 @@ const Configuracoes = () => {
     
     const [financiador, setFinanciador] = useState<FINANCIADOR>({} as FINANCIADOR)
     const [showModalDeletaPagamento, setShowModalDeletaPagamento] = useState<boolean>(false)
+    const [showModalDeletarFinanciamento, setShowModalDeletarFinanciamento] = useState<boolean>(false)
     
     async function handlerBuscarFinanciador(){
             setFinanciador( await useFinanciador.recuperarFinanciador())
+    }
+
+    async function deletarFinanciamentosQuitados() {
+        await useFinanciamento.deletarFinanciamentosQuitados().catch((error) => alert(error))
+        setShowModalDeletarFinanciamento(false)
     }
 
     async function deletarPagamentosFinanciamentosQuitados() {
@@ -60,8 +66,9 @@ const Configuracoes = () => {
                 <ButtonComponent nameButton={"SALVAR"} onPress={() => {atualizarFinanciador()}} typeButton={"primary"} width={300} />
             </View>
 
-            <View style={{ flexDirection: "column", gap: 10, padding:20, borderRadius:20, marginTop: 10, borderWidth: 1, borderColor: borderCollor}}>
+            <View style={{ flexDirection: "column", gap: 30, padding:20, borderRadius:30, marginTop: 30, borderWidth: 1, borderColor: borderCollor}}>
                 <ButtonComponent nameButton={"DELETAR PAGAMENTO FINANCIAMENTO QUITADO"} onPress={() => {setShowModalDeletaPagamento(!showModalDeletaPagamento)}} typeButton={"error"} width={300} height={80} />
+                <ButtonComponent nameButton={"DELETAR FINANCIAMENTO QUITADO"} onPress={() => {setShowModalDeletarFinanciamento(!showModalDeletarFinanciamento)}} typeButton={"error"} width={300} height={80} />
             </View>
 
             <ModalSystem title={"DELETAR PAGAMENTOS"} 
@@ -74,6 +81,18 @@ const Configuracoes = () => {
                     </View>
                 </View>} 
                 setVisible={setShowModalDeletaPagamento} visible={showModalDeletaPagamento} />
+
+            <ModalSystem title={"DELETAR FINANCIAMENTO"} 
+                 children={<View style={{ width:"90%", gap: 20}}>
+                    <TextComponent text={"Tem certeza que deseja deletar os financiamentos quitados?"} color={textColorWarning} fontSize={20} textAlign={"center"} />
+                    <TextComponent text={"Essa ação não irá mais contabilizar os financiamentos quitados e sua exclusão será permanente!"} color={textColorWarning} fontSize={20} textAlign={"center"} />
+                    <View style={{ flexDirection:"row", justifyContent:"space-between"}}>
+                        <ButtonComponent nameButton={"CONFIRMAR"} onPress={() => {deletarFinanciamentosQuitados()}} typeButton={"warning"} width={100} />
+                        <ButtonComponent nameButton={"CANCELAR"} onPress={() => {setShowModalDeletarFinanciamento(false)}} typeButton={"primary"} width={100} />
+                    </View>
+                </View>} 
+                 setVisible={setShowModalDeletarFinanciamento} 
+                 visible={showModalDeletarFinanciamento} />
         </BaseScreens>
         
     )

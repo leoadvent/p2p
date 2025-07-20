@@ -68,7 +68,7 @@ const FinanciamentoPagamentoView = ({ pagamento, idFinanciamento, cliente, isNeg
             </View>
             
             <View style={{ display: pagamento.dataPagamento === null ? "flex" :"none", gap: 10 }}>
-                <View style={{ display: DataUtils.calcularDiasEntreDatas(pagamento.dataVencimento, new Date()) > 0 && pagamento.dataPagamento === null && isNegociar ? "flex" : "none", flexDirection: "row", justifyContent:"space-between", width:"100%"}}>
+                <View style={{ display: DataUtils.calcularDiasEntreDatas(pagamento.dataVencimento, new Date()) > 0 && pagamento.dataPagamento === null ? "flex" : "none", flexDirection: "row", justifyContent:"space-between", width:"100%"}}>
                     <Contato 
                         telefoneNumero={cliente.contact} 
                         mensagem={StringUtil.formatarMensagemPagamentoAtrasado({

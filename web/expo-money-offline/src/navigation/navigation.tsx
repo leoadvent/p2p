@@ -7,6 +7,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { iconDrawerColor, statusBarColorPrimary, tabNavigatorColor, textColorPrimary } from '../constants/colorsPalette ';
 import AlertaVencido from '../screens/AlertaVencido';
 import AlertaVencimento from '../screens/AlertaVencimento';
+import BoasVindas from '../screens/BoasVindas';
 import ClienteCrierEditar from '../screens/ClienteCrierEditar';
 import Clientes from "../screens/Clientes";
 import Configuracoes from '../screens/configuracoes';
@@ -160,7 +161,8 @@ const MyTabNavigator = () => {
 const NavigationStack = () => {
     return (
         <NavigationContainer>
-            <Stack.Navigator initialRouteName="tabNavigator" screenOptions={{ headerShown: false }}>
+            <Stack.Navigator initialRouteName="BoasVindas" screenOptions={{ headerShown: false }}>
+                <Stack.Screen name="BoasVindas" component={BoasVindas} options={{ headerShown: false}} />
                 <Stack.Screen name="tabNavigator" component={MyTabNavigator} options={{ headerShown: false }} />
                 <Stack.Screen name="Home" component={Clientes} options={{ headerShown: false }} />
                 <Stack.Screen name="MeuClientes" component={MyDrawerNavigatorCliente} options={{ headerShown: false }} />

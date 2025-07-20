@@ -9,6 +9,7 @@ import { backgroundPrimary, balaoBarColorPrimary, iconColorPrimary, iconColorWar
 import { useFinanciadorDataBase } from "../database/useFinanciador";
 import { useFinanciamentoDataBase } from "../database/useFinanciamentoDataBase";
 import { NavigationProp } from "../navigation/navigation";
+import autenticarComBiometria from "../seguranca/AutenticacaoComBiometria";
 import { FINANCIADOR } from "../types/financiador";
 import { IconsUtil } from "../utils/iconsUtil";
 import BaseScreens from "./BaseScreens";
@@ -111,6 +112,7 @@ const Home = () => {
                 )}               
             />
 
+                <ButtonComponent nameButton={"BIOMETRIA"} onPress={() => autenticarComBiometria()} typeButton={"primary"} width={300} />
     
                 <ButtonComponent
                     nameButton={"ATUALIZAR JUROS"}

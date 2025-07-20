@@ -23,7 +23,6 @@ interface Props {
     isMostraCliente: boolean,
 }
 const FinanciamentoPagamentoView = ({ pagamento, idFinanciamento, cliente, isNegociar, isReceber, isMostraCliente, isNotificacaoVencimento } : Props ) => {
-
     //alert(JSON.stringify(pagamento))
     const width = Dimensions.get("screen").width
     const navigation = useNavigation<NavigationProp>();
@@ -45,7 +44,7 @@ const FinanciamentoPagamentoView = ({ pagamento, idFinanciamento, cliente, isNeg
             
             <View style={{ display:"flex" , gap: 10 , flexDirection:"row" }}>
                 <View>
-                    {DataUtils.calcularDiasEntreDatas(pagamento.dataUltimoPagamento, new Date()) <= 0 &&
+                    {DataUtils.calcularDiasEntreDatas(pagamento.dataVencimento, new Date()) <= 0 && pagamento.valorAtual > 0 &&
                     <Contato 
                         telefoneNumero={cliente.contact} 
                         mensagem={StringUtil.formatarMensagemNotificacaoVencimento({

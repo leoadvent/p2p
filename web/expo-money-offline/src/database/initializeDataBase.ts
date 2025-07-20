@@ -47,11 +47,13 @@ export async function initializeDataBase(dataBase: SQLiteDatabase) {
             valorDiaria REAL,
             valorMontante REAL,
             valorPago REAL,
+            valorEmpenho REAL,
             modalidade TEXT NOT NULL,
             periodocidade TEXT NOT NULL DEFAULT 'Semanal, Quinzenal, Mensal',
             totalParcelas INTEGER NOT NULL,
             finalizado INTEGER NULL,
             atrasado INTEGER NULL,
+            empenhoExecutado,
             cliente_id TEXT,
             FOREIGN KEY (cliente_id) REFERENCES CUSTOMER(id)
         );

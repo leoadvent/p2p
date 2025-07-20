@@ -21,12 +21,14 @@ export interface FINANCIAMENTO_PAGAMENTO {
     valorAtual: number
     valorParcela: number
     valorDiaria: number
+    valorEmpenho: number
     modalidade: MODALIDADE // Modalidade do financiamento, padrão: 'Parcelado, Carência de Capital'
     juros: number
     jurosAtraso: number
     executadoEmpenho: boolean
     pagamentoRealizado: boolean
     renegociado: boolean
+    empenhoExecutado: boolean
     cliente: CUSTOMER
 }
 

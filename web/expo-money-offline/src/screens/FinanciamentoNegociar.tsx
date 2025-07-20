@@ -44,7 +44,9 @@ const FinanciamentoNegociar = () => {
             cliente: {} as CUSTOMER,
             dataUltimoPagamento: parcelas?.dataUltimoPagamento ?? new Date(),
             modalidade: parcelas!.modalidade,
-            pagamentoRealizado: parcelas?.pagamentoRealizado ?? false
+            pagamentoRealizado: parcelas?.pagamentoRealizado ?? false,
+            valorEmpenho: parcelas?.valorEmpenho ?? 0,
+            empenhoExecutado: parcelas?.empenhoExecutado ?? false
         })
     }
 

@@ -42,6 +42,8 @@ const FinanciamentoReceber = () => {
             executadoEmpenho: parcelas!.executadoEmpenho,
             pagamentoRealizado: parcelas!.pagamentoRealizado,
             renegociado: parcelas!.renegociado,
+            valorEmpenho: parcelas!.valorEmpenho,
+            empenhoExecutado: parcelas!.empenhoExecutado,
             cliente: {} as CUSTOMER
         })
     }

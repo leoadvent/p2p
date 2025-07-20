@@ -130,7 +130,7 @@ const Financiamento = () => {
                 numeroParcela: i,
                 valorPago: 0,
                 valorAtual: Number.parseFloat(valParcel.toString()),
-                valorParcela: modalidade === MODALIDADE.Parcelado ? Number.parseFloat(valParcel.toString()) :  Number.parseFloat(valorMontante.replaceAll('.','').replace(',','.')) ,
+                valorParcela: modalidade === MODALIDADE.Parcelado ? Number.parseFloat(valParcel.toString()) : Number.parseFloat(valorMontante.replaceAll('.', '').replace(',', '.')),
                 valorDiaria: valorDiarioNumerico,
                 modalidade: modalidade,
                 juros: taxaJurosNumerico,
@@ -138,6 +138,8 @@ const Financiamento = () => {
                 executadoEmpenho: false,
                 pagamentoRealizado: false,
                 renegociado: false,
+                valorEmpenho: 0,
+                empenhoExecutado: false
             });
 
             // Avança a data conforme periodicidade

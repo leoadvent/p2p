@@ -235,7 +235,9 @@ export function useFinanciamentoDataBase() {
             executadoEmpenho: row.executadoEmpenho,
             pagamentoRealizado: row.pagamentoRealizado,
             renegociado: row.renegociado,
-            modalidade: row.modalidade
+            modalidade: row.modalidade,
+            valorEmpenho: row.valorEmpenho,
+            empenhoExecutado: row.empenhoExecutado
         };
     }
 
@@ -564,6 +566,8 @@ export function useFinanciamentoDataBase() {
                     executadoEmpenho: row.executadoEmpenho,
                     pagamentoRealizado: row.pagamentoRealizado,
                     renegociado: row.renegociado,
+                    valorEmpenho: row.valorEmpenho,
+                    empenhoExecutado: row.empenhoExecutado,
                     cliente: {
                         id: row.idCliente,
                         firstName: row.firstName,
@@ -639,6 +643,8 @@ export function useFinanciamentoDataBase() {
                     executadoEmpenho: row.executadoEmpenho,
                     pagamentoRealizado: row.pagamentoRealizado,
                     renegociado: row.renegociado,
+                    valorEmpenho: row.valorEmpenho,
+                    empenhoExecutado: row.empenhoExecutado,
                     cliente: {
                         id: row.idCliente,
                         firstName: row.firstName,

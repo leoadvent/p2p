@@ -735,6 +735,20 @@ export function useFinanciamentoDataBase() {
         return
     }
 
-    return {create,  atualizarPagamentosAtrasados, buscarFinanciamentoPorCliente, buscarParcelasDeFinanciamentoPorId, buscarParcelaPorId, updateParcela, negociarValorPagamento, atualizarValorParcelaCarenciaCapital, buscarParcelaVencimentoEmDias, buscarParcelaVencidas, buscarInvestimentos, contadorContratosAberto, contadorContratosAtrasados, contadorContratosFinalizado }
+    async function deletarPagamentosFinanciamentoQuitado() {
+        
+        try{
+            await dataBase.execAsync(`
+                DELETE FROM FINANCIAMENTO_PAGAMENTO
+                WHERE financiamento_id IN (
+                    SELECT id FROM FINANCIAMENTO WHERE finalizado = 1
+                );
+            `);
+        }catch(error) {
+            alert(error)
+        }
+    }
+
+    return {create,  atualizarPagamentosAtrasados, buscarFinanciamentoPorCliente, buscarParcelasDeFinanciamentoPorId, buscarParcelaPorId, updateParcela, negociarValorPagamento, atualizarValorParcelaCarenciaCapital, buscarParcelaVencimentoEmDias, buscarParcelaVencidas, buscarInvestimentos, contadorContratosAberto, contadorContratosAtrasados, contadorContratosFinalizado, deletarPagamentosFinanciamentoQuitado }
 
 }

@@ -4,7 +4,7 @@ import ButtonComponent from "../components/button"
 import InputText from "../components/input"
 import ModalSystem from "../components/modal"
 import TextComponent from "../components/text/text"
-import { borderCollor, textColorWarning } from "../constants/colorsPalette "
+import { borderCollor, textColorPrimary, textColorWarning } from "../constants/colorsPalette "
 import { useFinanciadorDataBase } from "../database/useFinanciador"
 import { useFinanciamentoDataBase } from "../database/useFinanciamentoDataBase"
 import { FINANCIADOR } from "../types/financiador"
@@ -46,6 +46,7 @@ const Configuracoes = () => {
         <BaseScreens  title={"CONFIGURAÇÕES"} rolbackStack>
 
             <View style={{ flexDirection: "column", gap: 10, padding:20, borderRadius:20, marginTop: 10, borderWidth: 1, borderColor: borderCollor}}>
+                <TextComponent text={"Quem utiliza o APP?"} color={textColorPrimary} fontSize={14} textAlign={"center"} />
                 <InputText 
                     width={300} 
                     label={"Nome"} 
@@ -67,6 +68,7 @@ const Configuracoes = () => {
             </View>
 
             <View style={{ flexDirection: "column", gap: 30, padding:20, borderRadius:30, marginTop: 30, borderWidth: 1, borderColor: borderCollor}}>
+                <TextComponent text={"Deletar Registros"} color={textColorPrimary} fontSize={14} textAlign={"center"} />
                 <ButtonComponent nameButton={"DELETAR PAGAMENTO FINANCIAMENTO QUITADO"} onPress={() => {setShowModalDeletaPagamento(!showModalDeletaPagamento)}} typeButton={"error"} width={300} height={80} />
                 <ButtonComponent nameButton={"DELETAR FINANCIAMENTO QUITADO"} onPress={() => {setShowModalDeletarFinanciamento(!showModalDeletarFinanciamento)}} typeButton={"error"} width={300} height={80} />
             </View>
